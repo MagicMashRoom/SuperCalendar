@@ -5,14 +5,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.ldf.calendar.MonthPager;
 import com.ldf.calendar.adpter.CalendarViewAdapter;
 import com.ldf.calendar.model.CalendarDate;
-import com.ldf.calendar.utils.DateUtil;
 import com.ldf.calendar.views.Calendar;
 
 import java.util.HashMap;
@@ -37,14 +35,12 @@ public class SyllabusActivity extends AppCompatActivity{
     private Calendar.OnCellClickListener onCellClickListener;
     private int mCurrentPage = MonthPager.CURRENT_DAY_INDEX;
     private Context context;
-    private boolean pageChangeByGestureSlide = false;
     private CalendarDate currentDate;
-    private HashMap<String, String> markDateData;
+    private HashMap<String, String> markData;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.e("ldf","setContentView()");
         setContentView(R.layout.activity_syllabus);
         ButterKnife.bind(this);
         context = this;
@@ -67,7 +63,6 @@ public class SyllabusActivity extends AppCompatActivity{
     }
 
     private void initCurrentDate() {
-        DateUtil.saveClickDate(context, new CalendarDate());
         currentDate = new CalendarDate();
     }
 
@@ -89,19 +84,18 @@ public class SyllabusActivity extends AppCompatActivity{
                 monthPager.setCurrentItem(mCurrentPage + offset);
             }
         };
-        initMonthPage();
+        initCalendarData();
         calendarAdapter = new CalendarViewAdapter<>(showCalendars, CURRENT_OFFSET);
         initMonthPager();
     }
 
     private void refreshClickDate(CalendarDate date) {
         currentDate = date;
-        DateUtil.saveClickDate(context, date);
         textViewYearDisplay.setText(date.getYear() + "年");
         textViewMonthDisplay.setText(date.getMonth() + "");
     }
 
-    private void initMonthPage() {
+    private void initCalendarData() {
         showCalendars = new Calendar[3];
         for (int i = 0; i < 3; i++) {
             showCalendars[i] = new Calendar(context, onCellClickListener);

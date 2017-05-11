@@ -42,14 +42,14 @@ public class Calendar extends View {
 	private CalendarDate clickDate; //被选中的日期  包括year month day
 	private OnCellClickListener onCellClickListener;	// 单元格点击回调事件
 	private int touchSlop;
-	private HashMap<String, String> markDateData;
+	private HashMap<String, String> markData;
 
-	public HashMap<String, String> getMarkDateData() {
-		return markDateData;
+	public HashMap<String, String> getMarkData() {
+		return markData;
 	}
 
-	public void setMarkDateData(HashMap<String, String> markDateData) {
-		this.markDateData = markDateData;
+	public void setMarkData(HashMap<String, String> markDateData) {
+		this.markData = markDateData;
 	}
 
 	public interface OnCellClickListener {
@@ -197,7 +197,7 @@ public class Calendar extends View {
 		public void drawRow(Canvas canvas) {
 			for (int col = 0; col < cells.length; col++) {
 				if (cells[col] != null)
-					cells[col].drawCell(canvas, markDateData);
+					cells[col].drawCell(canvas, markData);
 			}
 		}
 	}

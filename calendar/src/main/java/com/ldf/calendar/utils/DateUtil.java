@@ -158,9 +158,13 @@ public class DateUtil {
 
 	public static CalendarDate getClickDate(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(CLICK_DATE, Context.MODE_PRIVATE);
-		int year = sp.getInt(CLICK_DATE + "YEAR", 1970);
-		int month = sp.getInt(CLICK_DATE + "MONTH", 1);
-		int day = sp.getInt(CLICK_DATE + "DAY", 1);
+		CalendarDate defaultDate = new CalendarDate();
+		int defaultYear = defaultDate.getYear();
+		int defaultMonth = defaultDate.getMonth();
+		int defaultDay = defaultDate.getDay();
+		int year = sp.getInt(CLICK_DATE + "YEAR", defaultYear);
+		int month = sp.getInt(CLICK_DATE + "MONTH", defaultMonth);
+		int day = sp.getInt(CLICK_DATE + "DAY", defaultDay);
 		return new CalendarDate(year, month, day);
 	}
 
