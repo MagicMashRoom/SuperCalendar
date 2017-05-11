@@ -75,7 +75,6 @@ public class SyllabusActivity extends AppCompatActivity{
         onCellClickListener = new Calendar.OnCellClickListener() {
             @Override
             public void onClickDateCell(CalendarDate date) {
-                refreshCurrentDate(date);
                 refreshClickDate(date);
                 calendarAdapter.updateAllClickState();
             }
@@ -95,12 +94,9 @@ public class SyllabusActivity extends AppCompatActivity{
         initMonthPager();
     }
 
-    private void refreshCurrentDate(CalendarDate date) {
-        DateUtil.saveClickDate(context, date);
-        currentDate = date;
-    }
-
     private void refreshClickDate(CalendarDate date) {
+        currentDate = date;
+        DateUtil.saveClickDate(context, date);
         textViewYearDisplay.setText(date.getYear() + "年");
         textViewMonthDisplay.setText(date.getMonth() + "");
     }
@@ -122,36 +118,31 @@ public class SyllabusActivity extends AppCompatActivity{
                 page.setAlpha(position);
             }
         });
-        monthPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        monthPager.addOnPageChangeListener(new MonthPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             }
 
             @Override
             public void onPageSelected(int position) {
-                if(pageChangeByGestureSlide){
-                    mCurrentPage = position;
-                    currentCalendars = calendarAdapter.getAllItems();
-                    if(currentCalendars[position % currentCalendars.length] instanceof Calendar){
-                        CalendarDate date = currentCalendars[position % currentCalendars.length].getShowCurrentDate();
-                        currentDate = date;
-                        textViewYearDisplay.setText(date.getYear() + "年");
-                        textViewMonthDisplay.setText(date.getMonth() + "");
-                    }
-                    pageChangeByGestureSlide = false;
+                mCurrentPage = position;
+                currentCalendars = calendarAdapter.getAllItems();
+                if(currentCalendars[position % currentCalendars.length] instanceof Calendar){
+                    CalendarDate date = currentCalendars[position % currentCalendars.length].getShowCurrentDate();
+                    currentDate = date;
+                    textViewYearDisplay.setText(date.getYear() + "年");
+                    textViewMonthDisplay.setText(date.getMonth() + "");
                 }
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
-                pageChangeByGestureSlide = true;
             }
         });
     }
 
     public void onClickBackToDayBtn() {
         CalendarDate today = new CalendarDate();
-        refreshCurrentDate(today);
         refreshClickDate(today);
         calendarAdapter.updateAllClickState();
         refreshMonthPager(CURRENT_OFFSET);

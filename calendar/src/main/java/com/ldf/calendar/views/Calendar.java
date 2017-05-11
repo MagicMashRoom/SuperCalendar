@@ -162,23 +162,23 @@ public class Calendar extends View {
 
 		if (col >= TOTAL_COL || row >= TOTAL_ROW_SIX)
 			return;
-
 		if (rows[row] != null) {
+			CalendarDate clickDate;
 			if(rows[row].cells[col].state == State.CURRENT_MONTH_DAY){
 				rows[row].cells[col].state = State.CLICK_DAY;
-				CalendarDate clickDate = rows[row].cells[col].cellDate;
+				clickDate = rows[row].cells[col].cellDate;
 				onCellClickListener.onClickDateCell(clickDate);
 			} else if (rows[row].cells[col].state == State.PAST_MONTH_DAY){
-				CalendarDate clickDate = rows[row].cells[col].cellDate;
+				clickDate = rows[row].cells[col].cellDate;
 				onCellClickListener.onClickOtherMonth(PAST_MONTH);
 				onCellClickListener.onClickDateCell(clickDate);
 			} else if (rows[row].cells[col].state == State.NEXT_MONTH_DAY){
-				CalendarDate clickDate = rows[row].cells[col].cellDate;
+				clickDate = rows[row].cells[col].cellDate;
 				onCellClickListener.onClickOtherMonth(NEXT_MONTH);
 				onCellClickListener.onClickDateCell(clickDate);
 			} else if (rows[row].cells[col].state == State.TODAY){
 				rows[row].cells[col].state = State.CLICK_DAY;
-				CalendarDate clickDate = rows[row].cells[col].cellDate;
+				clickDate = rows[row].cells[col].cellDate;
 				onCellClickListener.onClickDateCell(clickDate);
 			}
 			invalidate();
