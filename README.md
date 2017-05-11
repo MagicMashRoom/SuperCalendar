@@ -2,6 +2,9 @@
 ==========================
 > 简单使用的日历
 
+![Screenshot](timesSquareScreenshot.png)
+
+
 Usage
 -----
 
@@ -101,7 +104,21 @@ Download
 --------
 Gradle:
 ```groovy
-compile 'com.squareup:android-times-square:1.6.5@aar'
+Step 1. Add it in your root build.gradle at the end of repositories:
+
+allprojects {
+		repositories {
+			...
+			maven { url 'https://www.jitpack.io' }
+		}
+	}
+	
+Step 2. Add the dependency
+
+	dependencies {
+	        compile 'com.github.MagicMashRoom:FuckCalendar:-SNAPSHOT'
+	}
+
 ```
 
 [![](https://www.jitpack.io/v/MagicMashRoom/FuckCalendar.svg)](https://www.jitpack.io/#MagicMashRoom/FuckCalendar)
