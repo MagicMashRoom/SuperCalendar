@@ -11,11 +11,12 @@ Usage
 Include `CalendarPickerView` in your layout XML.
 
 ```xml
-<com.squareup.timessquare.CalendarPickerView
-    android:id="@+id/calendar_view"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    />
+ <com.ldf.calendar.MonthPager
+        android:id="@+id/calendar_view"
+        android:layout_width="match_parent"
+        android:layout_height="270dp"
+        android:background="#fff">
+    </com.ldf.calendar.MonthPager>
 ```
 
 目前来看 相比于Dialog选择日历 我的控件更适合于Activity/Fragment
