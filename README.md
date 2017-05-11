@@ -2,9 +2,6 @@
 ==========================
 > 简单使用的日历
 
-![Screenshot](timesSquareScreenshot.png)
-
-
 Usage
 -----
 
@@ -107,4 +104,4 @@ Gradle:
 compile 'com.squareup:android-times-square:1.6.5@aar'
 ```
 
-Snapshots of the development version are available in [Sonatype's `snapshots` repository][snap].
+[![](https://www.jitpack.io/v/MagicMashRoom/FuckCalendar.svg)](https://www.jitpack.io/#MagicMashRoom/FuckCalendar)
