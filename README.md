@@ -104,18 +104,17 @@ private void initCalendarView() {
 Download
 --------
 Gradle:
-```groovy
 Step 1. Add it in your root build.gradle at the end of repositories:
-
+```groovy
 allprojects {
 		repositories {
 			...
 			maven { url 'https://www.jitpack.io' }
 		}
 	}
-	
+ ```	
 Step 2. Add the dependency
-
+```groovy
 	dependencies {
 	        compile 'com.github.MagicMashRoom:FuckCalendar:-SNAPSHOT'
 	}
