@@ -107,18 +107,17 @@ Gradle:
 Step 1. Add it in your root build.gradle at the end of repositories:
 ```groovy
 allprojects {
-		repositories {
-			...
-			maven { url 'https://www.jitpack.io' }
-		}
+	repositories {
+		...
+		maven { url 'https://www.jitpack.io' }
 	}
+}
  ```	
 Step 2. Add the dependency
 ```groovy
-	dependencies {
-	        compile 'com.github.MagicMashRoom:FuckCalendar:-SNAPSHOT'
-	}
-
+dependencies {
+        compile 'com.github.MagicMashRoom:FuckCalendar:-SNAPSHOT'
+}
 ```
 
 [![](https://www.jitpack.io/v/MagicMashRoom/FuckCalendar.svg)](https://www.jitpack.io/#MagicMashRoom/FuckCalendar)
