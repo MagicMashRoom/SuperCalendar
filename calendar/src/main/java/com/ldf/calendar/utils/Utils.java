@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class DateUtil {
+public class Utils {
 
 	private static final String CLICK_DATE= "CLICK_DATE";
 
@@ -69,14 +69,7 @@ public class DateUtil {
 		return Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
 	}
 
-	public static int getHour() {
-		return Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-	}
-	public static int getMinute() {
-		return Calendar.getInstance().get(Calendar.MINUTE);
-	}
 	public static CalendarDate getNextSunday() {
-		
 		Calendar c = Calendar.getInstance();
 		c.add(Calendar.DATE, 7 - getWeekDay()+1);
 		CalendarDate date = new CalendarDate(c.get(Calendar.YEAR),
@@ -143,8 +136,8 @@ public class DateUtil {
 	}
 	
 	public static boolean isCurrentMonth(CalendarDate date){
-		return(date.year == DateUtil.getYear() &&
-				date.month == DateUtil.getMonth());
+		return(date.year == Utils.getYear() &&
+				date.month == Utils.getMonth());
 	}
 
 	public static void saveClickDate(Context context, CalendarDate calendarDate) {
@@ -173,5 +166,9 @@ public class DateUtil {
 		int currentMonth = currentDate.getMonth();
 		int offset = (year - currentYear) * 12 + (month - currentMonth);
 		return offset;
+	}
+
+	public static int dpi2px(Context context, float dpi) {
+		return (int) (context.getResources().getDisplayMetrics().density * dpi + 0.5f);
 	}
 }

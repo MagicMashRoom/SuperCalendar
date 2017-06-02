@@ -6,6 +6,7 @@
 package com.ldf.calendar.adpter;
 
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -13,13 +14,15 @@ import com.ldf.calendar.MonthPager;
 import com.ldf.calendar.model.CalendarDate;
 import com.ldf.calendar.views.Calendar;
 
-public class CalendarViewAdapter<V extends View> extends PagerAdapter {
-	private V[] views;
+import java.util.ArrayList;
+
+public class CalendarViewAdapter extends PagerAdapter {
+	private ArrayList<Calendar> calendars;
 	private int offset;
 
-	public CalendarViewAdapter(V[] views, int offset) {
+	public CalendarViewAdapter(ArrayList<Calendar> calendars, int offset) {
 		super();
-		this.views = views;
+		this.calendars = calendars;
 		this.offset = offset;
 	}
 
@@ -28,21 +31,20 @@ public class CalendarViewAdapter<V extends View> extends PagerAdapter {
 		if(position < 2){
 			return null;
 		}
-		boolean isInitToday = true;
-		if (container.getChildCount() == views.length) {
-			isInitToday = false;
-			container.removeView(views[position % views.length]);
+		boolean instantiated = false;
+		if (container.getChildCount() == calendars.size()) {
+			instantiated = true;
+			container.removeView(calendars.get(position % calendars.size()));
 		}
-		View view = views[position % views.length];
-		if(view instanceof Calendar){
-			((Calendar) view).setShowCurrentDate(CalendarDate.modifyCurrentDateMonth(new CalendarDate(),
-					position - MonthPager.CURRENT_DAY_INDEX + offset));
-			if(position == MonthPager.CURRENT_DAY_INDEX && isInitToday){
-				((Calendar) view).setInitCurrentDate();
-			}
+		Calendar calendar = calendars.get(position % calendars.size());
+		CalendarDate date = new CalendarDate();
+		date.modifyCurrentDateMonth(position - MonthPager.CURRENT_DAY_INDEX + offset);
+		calendar.showDate(date);
+		if(position == MonthPager.CURRENT_DAY_INDEX && !instantiated){
+			calendar.showToday();
 		}
-		container.addView(view, 0);
-		return view;
+		container.addView(calendar, 0);
+		return calendar;
 	}
 
 	@Override
@@ -60,17 +62,17 @@ public class CalendarViewAdapter<V extends View> extends PagerAdapter {
 		container.removeView(container);
 	}
 
-	public V[] getAllItems() {
-		return views;
+	public ArrayList<Calendar> getAllItems() {
+		return calendars;
 	}
 
-	public void setViews(V[] views) {
-		this.views = views;
+	public void setCalendars(ArrayList<Calendar> calendars) {
+		this.calendars = calendars;
 	}
 
 	public void updateAllClickState(){
-		for(int i = 0; i < views.length; i++){
-			Calendar calendar = (Calendar) views[i];
+		for(int i = 0; i < calendars.size(); i++){
+			Calendar calendar = calendars.get(i);
 			calendar.cancelClickState();
 			calendar.updateClickDate();
 		}

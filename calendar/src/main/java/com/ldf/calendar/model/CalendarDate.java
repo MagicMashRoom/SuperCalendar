@@ -5,7 +5,7 @@
 
 package com.ldf.calendar.model;
 
-import com.ldf.calendar.utils.DateUtil;
+import com.ldf.calendar.utils.Utils;
 
 import java.io.Serializable;
 
@@ -18,10 +18,10 @@ public class CalendarDate implements Serializable{
 	public CalendarDate(int year, int month, int day){
 		if(month > 12){
 			month = 1;
-			year++;
-		}else if(month <1){
+			year ++;
+		}else if(month < 1){
 			month = 12;
-			year--;
+			year --;
 		}
 		this.year = year;
 		this.month = month;
@@ -29,41 +29,37 @@ public class CalendarDate implements Serializable{
 	}
 
 	public CalendarDate(){
-		this.year = DateUtil.getYear();
-		this.month = DateUtil.getMonth();
-		this.day = DateUtil.getDay();
+		this.year = Utils.getYear();
+		this.month = Utils.getMonth();
+		this.day = Utils.getDay();
 	}
 
-	public static CalendarDate modifyCurrentDateDay(CalendarDate date, int day){
+	public static CalendarDate modifyDay(CalendarDate date, int day){
 		CalendarDate modifyDate = new CalendarDate(date.year, date.month, day);
 		return modifyDate;
 	}
 
-	public static CalendarDate modifyCurrentDateMonth(CalendarDate date, int month){
-		CalendarDate modifyDate = new CalendarDate();
-		int addToMonth = date.month + month;
-		if(month == 0){
-			//donothing
-		}else if(month > 0){
+	public void modifyCurrentDateMonth(int offset){
+		int addToMonth = this.month + offset;
+		if(offset > 0){
 			if(addToMonth > 12){
-				modifyDate.setYear(date.year + (addToMonth - 1) / 12);
-				modifyDate.setMonth(addToMonth % 12 == 0 ? 12: addToMonth % 12);
+				setYear(this.year + (addToMonth - 1) / 12);
+				setMonth(addToMonth % 12 == 0 ? 12: addToMonth % 12);
 			}else {
-				modifyDate.setMonth(addToMonth);
+				setMonth(addToMonth);
 			}
 		}else{
 			if(addToMonth == 0){
-				modifyDate.setYear(date.year - 1);
-				modifyDate.setMonth(12);
+				setYear(this.year - 1);
+				setMonth(12);
 			}else if(addToMonth < 0){
-				modifyDate.setYear(date.year - ((Math.abs(addToMonth) / 12) + 1));
-				int temp_month = (((Math.abs(addToMonth) - 1) / 12) + 1) * 12 + addToMonth;
-				modifyDate.setMonth(temp_month == 0 ? 12 : temp_month);
+				setYear(this.year + addToMonth / 12 - 1);
+				int month = 12 - Math.abs(addToMonth) % 12;
+				setMonth(month == 0 ? 12 : month);
 			}else {
-				modifyDate.setMonth(addToMonth == 0 ? 12 : addToMonth);
+				setMonth(addToMonth == 0 ? 12 : addToMonth);
 			}
 		}
-		return modifyDate;
 	}
 
 	@Override

@@ -5,7 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
-import com.ldf.calendar.utils.MoveUtil;
+import com.ldf.calendar.utils.Utils;
 import com.ldf.calendar.views.Calendar;
 
 import java.util.HashMap;
@@ -88,7 +88,7 @@ public class Cell {
                 circlePaint.setStyle(Paint.Style.STROKE);
                 circlePaint.setStrokeWidth(3f);
                 canvas.drawCircle((float) (width * (col + 0.5)),
-                        (float) ((row + 0.5) * height), MoveUtil.dpi2px(context, 33) / 2,
+                        (float) ((row + 0.5) * height), Utils.dpi2px(context, 33) / 2,
                         circlePaint);
                 circlePaint.setStyle(Paint.Style.FILL);
                 break;
@@ -96,7 +96,7 @@ public class Cell {
                 datePaint.setColor(Color.parseColor("#FFFFFFFF"));
                 circlePaint.setColor(Color.parseColor("#FF25ADFF"));
                 canvas.drawCircle((float) (width * (col + 0.5)),
-                        (float) ((row + 0.5) * height), MoveUtil.dpi2px(context, 33) / 2,
+                        (float) ((row + 0.5) * height), Utils.dpi2px(context, 33) / 2,
                         circlePaint);
                 break;
         }
@@ -112,14 +112,14 @@ public class Cell {
                     if(markDateData.get(date.toString()).equals("0")){
                         markPaint.setColor(Color.parseColor("#FFFE6D6D"));
                         canvas.drawCircle((float) (width * (col + 0.5)),
-                                (float) ((row + 0.5) * height + MoveUtil.dpi2px(context, 12)) ,
-                                MoveUtil.dpi2px(context, 3),
+                                (float) ((row + 0.5) * height + Utils.dpi2px(context, 12)) ,
+                                Utils.dpi2px(context, 3),
                                 markPaint);
                     }else{
                         markPaint.setColor(Color.parseColor("#FFCCCCCC"));
                         canvas.drawCircle((float) (width * (col + 0.5)),
-                                (float) ((row + 0.5) * height + MoveUtil.dpi2px(context, 12)) ,
-                                MoveUtil.dpi2px(context, 3),
+                                (float) ((row + 0.5) * height + Utils.dpi2px(context, 12)) ,
+                                Utils.dpi2px(context, 3),
                                 markPaint);
                     }
                 }
@@ -141,7 +141,7 @@ public class Cell {
         }
         canvas.drawText(date,
                 (float) ((col + 0.5) * width - datePaint.measureText(date) / 2),
-                (float) ((row + 0.5) * height + MoveUtil.dpi2px(context, 4)),
+                (float) ((row + 0.5) * height + Utils.dpi2px(context, 4)),
                 datePaint);
 
     }

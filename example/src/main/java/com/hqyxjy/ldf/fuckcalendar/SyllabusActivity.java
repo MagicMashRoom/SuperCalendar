@@ -13,6 +13,7 @@ import com.ldf.calendar.adpter.CalendarViewAdapter;
 import com.ldf.calendar.model.CalendarDate;
 import com.ldf.calendar.views.Calendar;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import butterknife.ButterKnife;
@@ -28,10 +29,10 @@ public class SyllabusActivity extends AppCompatActivity{
     TextView backToday;
 
     public static int CURRENT_OFFSET = 0;
-    private Calendar[] showCalendars;
-    private Calendar[] currentCalendars;
+    private ArrayList<Calendar> showCalendars = new ArrayList<>();
+    private ArrayList<Calendar> currentCalendars = new ArrayList<>();
 
-    private CalendarViewAdapter<Calendar> calendarAdapter;
+    private CalendarViewAdapter calendarAdapter;
     private Calendar.OnCellClickListener onCellClickListener;
     private int mCurrentPage = MonthPager.CURRENT_DAY_INDEX;
     private Context context;
@@ -85,7 +86,7 @@ public class SyllabusActivity extends AppCompatActivity{
             }
         };
         initCalendarData();
-        calendarAdapter = new CalendarViewAdapter<>(showCalendars, CURRENT_OFFSET);
+        calendarAdapter = new CalendarViewAdapter(showCalendars, CURRENT_OFFSET);
         initMonthPager();
     }
 
@@ -96,9 +97,9 @@ public class SyllabusActivity extends AppCompatActivity{
     }
 
     private void initCalendarData() {
-        showCalendars = new Calendar[3];
         for (int i = 0; i < 3; i++) {
-            showCalendars[i] = new Calendar(context, onCellClickListener);
+            Calendar calendar = new Calendar(context , onCellClickListener);
+            showCalendars.add(calendar);
         }
     }
 
@@ -121,8 +122,8 @@ public class SyllabusActivity extends AppCompatActivity{
             public void onPageSelected(int position) {
                 mCurrentPage = position;
                 currentCalendars = calendarAdapter.getAllItems();
-                if(currentCalendars[position % currentCalendars.length] instanceof Calendar){
-                    CalendarDate date = currentCalendars[position % currentCalendars.length].getShowCurrentDate();
+                if(currentCalendars.get(position % currentCalendars.size()) instanceof Calendar){
+                    CalendarDate date = currentCalendars.get(position % currentCalendars.size()).getShowCurrentDate();
                     currentDate = date;
                     textViewYearDisplay.setText(date.getYear() + "年");
                     textViewMonthDisplay.setText(date.getMonth() + "");
@@ -143,7 +144,7 @@ public class SyllabusActivity extends AppCompatActivity{
     }
 
     private void refreshMonthPager(int offset) {
-        calendarAdapter = new CalendarViewAdapter<>(showCalendars, offset);
+        calendarAdapter = new CalendarViewAdapter(showCalendars, offset);
         monthPager.setAdapter(calendarAdapter);
         monthPager.setCurrentItem(MonthPager.CURRENT_DAY_INDEX);
     }
