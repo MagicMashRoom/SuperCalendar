@@ -140,27 +140,6 @@ public class Utils {
 				date.month == Utils.getMonth());
 	}
 
-	public static void saveClickDate(Context context, CalendarDate calendarDate) {
-		SharedPreferences sp = context.getSharedPreferences(CLICK_DATE, Context.MODE_PRIVATE);
-		SharedPreferences.Editor edit = sp.edit();
-		edit.putInt(CLICK_DATE + "YEAR", calendarDate.getYear());
-		edit.putInt(CLICK_DATE + "MONTH", calendarDate.getMonth());
-		edit.putInt(CLICK_DATE + "DAY", calendarDate.getDay());
-		edit.commit();
-	}
-
-	public static CalendarDate getClickDate(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(CLICK_DATE, Context.MODE_PRIVATE);
-		CalendarDate defaultDate = new CalendarDate();
-		int defaultYear = defaultDate.getYear();
-		int defaultMonth = defaultDate.getMonth();
-		int defaultDay = defaultDate.getDay();
-		int year = sp.getInt(CLICK_DATE + "YEAR", defaultYear);
-		int month = sp.getInt(CLICK_DATE + "MONTH", defaultMonth);
-		int day = sp.getInt(CLICK_DATE + "DAY", defaultDay);
-		return new CalendarDate(year, month, day);
-	}
-
 	public static int calculateMonthOffset(int year, int month, CalendarDate currentDate) {
 		int currentYear = currentDate.getYear();
 		int currentMonth = currentDate.getMonth();

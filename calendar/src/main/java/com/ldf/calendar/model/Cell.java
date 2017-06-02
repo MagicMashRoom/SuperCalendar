@@ -6,7 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 
 import com.ldf.calendar.utils.Utils;
-import com.ldf.calendar.views.Calendar;
+import com.ldf.calendar.view.Calendar;
 
 import java.util.HashMap;
 
@@ -16,7 +16,7 @@ import java.util.HashMap;
 
 public class Cell {
 
-    public CalendarDate cellDate;
+    public CalendarDate date;
     public Calendar.State state;
     public int col;
     public int row;
@@ -65,7 +65,7 @@ public class Cell {
 
     public Cell(CalendarDate date, Calendar.State state, int col, int row) {
         super();
-        this.cellDate = date;
+        this.date = date;
         this.state = state;
         this.col = col;
         this.row = row;
@@ -73,7 +73,7 @@ public class Cell {
 
     // 绘制一个单元格 如果颜色需要自定义可以修改
     public void drawCell(Canvas canvas, HashMap<String, String> markDateData) {
-        drawMark(canvas, cellDate, markDateData);
+        drawMark(canvas, date, markDateData);
         switch (state) {
             case CURRENT_MONTH_DAY:
                 datePaint.setColor(Color.parseColor("#FF333333"));
@@ -129,13 +129,13 @@ public class Cell {
 
     private void drawDateText(Canvas canvas) {
         // 绘制文字
-        String date = this.cellDate.day+"";
+        String date = this.date.day+"";
         CalendarDate today = new CalendarDate();
-        if(this.cellDate.toString().equals(today.toString())){
+        if(this.date.toString().equals(today.toString())){
             date = "今";
         }
-        if(CalendarDate.isSameMonth(today , this.cellDate)
-                && this.cellDate.day < today.day
+        if(CalendarDate.isSameMonth(today , this.date)
+                && this.date.day < today.day
                 && state == Calendar.State.CURRENT_MONTH_DAY){
             datePaint.setColor(Color.parseColor("#888888"));
         }

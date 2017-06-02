@@ -1,4 +1,4 @@
-package com.ldf.calendar.views;
+package com.ldf.calendar.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -8,12 +8,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 
+import com.ldf.calendar.OnSelectDateListener;
+import com.ldf.calendar.adpter.CalendarViewAdapter;
 import com.ldf.calendar.model.Cell;
 import com.ldf.calendar.model.CalendarDate;
 import com.ldf.calendar.utils.Utils;
 
 import java.util.HashMap;
-
 
 public class Calendar extends View {
 
@@ -38,8 +39,8 @@ public class Calendar extends View {
 	private Row rows[] = new Row[TOTAL_ROW_SIX];	// 行数组，每个元素代表一行
 
 	private CalendarDate mShowDate; //自定义的日期  包括year month day
-	private CalendarDate clickDate; //被选中的日期  包括year month day
-	private OnCellClickListener onCellClickListener;	// 单元格点击回调事件
+	private CalendarDate selectedDate; //被选中的日期  包括year month day
+	private OnSelectDateListener onCellClickListener;	// 单元格点击回调事件
 	private int touchSlop;
 	private HashMap<String, String> markData;
 
@@ -51,16 +52,7 @@ public class Calendar extends View {
 		this.markData = markDateData;
 	}
 
-	public interface OnCellClickListener {
-
-		void onClickDateCell(CalendarDate date);//回调点击的日期
-
-		void refreshDate(CalendarDate date);
-
-		void onClickOtherMonth(int offset);//点击其它月份日期
-	}
-
-	public Calendar(Context context, OnCellClickListener onCellClickListener) {
+	public Calendar(Context context, OnSelectDateListener onCellClickListener) {
 		super(context);
 		this.onCellClickListener = onCellClickListener;
 		init(context);
@@ -109,7 +101,7 @@ public class Calendar extends View {
 		linePaint.setColor(Color.parseColor("#E8E8E8"));
 		linePaint.setStrokeWidth(Utils.dpi2px(context, 0.66f));
 		touchSlop = ViewConfiguration.get(context).getScaledTouchSlop() * 2;
-		clickDate = Utils.getClickDate(context);
+		selectedDate = CalendarViewAdapter.getDate();
 		initDateData();
 	}
 
@@ -162,23 +154,27 @@ public class Calendar extends View {
 		if (col >= TOTAL_COL || row >= TOTAL_ROW_SIX)
 			return;
 		if (rows[row] != null) {
-			CalendarDate clickDate;
 			if(rows[row].cells[col].state == State.CURRENT_MONTH_DAY){
+				cancelClickState();
 				rows[row].cells[col].state = State.CLICK_DAY;
-				clickDate = rows[row].cells[col].cellDate;
-				onCellClickListener.onClickDateCell(clickDate);
+				selectedDate = rows[row].cells[col].date;
+				CalendarViewAdapter.setDate(selectedDate);
+				onCellClickListener.onSelectDate(selectedDate);
 			} else if (rows[row].cells[col].state == State.PAST_MONTH_DAY){
-				clickDate = rows[row].cells[col].cellDate;
-				onCellClickListener.onClickOtherMonth(PAST_MONTH);
-				onCellClickListener.onClickDateCell(clickDate);
+				selectedDate = rows[row].cells[col].date;
+				CalendarViewAdapter.setDate(selectedDate);
+				onCellClickListener.onSelectOtherMonth(PAST_MONTH);
+				onCellClickListener.onSelectDate(selectedDate);
 			} else if (rows[row].cells[col].state == State.NEXT_MONTH_DAY){
-				clickDate = rows[row].cells[col].cellDate;
-				onCellClickListener.onClickOtherMonth(NEXT_MONTH);
-				onCellClickListener.onClickDateCell(clickDate);
+				selectedDate = rows[row].cells[col].date;
+				CalendarViewAdapter.setDate(selectedDate);
+				onCellClickListener.onSelectOtherMonth(NEXT_MONTH);
+				onCellClickListener.onSelectDate(selectedDate);
 			} else if (rows[row].cells[col].state == State.TODAY){
 				rows[row].cells[col].state = State.CLICK_DAY;
-				clickDate = rows[row].cells[col].cellDate;
-				onCellClickListener.onClickDateCell(clickDate);
+				selectedDate = rows[row].cells[col].date;
+				CalendarViewAdapter.setDate(selectedDate);
+				onCellClickListener.onSelectDate(selectedDate);
 			}
 			invalidate();
 		}
@@ -224,7 +220,7 @@ public class Calendar extends View {
 				fillCurrentMonth(day, row, col);
 				if (Utils.isCurrentMonth(mShowDate)
 						&& Utils.isCurrentDay(day)
-						&& !rows[row].cells[col].cellDate.equals(clickDate)) {
+						&& !rows[row].cells[col].date.equals(selectedDate)) {
 					fillTodayDate(day, row, col);
 				}
 			} else if (position < firstDayWeek) { //last month
@@ -245,7 +241,7 @@ public class Calendar extends View {
 	private void fillCurrentMonth(int day, int row, int col) {
 		rows[row].cells[col] = new Cell(CalendarDate.modifyDay(mShowDate, day),
 				State.CURRENT_MONTH_DAY, col, row);
-		if(rows[row].cells[col].cellDate.equals(clickDate)){
+		if(rows[row].cells[col].date.equals(selectedDate)){
 			rows[row].cells[col] = new Cell(CalendarDate.modifyDay(mShowDate, day),
 					State.CLICK_DAY, col, row);
 		}
@@ -288,12 +284,6 @@ public class Calendar extends View {
 		return this.mShowDate;
 	}
 
-	public void showToday(){
-		if(onCellClickListener != null){
-			onCellClickListener.refreshDate(mShowDate);
-		}
-	}
-
 	public void cancelClickState(){
 		for (int i = 0; i < TOTAL_ROW_SIX; i++) {
 			if (rows[i] != null){
@@ -301,13 +291,15 @@ public class Calendar extends View {
 					if(rows[i].cells[j].state == State.CLICK_DAY){
 						rows[i].cells[j].state = State.CURRENT_MONTH_DAY;
 					}
+					if(rows[i].cells[j].date.equals(new CalendarDate())) {
+						rows[i].cells[j].state = State.TODAY;
+					}
 				}
 			}
 		}
 	}
 
 	public void updateClickDate(){
-		clickDate = Utils.getClickDate(context);
 		fillMonthDate();
 	}
 }

@@ -9,9 +9,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.ldf.calendar.MonthPager;
+import com.ldf.calendar.OnSelectDateListener;
 import com.ldf.calendar.adpter.CalendarViewAdapter;
 import com.ldf.calendar.model.CalendarDate;
-import com.ldf.calendar.views.Calendar;
+import com.ldf.calendar.view.Calendar;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,7 +34,7 @@ public class SyllabusActivity extends AppCompatActivity{
     private ArrayList<Calendar> currentCalendars = new ArrayList<>();
 
     private CalendarViewAdapter calendarAdapter;
-    private Calendar.OnCellClickListener onCellClickListener;
+    private OnSelectDateListener onCellClickListener;
     private int mCurrentPage = MonthPager.CURRENT_DAY_INDEX;
     private Context context;
     private CalendarDate currentDate;
@@ -68,20 +69,15 @@ public class SyllabusActivity extends AppCompatActivity{
     }
 
     private void initCalendarView() {
-        onCellClickListener = new Calendar.OnCellClickListener() {
-            @Override
-            public void onClickDateCell(CalendarDate date) {
-                refreshClickDate(date);
-                calendarAdapter.updateAllClickState();
-            }
+        onCellClickListener = new OnSelectDateListener() {
 
             @Override
-            public void refreshDate(CalendarDate date) {
+            public void onSelectDate(CalendarDate date) {
                 refreshClickDate(date);
             }
 
             @Override
-            public void onClickOtherMonth(int offset) {
+            public void onSelectOtherMonth(int offset) {
                 monthPager.setCurrentItem(mCurrentPage + offset);
             }
         };
