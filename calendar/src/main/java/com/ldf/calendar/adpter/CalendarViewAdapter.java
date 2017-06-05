@@ -9,11 +9,13 @@ import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.ldf.calendar.MonthPager;
+import com.ldf.calendar.utils.Utils;
+import com.ldf.calendar.view.MonthPager;
 import com.ldf.calendar.model.CalendarDate;
 import com.ldf.calendar.view.Calendar;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CalendarViewAdapter extends PagerAdapter {
 	private ArrayList<Calendar> calendars;
@@ -69,10 +71,6 @@ public class CalendarViewAdapter extends PagerAdapter {
 		return calendars;
 	}
 
-	public void setCalendars(ArrayList<Calendar> calendars) {
-		this.calendars = calendars;
-	}
-
 	public void updateState(){
 		for(int i = 0; i < calendars.size(); i++){
 			Calendar calendar = calendars.get(i);
@@ -80,4 +78,8 @@ public class CalendarViewAdapter extends PagerAdapter {
 			calendar.updateClickDate();
 		}
 	}
+
+    public void setMarkData(HashMap<String, String> markData) {
+        Utils.setMarkData(markData);
+    }
 }

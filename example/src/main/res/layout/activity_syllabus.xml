@@ -84,10 +84,10 @@
             style="@style/weekIndicatorStyle"
             android:text="日" />
     </LinearLayout>
-    <com.ldf.calendar.MonthPager
+    <com.ldf.calendar.view.MonthPager
         android:id="@+id/calendar_view"
         android:layout_width="match_parent"
         android:layout_height="270dp"
         android:background="#fff">
-    </com.ldf.calendar.MonthPager>
+    </com.ldf.calendar.view.MonthPager>
 </LinearLayout>

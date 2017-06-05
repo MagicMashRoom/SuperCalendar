@@ -34,8 +34,8 @@ public class CalendarDate implements Serializable{
 		this.day = Utils.getDay();
 	}
 
-	public static CalendarDate modifyDay(CalendarDate date, int day){
-		CalendarDate modifyDate = new CalendarDate(date.year, date.month, day);
+	public CalendarDate modifyDay(int day){
+		CalendarDate modifyDate = new CalendarDate(this.year, this.month, day);
 		return modifyDate;
 	}
 

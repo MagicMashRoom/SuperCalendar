@@ -1,4 +1,4 @@
-package com.ldf.calendar;
+package com.ldf.calendar.view;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;
@@ -30,6 +30,7 @@ public class MonthPager extends ViewPager {
         viewPageChangeListener = new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                Log.e("ldf","onPageScrolled");
                 if(monthPageChangeListener != null) {
                     monthPageChangeListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
                 }
@@ -38,6 +39,7 @@ public class MonthPager extends ViewPager {
             @Override
             public void onPageSelected(int position) {
                 CalendarViewAdapter adapter = (CalendarViewAdapter) getAdapter();
+                Log.e("ldf","position = " + position % 3);
                 adapter.updateState();
                 if (pageChangeByGesture) {
                     if(monthPageChangeListener != null) {
@@ -49,6 +51,7 @@ public class MonthPager extends ViewPager {
 
             @Override
             public void onPageScrollStateChanged(int state) {
+                Log.e("ldf","onPageScrollStateChanged");
                 if(monthPageChangeListener != null) {
                     monthPageChangeListener.onPageScrollStateChanged(state);
                 }

@@ -27,10 +27,6 @@ public class Cell {
     public static Paint markPaint;
     public static Context context;
 
-    public static Context getContext() {
-        return context;
-    }
-
     public static void setContext(Context context) {
         Cell.context = context;
     }
@@ -45,10 +41,6 @@ public class Cell {
 
     public static void setMarkPaint(Paint markPaint) {
         Cell.markPaint = markPaint;
-    }
-
-    public static int getWidth() {
-        return width;
     }
 
     public static void setWidth(int width) {
@@ -72,8 +64,8 @@ public class Cell {
     }
 
     // 绘制一个单元格 如果颜色需要自定义可以修改
-    public void drawCell(Canvas canvas, HashMap<String, String> markDateData) {
-        drawMark(canvas, date, markDateData);
+    public void drawCell(Canvas canvas) {
+        drawMark(canvas, date, Utils.getMarkData());
         switch (state) {
             case CURRENT_MONTH_DAY:
                 datePaint.setColor(Color.parseColor("#FF333333"));

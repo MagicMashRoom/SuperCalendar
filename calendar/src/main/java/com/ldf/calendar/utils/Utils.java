@@ -15,12 +15,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 
 public class Utils {
-
-	private static final String CLICK_DATE= "CLICK_DATE";
-
 	public static final String[] weekName = {   "周一", "周二", "周三", "周四", "周五", "周六", "周日" };
+
+	private static HashMap<String , String> markData = new HashMap<>();
 
 	public static int getMonthDays(int year, int month) {
 		if (month > 12) {
@@ -56,13 +56,6 @@ public class Utils {
 
 	public static int getDay() {
 		return Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-	}
-
-	public static boolean isCurrentDay(int day) {
-		if(Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == day){
-			return true;
-		}
-		return false;
 	}
 
 	public static int getWeekDay() {
@@ -134,10 +127,10 @@ public class Utils {
 		}
 		return date;
 	}
-	
-	public static boolean isCurrentMonth(CalendarDate date){
-		return(date.year == Utils.getYear() &&
-				date.month == Utils.getMonth());
+
+	public static boolean isToday(CalendarDate date , int day) {
+		return (date.year == Utils.getYear() &&
+				date.month == Utils.getMonth() && day == Utils.getDay());
 	}
 
 	public static int calculateMonthOffset(int year, int month, CalendarDate currentDate) {
@@ -149,5 +142,13 @@ public class Utils {
 
 	public static int dpi2px(Context context, float dpi) {
 		return (int) (context.getResources().getDisplayMetrics().density * dpi + 0.5f);
+	}
+
+	public static HashMap<String, String> getMarkData() {
+		return markData;
+	}
+
+	public static void setMarkData(HashMap<String, String> imarkData) {
+		markData = imarkData;
 	}
 }

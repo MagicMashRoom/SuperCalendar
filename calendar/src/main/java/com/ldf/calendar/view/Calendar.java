@@ -4,12 +4,11 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 
-import com.ldf.calendar.OnSelectDateListener;
+import com.ldf.calendar.listener.OnSelectDateListener;
 import com.ldf.calendar.adpter.CalendarViewAdapter;
 import com.ldf.calendar.model.Cell;
 import com.ldf.calendar.model.CalendarDate;
@@ -31,14 +30,19 @@ public class Calendar extends View {
 	private Context context;
 
 	private Paint circlePaint;	// 绘制点击选中圆形的画笔
+	private int selectedColor = Color.BLACK;
 
-	private int circlePaintColor = Color.BLACK;
 	private Paint markPaint; //绘制MARK的画笔
-	private int markPaintColor = Color.RED;
+	private int markColor = Color.RED;
+
 	private Paint datePaint;	// 绘制文本的画笔
-	private int datePaintTextColor = Color.BLACK;
-	private int datePaintTextSize = 39;
+	private int dateTextColor = Color.BLACK;
+	private float dateTextSize = 13f;
+
 	private Paint linePaint;	// 绘制分割线的画笔
+
+	private int lineColor = Color.BLACK;
+	private float lineSize = 0.66f;
 
 	private int viewWidth;	// 视图的宽度
 	private int viewHeight;	// 视图的高度
@@ -51,15 +55,6 @@ public class Calendar extends View {
 	private CalendarDate selectedDate; //被选中的日期  包括year month day
 	private OnSelectDateListener onCellClickListener;	// 单元格点击回调事件
 	private int touchSlop;
-	private HashMap<String, String> markData;
-
-	public HashMap<String, String> getMarkData() {
-		return markData;
-	}
-
-	public void setMarkData(HashMap<String, String> markDateData) {
-		this.markData = markDateData;
-	}
 
 	public Calendar(Context context, OnSelectDateListener onCellClickListener) {
 		super(context);
@@ -90,25 +85,25 @@ public class Calendar extends View {
 	}
 
 	private void drawLine(Canvas canvas, int row) {
-		canvas.drawLine(0, row * cellHeight, viewWidth,row * cellHeight, linePaint);
+		canvas.drawLine(0, row * cellHeight, viewWidth , row * cellHeight, linePaint);
 	}
 
 	private void init(Context context) {
 		this.context = context;
 		Cell.setContext(context);
 		datePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		datePaint.setTextSize(Utils.dpi2px(context, 13));
+		datePaint.setTextSize(Utils.dpi2px(context, dateTextSize));
 		Cell.setDatePaint(datePaint);
 		circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		circlePaint.setStyle(Paint.Style.FILL);
-		circlePaint.setColor(Color.parseColor("#FFEBEBEB"));
+		circlePaint.setColor(selectedColor);
 		Cell.setCirclePaint(circlePaint);
 		markPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		markPaint.setStyle(Paint.Style.FILL);
 		Cell.setMarkPaint(markPaint);
 		linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		linePaint.setColor(Color.parseColor("#E8E8E8"));
-		linePaint.setStrokeWidth(Utils.dpi2px(context, 0.66f));
+		linePaint.setColor(lineColor);
+		linePaint.setStrokeWidth(Utils.dpi2px(context, lineSize));
 		touchSlop = ViewConfiguration.get(context).getScaledTouchSlop() * 2;
 		selectedDate = CalendarViewAdapter.getDate();
 		initDateData();
@@ -201,7 +196,7 @@ public class Calendar extends View {
 		public void drawRow(Canvas canvas) {
 			for (int col = 0; col < cells.length; col++) {
 				if (cells[col] != null)
-					cells[col].drawCell(canvas, markData);
+					cells[col].drawCell(canvas);
 			}
 		}
 	}
@@ -210,54 +205,52 @@ public class Calendar extends View {
 		TODAY, CURRENT_MONTH_DAY, PAST_MONTH_DAY, NEXT_MONTH_DAY, CLICK_DAY, NONE
 	}
 
-	private void fillMonthDate() {
+	private void instantiateMonth() {
 		int lastMonthDays = Utils.getMonthDays(mShowDate.year, mShowDate.month - 1);	// 上个月的天数
 		int currentMonthDays = Utils.getMonthDays(mShowDate.year, mShowDate.month);	// 当前月的天数
-		int firstDayWeek = Utils.getWeekDayFromDate(mShowDate.year, mShowDate.month);
+		int firstDayPosition = Utils.getWeekDayFromDate(mShowDate.year, mShowDate.month);//本月第一天是本月第一周的周几
 		int day = 0;
 		for (int row = 0; row < TOTAL_ROW_SIX; row++) {
-			day = fillDayCol(lastMonthDays, currentMonthDays, firstDayWeek, day, row);
+			day = instantiateWeek(lastMonthDays, currentMonthDays, firstDayPosition, day, row);
 		}
 	}
 
-	private int fillDayCol(int lastMonthDays, int currentMonthDays, int firstDayWeek, int day, int row) {
+	private int instantiateWeek(int lastMonthDays, int currentMonthDays, int firstDayWeek, int day, int row) {
 		rows[row] = new Row(row);
 		for (int col = 0; col < TOTAL_COL; col++) {
 			int position = col + row * TOTAL_COL;	// 单元格位置
-			if (position >= firstDayWeek && position < firstDayWeek + currentMonthDays) {	// 这个月的
+			if (position >= firstDayWeek && position < firstDayWeek + currentMonthDays) {	// 本月的
 				day ++;
-				fillCurrentMonth(day, row, col);
-				if (Utils.isCurrentMonth(mShowDate)
-						&& Utils.isCurrentDay(day)
+				instantiateCurrentMonth(day, row, col);
+				if (Utils.isToday(mShowDate , day)
 						&& !rows[row].cells[col].date.equals(CalendarViewAdapter.getDate())) {
-					Log.e("ldf","selectedDate = " + CalendarViewAdapter.getDate().toString());
-					fillTodayDate(day, row, col);
+					instantiateToday(day, row, col);
 				}
 			} else if (position < firstDayWeek) { //last month
-				fillLastMonth(lastMonthDays, firstDayWeek, row, col, position);
+				instantiateLastMonth(lastMonthDays, firstDayWeek, row, col, position);
 			} else if (position >= firstDayWeek + currentMonthDays) {//next month
-				fillNextMonth(currentMonthDays, firstDayWeek, row, col, position);
+				instantiateNextMonth(currentMonthDays, firstDayWeek, row, col, position);
 			}
 		}
 		return day;
 	}
 
-	private void fillTodayDate(int day, int row, int col) {
-		CalendarDate date = CalendarDate.modifyDay(mShowDate, day);
+	private void instantiateToday(int day, int row, int col) {
+		CalendarDate date = mShowDate.modifyDay(day);
 		mTodayCell = new Cell(date, State.TODAY, col, row);
 		rows[row].cells[col] = mTodayCell;
 	}
 
-	private void fillCurrentMonth(int day, int row, int col) {
-		rows[row].cells[col] = new Cell(CalendarDate.modifyDay(mShowDate, day),
+	private void instantiateCurrentMonth(int day, int row, int col) {
+		rows[row].cells[col] = new Cell(mShowDate.modifyDay(day),
 				State.CURRENT_MONTH_DAY, col, row);
-		if(rows[row].cells[col].date.equals(selectedDate)){
-			rows[row].cells[col] = new Cell(CalendarDate.modifyDay(mShowDate, day),
+		if(rows[row].cells[col].date.equals(CalendarViewAdapter.getDate())){
+			rows[row].cells[col] = new Cell(mShowDate.modifyDay(day),
 					State.CLICK_DAY, col, row);
 		}
 	}
 
-	private void fillNextMonth(int currentMonthDays, int firstDayWeek, int row, int col, int position) {
+	private void instantiateNextMonth(int currentMonthDays, int firstDayWeek, int row, int col, int position) {
 
 		rows[row].cells[col] = new Cell((new CalendarDate(mShowDate.year,
 				mShowDate.month + 1, position - firstDayWeek - currentMonthDays + 1)),
@@ -270,14 +263,14 @@ public class Calendar extends View {
 		}
 	}
 
-	private void fillLastMonth(int lastMonthDays, int firstDayWeek, int row, int col, int position) {
+	private void instantiateLastMonth(int lastMonthDays, int firstDayWeek, int row, int col, int position) {
 		rows[row].cells[col] = new Cell(new CalendarDate(mShowDate.year,
 				mShowDate.month - 1, lastMonthDays - (firstDayWeek- position - 1)),
 				State.PAST_MONTH_DAY, col, row);
 	}
 
 	public void updateCurrentDate() {
-		fillMonthDate();
+		instantiateMonth();
 		invalidate();
 	}
 
@@ -310,6 +303,36 @@ public class Calendar extends View {
 	}
 
 	public void updateClickDate(){
-		fillMonthDate();
+		instantiateMonth();
+	}
+
+	public void setMarkColor(int markColor) {
+		this.markColor = markColor;
+	}
+
+	public void setSelectedColor(int selectedColor) {
+		this.selectedColor = selectedColor;
+	}
+
+	public int getDateTextColor() {
+		return dateTextColor;
+	}
+
+	public void setDateTextColor(int dateTextColor) {
+		this.dateTextColor = dateTextColor;
+	}
+
+	// 传入参数为Dp
+	public void setDateTextSize(int dateTextSize) {
+		this.dateTextSize = dateTextSize;
+	}
+
+	public void setLineColor(int lineColor) {
+		this.lineColor = lineColor;
+	}
+
+	// 传入参数为Dp
+	public void setLineSize(float lineSize) {
+		this.lineSize = lineSize;
 	}
 }

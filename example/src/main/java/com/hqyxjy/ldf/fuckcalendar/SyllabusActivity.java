@@ -8,8 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
-import com.ldf.calendar.MonthPager;
-import com.ldf.calendar.OnSelectDateListener;
+import com.ldf.calendar.view.MonthPager;
+import com.ldf.calendar.listener.OnSelectDateListener;
 import com.ldf.calendar.adpter.CalendarViewAdapter;
 import com.ldf.calendar.model.CalendarDate;
 import com.ldf.calendar.view.Calendar;
@@ -141,6 +141,9 @@ public class SyllabusActivity extends AppCompatActivity{
 
     private void refreshMonthPager(int offset) {
         calendarAdapter = new CalendarViewAdapter(showCalendars, offset);
+        HashMap<String , String> markData = new HashMap<>();
+        markData.put("2017-08-09" , "1");
+        calendarAdapter.setMarkData(markData);
         monthPager.setAdapter(calendarAdapter);
         monthPager.setCurrentItem(MonthPager.CURRENT_DAY_INDEX);
     }
