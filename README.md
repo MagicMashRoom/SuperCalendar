@@ -39,22 +39,17 @@ Include `CalendarPickerView` in your layout XML.
 使用此方法回调日历点击事件
  ```
 private void initCalendarView() {
-        onCellClickListener = new Calendar.OnCellClickListener() {
+        onCellClickListener = new OnSelectDateListener() {
+
             @Override
-            public void onClickDateCell(CalendarDate date) {
-                refreshClickDate(date);
-                calendarAdapter.updateAllClickState();// 此代码一定要有
+            public void onSelectDate(CalendarDate date) {
+                //you code
             }
 
             @Override
-            public void refreshDate(CalendarDate date) {
-                refreshClickDate(date);
-            }
-
-            @Override
-            public void onClickOtherMonth(int offset) {
-                monthPager.setCurrentItem(mCurrentPage + offset);
-            }
+            public void onSelectOtherMonth(int offset) {
+                //you code
+            }
         };
         initMonthPage();
         calendarAdapter = new CalendarViewAdapter<>(showCalendars, CURRENT_OFFSET);
@@ -66,39 +61,32 @@ private void initCalendarView() {
  
  ```
  private void initCalendarData() {
-        showCalendars = new Calendar[3];
         for (int i = 0; i < 3; i++) {
-            showCalendars[i] = new Calendar(context, onCellClickListener);
+            Calendar calendar = new Calendar(context , onCellClickListener);
+            showCalendars.add(calendar);
         }
     }
  ```
  使用此方法给MonthPager添加上相关监听
   ```
-  private void  initMonthPager() {
-        monthPager.setAdapter(calendarAdapter);
-        monthPager.setCurrentItem(MonthPager.CURRENT_DAY_INDEX);
-        monthPager.setPageTransformer(false, new ViewPager.PageTransformer() {
-            @Override
-            public void transformPage(View page, float position) {
-                position = (float) Math.sqrt(1 - Math.abs(position));
-                page.setAlpha(position);
-            }
-        });
-        monthPager.addOnPageChangeListener(new MonthPager.OnPageChangeListener() {
+  monthPager.addOnPageChangeListener(new MonthPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             }
 
             @Override
             public void onPageSelected(int position) {
-            /// 示例代码
+                mCurrentPage = position;
+                currentCalendars = calendarAdapter.getAllItems();
+                if(currentCalendars.get(position % currentCalendars.size()) instanceof Calendar){
+                    //you code
+                }
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
             }
         });
-    }
   ```
  
 Download
@@ -107,16 +95,16 @@ Gradle:
 Step 1. Add it in your root build.gradle at the end of repositories:
 ```groovy
 allprojects {
-	repositories {
-		...
-		maven { url 'https://www.jitpack.io' }
-	}
+    repositories {
+	...
+	maven { url 'https://www.jitpack.io' }
+    }
 }
  ```	
 Step 2. Add the dependency
 ```groovy
 dependencies {
-        compile 'com.github.MagicMashRoom:FuckCalendar:-SNAPSHOT'
+    compile 'com.github.MagicMashRoom:FuckCalendar:-SNAPSHOT'
 }
 ```
 
