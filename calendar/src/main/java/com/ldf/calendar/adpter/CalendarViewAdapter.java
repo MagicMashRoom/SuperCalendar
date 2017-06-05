@@ -19,7 +19,6 @@ import java.util.HashMap;
 
 public class CalendarViewAdapter extends PagerAdapter {
 	private ArrayList<Calendar> calendars;
-	private int offset;
 	private static CalendarDate date = new CalendarDate();
 
 	public static void setDate(CalendarDate calendarDate) {
@@ -30,10 +29,9 @@ public class CalendarViewAdapter extends PagerAdapter {
 		return date;
 	}
 
-	public CalendarViewAdapter(ArrayList<Calendar> calendars, int offset) {
+	public CalendarViewAdapter(ArrayList<Calendar> calendars) {
 		super();
 		this.calendars = calendars;
-		this.offset = offset;
 	}
 
 	@Override
@@ -46,7 +44,7 @@ public class CalendarViewAdapter extends PagerAdapter {
 		}
 		Calendar calendar = calendars.get(position % calendars.size());
 		CalendarDate date = new CalendarDate();
-		date.modifyCurrentDateMonth(position - MonthPager.CURRENT_DAY_INDEX + offset);
+		date.modifyCurrentDateMonth(position - MonthPager.CURRENT_DAY_INDEX);
 		calendar.showDate(date);
 		container.addView(calendar, 0);
 		return calendar;

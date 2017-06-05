@@ -83,7 +83,7 @@ public class SyllabusActivity extends AppCompatActivity{
             }
         };
         initCalendarData();
-        calendarAdapter = new CalendarViewAdapter(showCalendars, CURRENT_OFFSET);
+        calendarAdapter = new CalendarViewAdapter(showCalendars);
         HashMap<String , String> markData = new HashMap<>();
         markData.put("2017-8-9" , "1");
         markData.put("2017-7-9" , "0");
@@ -140,16 +140,17 @@ public class SyllabusActivity extends AppCompatActivity{
     }
 
     public void onClickBackToDayBtn() {
-        CalendarDate today = new CalendarDate();
-        refreshClickDate(today);
         calendarAdapter.updateState();
-        refreshMonthPager(CURRENT_OFFSET);
+        refreshMonthPager();
     }
 
-    private void refreshMonthPager(int offset) {
-        calendarAdapter = new CalendarViewAdapter(showCalendars, offset);
+    private void refreshMonthPager() {
+        calendarAdapter = new CalendarViewAdapter(showCalendars);
         monthPager.setAdapter(calendarAdapter);
         monthPager.setCurrentItem(MonthPager.CURRENT_DAY_INDEX);
+        calendarAdapter.updateState();
+        CalendarDate today = new CalendarDate();
+        refreshClickDate(today);
     }
 }
 
