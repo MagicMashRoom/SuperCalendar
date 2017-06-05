@@ -77,6 +77,14 @@ public class CalendarViewAdapter extends PagerAdapter {
 		}
 	}
 
+	public void updateState(CalendarDate date){
+		for(int i = 0; i < calendars.size(); i++){
+			Calendar calendar = calendars.get(i);
+			calendar.cancelClickState();
+			calendar.updateClickDate(date);
+		}
+	}
+
     public void setMarkData(HashMap<String, String> markData) {
         Utils.setMarkData(markData);
     }

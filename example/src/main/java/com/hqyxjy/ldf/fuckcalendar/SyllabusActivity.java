@@ -140,7 +140,6 @@ public class SyllabusActivity extends AppCompatActivity{
     }
 
     public void onClickBackToDayBtn() {
-        calendarAdapter.updateState();
         refreshMonthPager();
     }
 
@@ -148,8 +147,8 @@ public class SyllabusActivity extends AppCompatActivity{
         calendarAdapter = new CalendarViewAdapter(showCalendars);
         monthPager.setAdapter(calendarAdapter);
         monthPager.setCurrentItem(MonthPager.CURRENT_DAY_INDEX);
-        calendarAdapter.updateState();
         CalendarDate today = new CalendarDate();
+        calendarAdapter.updateState(today);
         refreshClickDate(today);
     }
 }

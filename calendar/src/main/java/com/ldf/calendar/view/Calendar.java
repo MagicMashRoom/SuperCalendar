@@ -310,6 +310,12 @@ public class Calendar extends View {
 		instantiateMonth();
 	}
 
+	public void updateClickDate(CalendarDate date){
+		CalendarViewAdapter.setDate(date);
+		instantiateMonth();
+		invalidate();
+	}
+
 	public void setMarkColor(int markColor) {
 		this.markColor = markColor;
 	}
