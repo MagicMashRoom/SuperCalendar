@@ -30,7 +30,6 @@ public class MonthPager extends ViewPager {
         viewPageChangeListener = new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                Log.e("ldf","onPageScrolled");
                 if(monthPageChangeListener != null) {
                     monthPageChangeListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
                 }
@@ -38,9 +37,6 @@ public class MonthPager extends ViewPager {
 
             @Override
             public void onPageSelected(int position) {
-                CalendarViewAdapter adapter = (CalendarViewAdapter) getAdapter();
-                Log.e("ldf","position = " + position % 3);
-                adapter.updateState();
                 if (pageChangeByGesture) {
                     if(monthPageChangeListener != null) {
                         monthPageChangeListener.onPageSelected(position);
@@ -51,7 +47,8 @@ public class MonthPager extends ViewPager {
 
             @Override
             public void onPageScrollStateChanged(int state) {
-                Log.e("ldf","onPageScrollStateChanged");
+                CalendarViewAdapter adapter = (CalendarViewAdapter) getAdapter();
+                adapter.updateState();
                 if(monthPageChangeListener != null) {
                     monthPageChangeListener.onPageScrollStateChanged(state);
                 }

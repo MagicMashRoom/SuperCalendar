@@ -8,6 +8,7 @@ package com.ldf.calendar.utils;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.ldf.calendar.model.CalendarDate;
 
@@ -150,5 +151,6 @@ public class Utils {
 
 	public static void setMarkData(HashMap<String, String> imarkData) {
 		markData = imarkData;
+		Log.e("ldf","markData = " + markData.size());
 	}
 }

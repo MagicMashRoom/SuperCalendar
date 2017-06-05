@@ -38,7 +38,6 @@ public class SyllabusActivity extends AppCompatActivity{
     private int mCurrentPage = MonthPager.CURRENT_DAY_INDEX;
     private Context context;
     private CalendarDate currentDate;
-    private HashMap<String, String> markData;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,6 +82,12 @@ public class SyllabusActivity extends AppCompatActivity{
         };
         initCalendarData();
         calendarAdapter = new CalendarViewAdapter(showCalendars, CURRENT_OFFSET);
+        HashMap<String , String> markData = new HashMap<>();
+        markData.put("2017-8-9" , "1");
+        markData.put("2017-7-9" , "0");
+        markData.put("2017-6-9" , "1");
+        markData.put("2017-6-10" , "0");
+        calendarAdapter.setMarkData(markData);
         initMonthPager();
     }
 
@@ -141,9 +146,6 @@ public class SyllabusActivity extends AppCompatActivity{
 
     private void refreshMonthPager(int offset) {
         calendarAdapter = new CalendarViewAdapter(showCalendars, offset);
-        HashMap<String , String> markData = new HashMap<>();
-        markData.put("2017-08-09" , "1");
-        calendarAdapter.setMarkData(markData);
         monthPager.setAdapter(calendarAdapter);
         monthPager.setCurrentItem(MonthPager.CURRENT_DAY_INDEX);
     }

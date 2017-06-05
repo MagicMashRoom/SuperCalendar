@@ -175,6 +175,7 @@ public class Calendar extends View {
 				onCellClickListener.onSelectOtherMonth(NEXT_MONTH);
 				onCellClickListener.onSelectDate(selectedDate);
 			} else if (rows[row].cells[col].state == State.TODAY){
+				cancelClickState();
 				rows[row].cells[col].state = State.CLICK_DAY;
 				selectedDate = rows[row].cells[col].date;
 				CalendarViewAdapter.setDate(selectedDate);
