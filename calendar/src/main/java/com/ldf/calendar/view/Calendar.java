@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -17,8 +18,11 @@ import com.ldf.calendar.utils.Utils;
 import java.util.HashMap;
 
 public class Calendar extends View {
-
+	/**
+	 * 日历列数
+	 */
 	private static final int TOTAL_COL = 7;
+
 	private static final int TOTAL_ROW_SIX = 6;
 	private static final int TOTAL_ROW_FIVE = 5;
 	private static final int PAST_MONTH = -1;
@@ -27,8 +31,13 @@ public class Calendar extends View {
 	private Context context;
 
 	private Paint circlePaint;	// 绘制点击选中圆形的画笔
+
+	private int circlePaintColor = Color.BLACK;
 	private Paint markPaint; //绘制MARK的画笔
+	private int markPaintColor = Color.RED;
 	private Paint datePaint;	// 绘制文本的画笔
+	private int datePaintTextColor = Color.BLACK;
+	private int datePaintTextSize = 39;
 	private Paint linePaint;	// 绘制分割线的画笔
 
 	private int viewWidth;	// 视图的宽度
@@ -220,7 +229,8 @@ public class Calendar extends View {
 				fillCurrentMonth(day, row, col);
 				if (Utils.isCurrentMonth(mShowDate)
 						&& Utils.isCurrentDay(day)
-						&& !rows[row].cells[col].date.equals(selectedDate)) {
+						&& !rows[row].cells[col].date.equals(CalendarViewAdapter.getDate())) {
+					Log.e("ldf","selectedDate = " + CalendarViewAdapter.getDate().toString());
 					fillTodayDate(day, row, col);
 				}
 			} else if (position < firstDayWeek) { //last month

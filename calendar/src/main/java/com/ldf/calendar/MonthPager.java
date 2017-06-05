@@ -6,9 +6,6 @@ import android.util.AttributeSet;
 import android.util.Log;
 
 import com.ldf.calendar.adpter.CalendarViewAdapter;
-import com.ldf.calendar.view.Calendar;
-
-import java.util.ArrayList;
 
 public class MonthPager extends ViewPager {
     public static int CURRENT_DAY_INDEX = 600;
@@ -41,8 +38,7 @@ public class MonthPager extends ViewPager {
             @Override
             public void onPageSelected(int position) {
                 CalendarViewAdapter adapter = (CalendarViewAdapter) getAdapter();
-                ArrayList<Calendar> calendars = adapter.getAllItems();
-                calendars.get(position % calendars.size()).updateClickDate();
+                adapter.updateState();
                 if (pageChangeByGesture) {
                     if(monthPageChangeListener != null) {
                         monthPageChangeListener.onPageSelected(position);

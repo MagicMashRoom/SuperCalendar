@@ -135,7 +135,7 @@ public class SyllabusActivity extends AppCompatActivity{
     public void onClickBackToDayBtn() {
         CalendarDate today = new CalendarDate();
         refreshClickDate(today);
-        calendarAdapter.updateAllClickState();
+        calendarAdapter.updateState();
         refreshMonthPager(CURRENT_OFFSET);
     }
 

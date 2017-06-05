@@ -73,7 +73,7 @@ public class CalendarViewAdapter extends PagerAdapter {
 		this.calendars = calendars;
 	}
 
-	public void updateAllClickState(){
+	public void updateState(){
 		for(int i = 0; i < calendars.size(); i++){
 			Calendar calendar = calendars.get(i);
 			calendar.cancelClickState();
