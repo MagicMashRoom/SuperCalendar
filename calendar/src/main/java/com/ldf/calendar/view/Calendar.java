@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -48,6 +49,7 @@ public class Calendar extends View {
 	private int viewHeight;	// 视图的高度
 	private int cellHeight; // 单元格高度
 	private int cellWidth; // 单元格宽度
+	private int currentMonthWeeks = TOTAL_ROW_SIX;
 
 	private Row rows[] = new Row[TOTAL_ROW_SIX];	// 行数组，每个元素代表一行
 
@@ -64,16 +66,17 @@ public class Calendar extends View {
 
 	@Override
 	protected void onDraw(Canvas canvas) {
+		Log.e("ldf","onDraw");
 		super.onDraw(canvas);
-		if(rows[5].cells[0].state == State.NONE){
+		if(currentMonthWeeks == TOTAL_ROW_FIVE){
 			cellHeight = viewHeight / TOTAL_ROW_FIVE;
 			Cell.setHeight(cellHeight);
-			for (int row = 0; row < TOTAL_ROW_SIX - 1; row++) {
+			for (int row = 0; row < TOTAL_ROW_FIVE; row++) {
 				if (rows[row] != null)
 					rows[row].drawRow(canvas);
 				drawLine(canvas, row);
 			}
-		}else{
+		} else {
 			cellHeight = viewHeight / TOTAL_ROW_SIX;
 			Cell.setHeight(cellHeight);
 			for (int row = 0; row < TOTAL_ROW_SIX; row++) {
@@ -197,13 +200,14 @@ public class Calendar extends View {
 		public void drawRow(Canvas canvas) {
 			for (int col = 0; col < cells.length; col++) {
 				if (cells[col] != null)
+					Log.e("ldf","date = " + cells[col].date.toString());
 					cells[col].drawCell(canvas);
 			}
 		}
 	}
 
 	public enum State {
-		TODAY, CURRENT_MONTH_DAY, PAST_MONTH_DAY, NEXT_MONTH_DAY, CLICK_DAY, NONE
+		TODAY, CURRENT_MONTH_DAY, PAST_MONTH_DAY, NEXT_MONTH_DAY, CLICK_DAY
 	}
 
 	private void instantiateMonth() {
@@ -256,11 +260,10 @@ public class Calendar extends View {
 		rows[row].cells[col] = new Cell((new CalendarDate(mShowDate.year,
 				mShowDate.month + 1, position - firstDayWeek - currentMonthDays + 1)),
 				State.NEXT_MONTH_DAY, col, row);
-
-		if(row == 5 && col == 0){
-			rows[row].cells[col] = new Cell((new CalendarDate(mShowDate.year,
-					mShowDate.month + 1, position - firstDayWeek - currentMonthDays + 1)),
-					State.NONE, col, row);
+		if(position - firstDayWeek - currentMonthDays + 1 >= 7) {
+			currentMonthWeeks = TOTAL_ROW_FIVE;
+		} else {
+			currentMonthWeeks = TOTAL_ROW_SIX;
 		}
 	}
 

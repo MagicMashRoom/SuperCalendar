@@ -65,6 +65,8 @@ public class SyllabusActivity extends AppCompatActivity{
 
     private void initCurrentDate() {
         currentDate = new CalendarDate();
+        textViewYearDisplay.setText(currentDate.getYear() + "年");
+        textViewMonthDisplay.setText(currentDate.getMonth() + "");
     }
 
     private void initCalendarView() {
@@ -104,7 +106,7 @@ public class SyllabusActivity extends AppCompatActivity{
         }
     }
 
-    private void  initMonthPager() {
+    private void initMonthPager() {
         monthPager.setAdapter(calendarAdapter);
         monthPager.setCurrentItem(MonthPager.CURRENT_DAY_INDEX);
         monthPager.setPageTransformer(false, new ViewPager.PageTransformer() {
