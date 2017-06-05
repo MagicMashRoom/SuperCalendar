@@ -1,9 +1,7 @@
 # FuckCalendar
 ==========================
 > 简单使用的日历
-
-![Screenshot](timesSquareScreenshot.png)
-
+![](https://github.com/MagicMashRoom/FuckCalendar/blob/master/raw/example.gif)
 
 Usage
 -----
