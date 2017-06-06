@@ -5,10 +5,12 @@
 
 package com.ldf.calendar.adpter;
 
+import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.ldf.calendar.listener.OnSelectDateListener;
 import com.ldf.calendar.utils.Utils;
 import com.ldf.calendar.view.MonthPager;
 import com.ldf.calendar.model.CalendarDate;
@@ -29,9 +31,16 @@ public class CalendarViewAdapter extends PagerAdapter {
 		return date;
 	}
 
-	public CalendarViewAdapter(ArrayList<Calendar> calendars) {
+	public CalendarViewAdapter(Context context , OnSelectDateListener onSelectDateListener) {
 		super();
-		this.calendars = calendars;
+		init(context, onSelectDateListener);
+	}
+
+	private void init(Context context, OnSelectDateListener onSelectDateListener) {
+		for (int i = 0; i < 3; i++) {
+			Calendar calendar = new Calendar(context , onSelectDateListener);
+			calendars.add(calendar);
+		}
 	}
 
 	@Override

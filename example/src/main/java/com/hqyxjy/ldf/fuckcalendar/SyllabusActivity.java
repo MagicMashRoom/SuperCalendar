@@ -34,7 +34,7 @@ public class SyllabusActivity extends AppCompatActivity{
     private ArrayList<Calendar> currentCalendars = new ArrayList<>();
 
     private CalendarViewAdapter calendarAdapter;
-    private OnSelectDateListener onCellClickListener;
+    private OnSelectDateListener onSelectDateListener;
     private int mCurrentPage = MonthPager.CURRENT_DAY_INDEX;
     private Context context;
     private CalendarDate currentDate;
@@ -70,7 +70,23 @@ public class SyllabusActivity extends AppCompatActivity{
     }
 
     private void initCalendarView() {
-        onCellClickListener = new OnSelectDateListener() {
+        initListener();
+        calendarAdapter = new CalendarViewAdapter(context , onSelectDateListener);
+        initMarkData();
+        initMonthPager();
+    }
+
+    private void initMarkData() {
+        HashMap<String , String> markData = new HashMap<>();
+        markData.put("2017-8-9" , "1");
+        markData.put("2017-7-9" , "0");
+        markData.put("2017-6-9" , "1");
+        markData.put("2017-6-10" , "0");
+        calendarAdapter.setMarkData(markData);
+    }
+
+    private void initListener() {
+        onSelectDateListener = new OnSelectDateListener() {
 
             @Override
             public void onSelectDate(CalendarDate date) {
@@ -82,28 +98,12 @@ public class SyllabusActivity extends AppCompatActivity{
                 monthPager.setCurrentItem(mCurrentPage + offset);
             }
         };
-        initCalendarData();
-        calendarAdapter = new CalendarViewAdapter(showCalendars);
-        HashMap<String , String> markData = new HashMap<>();
-        markData.put("2017-8-9" , "1");
-        markData.put("2017-7-9" , "0");
-        markData.put("2017-6-9" , "1");
-        markData.put("2017-6-10" , "0");
-        calendarAdapter.setMarkData(markData);
-        initMonthPager();
     }
 
     private void refreshClickDate(CalendarDate date) {
         currentDate = date;
         textViewYearDisplay.setText(date.getYear() + "年");
         textViewMonthDisplay.setText(date.getMonth() + "");
-    }
-
-    private void initCalendarData() {
-        for (int i = 0; i < 3; i++) {
-            Calendar calendar = new Calendar(context , onCellClickListener);
-            showCalendars.add(calendar);
-        }
     }
 
     private void initMonthPager() {
@@ -144,7 +144,7 @@ public class SyllabusActivity extends AppCompatActivity{
     }
 
     private void refreshMonthPager() {
-        calendarAdapter = new CalendarViewAdapter(showCalendars);
+        calendarAdapter = new CalendarViewAdapter(context , onSelectDateListener);
         monthPager.setAdapter(calendarAdapter);
         monthPager.setCurrentItem(MonthPager.CURRENT_DAY_INDEX);
         CalendarDate today = new CalendarDate();
