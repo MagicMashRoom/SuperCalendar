@@ -114,7 +114,7 @@ allprojects {
 Step 2. Add the dependency
 ```groovy
 dependencies {
-    compile 'com.github.MagicMashRoom:FuckCalendar:-SNAPSHOT'
+    compile 'com.github.MagicMashRoom:FuckCalendar:v1.0.1'
 }
 ```
 
