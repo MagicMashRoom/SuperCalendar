@@ -11,12 +11,12 @@ Usage
 Include `MonthPager` in your layout XML.
 
 ```xml
- <com.ldf.calendar.MonthPager
+ <com.ldf.calendar.view.MonthPager
         android:id="@+id/calendar_view"
         android:layout_width="match_parent"
         android:layout_height="270dp"
         android:background="#fff">
-    </com.ldf.calendar.MonthPager>
+    </com.ldf.calendar.view.MonthPager>
 ```
 
 目前来看 相比于Dialog选择日历 我的控件更适合于Activity/Fragment
