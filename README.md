@@ -8,7 +8,7 @@
 Usage
 -----
 
-Include `CalendarPickerView` in your layout XML.
+Include `MonthPager` in your layout XML.
 
 ```xml
  <com.ldf.calendar.MonthPager
@@ -36,58 +36,68 @@ Include `CalendarPickerView` in your layout XML.
         currentDate = new CalendarDate();
     }
  ```
-使用此方法回调日历点击事件
- ```
+初始化步骤
+ ```java
 private void initCalendarView() {
-        onCellClickListener = new OnSelectDateListener() {
-
-            @Override
-            public void onSelectDate(CalendarDate date) {
-                //you code
-            }
-
-            @Override
-            public void onSelectOtherMonth(int offset) {
-                //you code
-            }
-        };
-        initMonthPage();
-        calendarAdapter = new CalendarViewAdapter<>(showCalendars, CURRENT_OFFSET);
+        initListener();
+        calendarAdapter = new CalendarViewAdapter(context , onSelectDateListener);
+        initMarkData();
         initMonthPager();
     } 
- ```
- 
- 使用此方法初始化日历数据
- 
- ```
- private void initCalendarData() {
-        for (int i = 0; i < 3; i++) {
-            Calendar calendar = new Calendar(context , onCellClickListener);
-            showCalendars.add(calendar);
+```
+ 使用此方法回调日历点击事件   
+```java
+private void initListener() {
+    onSelectDateListener = new OnSelectDateListener() {
+
+        @Override
+        public void onSelectDate(CalendarDate date) {
+            refreshClickDate(date);
         }
-    }
+
+        @Override
+        public void onSelectOtherMonth(int offset) {
+            monthPager.setCurrentItem(mCurrentPage + offset);
+        }
+    };
+}
  ```
- 使用此方法给MonthPager添加上相关监听
-  ```
-  monthPager.addOnPageChangeListener(new MonthPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
+新建adapter
+```java
+calendarAdapter = new CalendarViewAdapter(context , onSelectDateListener);
+```
+设置有标记的日历的HashMap
+```java
+private void initMarkData() {
+       HashMap<String , String> markData = new HashMap<>();
+       markData.put("2017-8-9" , "1");
+       markData.put("2017-7-9" , "0");
+       markData.put("2017-6-9" , "1");
+       markData.put("2017-6-10" , "0");
+       calendarAdapter.setMarkData(markData);
+   }
+```
+使用此方法给MonthPager添加上相关监听
+ ```
+ monthPager.addOnPageChangeListener(new MonthPager.OnPageChangeListener() {
+           @Override
+           public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+           }
 
-            @Override
-            public void onPageSelected(int position) {
-                mCurrentPage = position;
-                currentCalendars = calendarAdapter.getAllItems();
-                if(currentCalendars.get(position % currentCalendars.size()) instanceof Calendar){
-                    //you code
-                }
-            }
+           @Override
+           public void onPageSelected(int position) {
+               mCurrentPage = position;
+               currentCalendars = calendarAdapter.getAllItems();
+               if(currentCalendars.get(position % currentCalendars.size()) instanceof Calendar){
+                   //you code
+               }
+           }
 
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        });
-  ```
+           @Override
+           public void onPageScrollStateChanged(int state) {
+           }
+       });
+```
  
 Download
 --------
