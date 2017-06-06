@@ -1,5 +1,7 @@
 apply plugin: 'com.android.library'
+apply plugin:'com.github.dcendents.android-maven'
 
+group='com.github.MagicMashRoom'
 android {
     compileSdkVersion 23
     buildToolsVersion "25.0.0"
