@@ -2,6 +2,7 @@ package com.ldf.calendar.view;
 
 import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -14,9 +15,9 @@ import com.ldf.calendar.Utils;
 @CoordinatorLayout.DefaultBehavior(MonthPager.Behavior.class)
 public class MonthPager extends ViewPager {
     public static int CURRENT_DAY_INDEX = 600;
-    private Context context;
+    private static Context context;
     private int mCellSpace;
-    private int rowCount = 6;
+    private static int rowCount = 6;
     private int totalRow = 6;
     private int cellHeight = 0;
 
@@ -24,8 +25,7 @@ public class MonthPager extends ViewPager {
     private OnPageChangeListener monthPageChangeListener;
     private boolean pageChangeByGesture = false;
     private boolean hasPageChangeListener = false;
-    private int selectedCell = 0;
-
+    private int selectedCell = 10;
 
     public MonthPager(Context context) {
         this(context, null);
@@ -54,8 +54,6 @@ public class MonthPager extends ViewPager {
                     if(monthPageChangeListener != null) {
                         monthPageChangeListener.onPageSelected(position);
                     }
-                    CalendarViewAdapter adapter = (CalendarViewAdapter) getAdapter();
-                    adapter.getPagers().get(position % 3).getCellHeight();
                     pageChangeByGesture = false;
                 }
             }
@@ -72,6 +70,14 @@ public class MonthPager extends ViewPager {
         };
         addOnPageChangeListener(viewPageChangeListener);
         hasPageChangeListener = true;
+    }
+
+    @Override
+    public void setAdapter(PagerAdapter adapter) {
+        super.setAdapter(adapter);
+        CalendarViewAdapter calendarViewAdapter = (CalendarViewAdapter) adapter;
+        cellHeight = calendarViewAdapter.getPagers().get(0).getCellHeight();
+        Log.e("ldf","cellHeight = " + cellHeight);
     }
 
     @Override
@@ -114,7 +120,7 @@ public class MonthPager extends ViewPager {
         void onPageScrollStateChanged(int state);
     }
 
-    public class Behavior extends CoordinatorLayout.Behavior<MonthPager> {
+    public static class Behavior extends CoordinatorLayout.Behavior<MonthPager> {
         private int top;
 
         @Override
@@ -133,11 +139,14 @@ public class MonthPager extends ViewPager {
 
         @Override
         public boolean onDependentViewChanged(CoordinatorLayout parent, MonthPager child, View dependency) {
+            Log.e("ldf","onDependentViewChanged");
             CalendarViewAdapter calendarViewAdapter = (CalendarViewAdapter) child.getAdapter();
             int touchSlop = Utils.getTouchSlop(context);
             if (dependentViewTop != -1) {
                 int dy = dependency.getTop() - dependentViewTop;    //dependency对其依赖的view(本例依赖的view是RecycleView)
+                Log.e("ldf","dy1 = " + dy);
                 int top = child.getTop();
+                Log.e("ldf","top = " + top);
 
                 if(dy > touchSlop){
                     calendarViewAdapter.switchToMonthType();
@@ -148,10 +157,14 @@ public class MonthPager extends ViewPager {
                 if (dy > -top){
                     dy = -top;
                 }
+                Log.e("ldf","dy2 = " + dy);
 
                 if (dy < -top - child.getTopMovableDistance()){
                     dy = -top - child.getTopMovableDistance();
                 }
+                Log.e("ldf","dy3 = " + dy);
+
+                Log.e("ldf","monthPager dy = " + dy);
                 child.offsetTopAndBottom(dy);
             }
             dependentViewTop = dependency.getTop();
@@ -181,10 +194,11 @@ public class MonthPager extends ViewPager {
 
     public int getTopMovableDistance() {
         rowCount = selectedCell / 7;
+        Log.e("ldf","cellHeight = " + cellHeight + "" + rowCount);
         return cellHeight * rowCount;
     }
     public int getMaxMovableDistance() {
+        Log.e("ldf","cellHeight = " + cellHeight);
         return getHeight() - cellHeight; //getHeight为本控件的高度
     }
-
 }

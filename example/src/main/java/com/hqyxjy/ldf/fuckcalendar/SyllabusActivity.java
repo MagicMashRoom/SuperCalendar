@@ -59,6 +59,7 @@ public class SyllabusActivity extends AppCompatActivity{
         initCurrentDate();
         initCalendarView();
         initBackTodayClickListener();
+        refreshMonthPager();
     }
 
     private void initBackTodayClickListener() {

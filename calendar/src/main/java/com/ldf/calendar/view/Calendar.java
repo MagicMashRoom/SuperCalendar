@@ -77,22 +77,12 @@ public class Calendar extends View {
 	protected void onDraw(Canvas canvas) {
 		Log.e("ldf","onDraw");
 		super.onDraw(canvas);
-		if(currentMonthWeeks == TOTAL_ROW_FIVE){
-			cellHeight = viewHeight / TOTAL_ROW_FIVE;
-			Cell.setHeight(cellHeight);
-			for (int row = 0; row < TOTAL_ROW_FIVE; row++) {
-				if (rows[row] != null)
-					rows[row].drawRow(canvas);
-				drawLine(canvas, row);
-			}
-		} else {
-			cellHeight = viewHeight / TOTAL_ROW_SIX;
-			Cell.setHeight(cellHeight);
-			for (int row = 0; row < TOTAL_ROW_SIX; row++) {
-				if (rows[row] != null)
-					rows[row].drawRow(canvas);
-				drawLine(canvas, row);
-			}
+		cellHeight = viewHeight / currentMonthWeeks;
+		Cell.setHeight(cellHeight);
+		for (int row = 0; row < currentMonthWeeks; row++) {
+			if (rows[row] != null)
+				rows[row].drawRow(canvas);
+			drawLine(canvas, row);
 		}
 	}
 
@@ -132,7 +122,7 @@ public class Calendar extends View {
 		super.onSizeChanged(w, h, oldW, oldH);
 		viewWidth = w;
 		viewHeight = h;
-		cellHeight = viewHeight / TOTAL_ROW_SIX;
+		cellHeight = viewHeight / currentMonthWeeks;
 		cellWidth = viewWidth / TOTAL_COL;
 		Cell.setWidth(cellWidth);
 	}
@@ -307,8 +297,10 @@ public class Calendar extends View {
 				State.NEXT_MONTH_DAY, col, row);
 		if(position - firstDayWeek - currentMonthDays + 1 >= 7) {
 			currentMonthWeeks = TOTAL_ROW_FIVE;
+			cellHeight = viewHeight / currentMonthWeeks;
 		} else {
 			currentMonthWeeks = TOTAL_ROW_SIX;
+			cellHeight = viewHeight / currentMonthWeeks;
 		}
 	}
 

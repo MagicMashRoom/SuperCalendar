@@ -28,6 +28,7 @@ public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<RecyclerVie
         if (monthPager.getBottom() > 0 && initOffset == -1) {
             initOffset = monthPager.getBottom();
             minOffset = initOffset - getMonthPager(parent).getMaxMovableDistance();
+            Log.e("ldf","minOffset = " + minOffset);
             child.offsetTopAndBottom(initOffset);
             saveTop(initOffset);
         } else if (initOffset != -1) {
@@ -51,10 +52,11 @@ public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<RecyclerVie
     }
 
     @Override
-    public void onNestedPreScroll(CoordinatorLayout coordinatorLayout, RecyclerView child, View target, int dx, int dy, int[] consumed) {
+    public void onNestedPreScroll(CoordinatorLayout coordinatorLayout, RecyclerView child,
+                                  View target, int dx, int dy, int[] consumed) {
         super.onNestedPreScroll(coordinatorLayout, child, target, dx, dy, consumed);
         if (child.getTop() <= initOffset && child.getTop() >= minOffset) {
-            Log.e("ldf","dy = " + dy);
+            Log.e("ldf","recyclerView dy = " + dy);
             consumed[1] = Utils.scroll(child, dy, minOffset, initOffset);
             saveTop(child.getTop());
         }
