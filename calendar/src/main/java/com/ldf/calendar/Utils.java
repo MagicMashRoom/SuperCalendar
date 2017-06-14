@@ -3,12 +3,12 @@
  * wb-lijinwei.a@alibaba-inc.com
  */
 
-package com.ldf.calendar.utils;
+package com.ldf.calendar;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.util.Log;
+import android.view.View;
+import android.view.ViewConfiguration;
 
 import com.ldf.calendar.model.CalendarDate;
 
@@ -65,7 +65,7 @@ public class Utils {
 
 	public static CalendarDate getNextSunday() {
 		Calendar c = Calendar.getInstance();
-		c.add(Calendar.DATE, 7 - getWeekDay()+1);
+		c.add(Calendar.DATE, 7 - getWeekDay() + 1);
 		CalendarDate date = new CalendarDate(c.get(Calendar.YEAR),
 				c.get(Calendar.MONTH)+1, c.get(Calendar.DAY_OF_MONTH));
 		return date;
@@ -151,6 +151,43 @@ public class Utils {
 
 	public static void setMarkData(HashMap<String, String> imarkData) {
 		markData = imarkData;
-		Log.e("ldf","markData = " + markData.size());
+	}
+
+	private static int offsetMaxAndMin(int value, int min, int max) {
+		if (value > max) {
+			return max;
+		} else if (value < min) {
+			return min;
+		} else {
+			return value;
+		}
+	}
+
+	public static int scroll(View child, int dy, int minOffset, int maxOffset) {
+		final int initOffset = child.getTop();
+		int delta = offsetMaxAndMin(initOffset - dy, minOffset, maxOffset) - initOffset;
+		child.offsetTopAndBottom(delta);
+		return -delta;
+	}
+
+	public static int getTouchSlop(Context context) {
+		return ViewConfiguration.get(context).getScaledTouchSlop();
+	}
+
+	public static CalendarDate getSunday(int year, int month, int day) {// TODO: 16/12/12 得到一个CustomDate对象
+		Calendar c = Calendar.getInstance();
+		String dateString = year + "-" + month + "-" + day;
+		Date date = null;
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-d");
+			date = sdf.parse(dateString);
+		} catch (ParseException e) {
+			System.out.println(e.getMessage());
+		}
+		c.setTime(date);
+		c.add(Calendar.DAY_OF_MONTH, 7 - c.get(Calendar.DAY_OF_WEEK) + 1);
+		return new CalendarDate(c.get(Calendar.YEAR) ,
+				c.get(Calendar.MONTH) + 1 ,
+				c.get(Calendar.DAY_OF_MONTH));
 	}
 }

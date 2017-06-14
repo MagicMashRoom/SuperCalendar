@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="titles">
+        <item>Android</item>
+        <item>IOS</item>
+        <item>JAVA</item>
+        <item>C++</item>
+        <item>Ruby</item>
+        <item>WEB</item>
+        <item>HTML</item>
+        <item>PERL</item>
+        <item>C</item>
+        <item>SWIFT</item>
+    </string-array>
+
+    <string-array name="items">
+        <item>Normal List</item>
+        <item>Normal Grid</item>
+        <item>Normal Staggered</item>
+        <item>Multiple List</item>
+        <item>Multiple Grid</item>
+        <item>Header Bottom List</item>
+        <item>Header Bottom Grid</item>
+        <item>Anim List</item>
+        <item>Anim Grid</item>
+        <item>Expended List</item>
+        <item>Expended Grid</item>
+        <item>Single Select</item>
+        <item>Multiple Select</item>
+    </string-array>
+</resources>

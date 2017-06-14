@@ -13,9 +13,7 @@ import com.ldf.calendar.listener.OnSelectDateListener;
 import com.ldf.calendar.adpter.CalendarViewAdapter;
 import com.ldf.calendar.model.Cell;
 import com.ldf.calendar.model.CalendarDate;
-import com.ldf.calendar.utils.Utils;
-
-import java.util.HashMap;
+import com.ldf.calendar.Utils;
 
 public class Calendar extends View {
 	/**
@@ -27,6 +25,10 @@ public class Calendar extends View {
 	private static final int TOTAL_ROW_FIVE = 5;
 	private static final int PAST_MONTH = -1;
 	private static final int NEXT_MONTH = 1;
+
+	public static final int MONTH_TYPE = 0;
+	public static final int WEEK_TYPE = 1;
+	public static int calendarType = MONTH_TYPE;
 
 	private Context context;
 
@@ -47,16 +49,23 @@ public class Calendar extends View {
 
 	private int viewWidth;	// 视图的宽度
 	private int viewHeight;	// 视图的高度
+
+	public int getCellHeight() {
+		return cellHeight;
+	}
+
 	private int cellHeight; // 单元格高度
 	private int cellWidth; // 单元格宽度
 	private int currentMonthWeeks = TOTAL_ROW_SIX;
 
 	private Row rows[] = new Row[TOTAL_ROW_SIX];	// 行数组，每个元素代表一行
 
-	private CalendarDate mShowDate; //自定义的日期  包括year month day
+	private CalendarDate showDate; //自定义的日期  包括year month day
 	private CalendarDate selectedDate; //被选中的日期  包括year month day
 	private OnSelectDateListener onCellClickListener;	// 单元格点击回调事件
 	private int touchSlop;
+	private int selectedRow = 0;
+
 
 	public Calendar(Context context, OnSelectDateListener onCellClickListener) {
 		super(context);
@@ -113,8 +122,8 @@ public class Calendar extends View {
 	}
 
 	private void initDateData() {
-		if(mShowDate == null){
-			mShowDate = new CalendarDate();
+		if(showDate == null){
+			showDate = new CalendarDate();
 		}
 	}
 
@@ -188,6 +197,14 @@ public class Calendar extends View {
 		}
 	}
 
+	public int getSelectedRow() {
+		return selectedRow;
+	}
+
+	public void setSelectedRow(int selectedRow) {
+		this.selectedRow = selectedRow;
+	}
+
 	// 组
 	class Row {
 		public int row;
@@ -210,26 +227,54 @@ public class Calendar extends View {
 		TODAY, CURRENT_MONTH_DAY, PAST_MONTH_DAY, NEXT_MONTH_DAY, CLICK_DAY
 	}
 
-	private void instantiateMonth() {
-		int lastMonthDays = Utils.getMonthDays(mShowDate.year, mShowDate.month - 1);	// 上个月的天数
-		int currentMonthDays = Utils.getMonthDays(mShowDate.year, mShowDate.month);	// 当前月的天数
-		int firstDayPosition = Utils.getWeekDayFromDate(mShowDate.year, mShowDate.month);//本月第一天是本月第一周的周几
-		int day = 0;
-		for (int row = 0; row < TOTAL_ROW_SIX; row++) {
-			day = instantiateWeek(lastMonthDays, currentMonthDays, firstDayPosition, day, row);
+	private void instantiateCalendar(){
+		instantiateMonth();
+		if (calendarType == WEEK_TYPE) {
+			instantiateWeek();
 		}
 	}
 
-	private int instantiateWeek(int lastMonthDays, int currentMonthDays, int firstDayWeek, int day, int row) {
+	private void instantiateWeek() {
+		CalendarDate sunday = Utils.getSunday(showDate.year , showDate.month , showDate.day);
+		showDate = sunday;
+		int lastMonthDays = Utils.getMonthDays(showDate.year, showDate.month - 1);
+		rows[selectedRow] = new Row(selectedRow);
+		int day = sunday.day;
+		for (int i = TOTAL_COL - 1; i >= 0 ; i --) {
+			CalendarDate date = sunday.modifyDay(day);
+			if (Utils.isToday(date , day)) {
+				mTodayCell = new Cell(date, State.TODAY, i, selectedRow);
+				fillToday(day , selectedRow , i);
+			} else {
+				rows[selectedRow].cells[i] = new Cell(date, State.CURRENT_MONTH_DAY,i, selectedRow);
+			}
+			day -- ;
+			if (day < 1) {
+				day = lastMonthDays + day;
+			}
+		}
+	}
+
+	private void instantiateMonth() {
+		int lastMonthDays = Utils.getMonthDays(showDate.year, showDate.month - 1);	// 上个月的天数
+		int currentMonthDays = Utils.getMonthDays(showDate.year, showDate.month);	// 当前月的天数
+		int firstDayPosition = Utils.getWeekDayFromDate(showDate.year, showDate.month);//本月第一天是本月第一周的周几
+		int day = 0;
+		for (int row = 0; row < TOTAL_ROW_SIX; row++) {
+			day = fillWeek(lastMonthDays, currentMonthDays, firstDayPosition, day, row);
+		}
+	}
+
+	private int fillWeek(int lastMonthDays, int currentMonthDays, int firstDayWeek, int day, int row) {
 		rows[row] = new Row(row);
 		for (int col = 0; col < TOTAL_COL; col++) {
 			int position = col + row * TOTAL_COL;	// 单元格位置
 			if (position >= firstDayWeek && position < firstDayWeek + currentMonthDays) {	// 本月的
 				day ++;
-				instantiateCurrentMonth(day, row, col);
-				if (Utils.isToday(mShowDate , day)
+				fillCurrentMonthDay(day, row, col);
+				if (Utils.isToday(showDate, day)
 						&& !rows[row].cells[col].date.equals(CalendarViewAdapter.getDate())) {
-					instantiateToday(day, row, col);
+					fillToday(day, row, col);
 				}
 			} else if (position < firstDayWeek) { //last month
 				instantiateLastMonth(lastMonthDays, firstDayWeek, row, col, position);
@@ -240,25 +285,25 @@ public class Calendar extends View {
 		return day;
 	}
 
-	private void instantiateToday(int day, int row, int col) {
-		CalendarDate date = mShowDate.modifyDay(day);
+	private void fillToday(int day, int row, int col) {
+		CalendarDate date = showDate.modifyDay(day);
 		mTodayCell = new Cell(date, State.TODAY, col, row);
 		rows[row].cells[col] = mTodayCell;
 	}
 
-	private void instantiateCurrentMonth(int day, int row, int col) {
-		rows[row].cells[col] = new Cell(mShowDate.modifyDay(day),
+	private void fillCurrentMonthDay(int day, int row, int col) {
+		rows[row].cells[col] = new Cell(showDate.modifyDay(day),
 				State.CURRENT_MONTH_DAY, col, row);
 		if(rows[row].cells[col].date.equals(CalendarViewAdapter.getDate())){
-			rows[row].cells[col] = new Cell(mShowDate.modifyDay(day),
+			rows[row].cells[col] = new Cell(showDate.modifyDay(day),
 					State.CLICK_DAY, col, row);
 		}
 	}
 
 	private void instantiateNextMonth(int currentMonthDays, int firstDayWeek, int row, int col, int position) {
 
-		rows[row].cells[col] = new Cell((new CalendarDate(mShowDate.year,
-				mShowDate.month + 1, position - firstDayWeek - currentMonthDays + 1)),
+		rows[row].cells[col] = new Cell((new CalendarDate(showDate.year,
+				showDate.month + 1, position - firstDayWeek - currentMonthDays + 1)),
 				State.NEXT_MONTH_DAY, col, row);
 		if(position - firstDayWeek - currentMonthDays + 1 >= 7) {
 			currentMonthWeeks = TOTAL_ROW_FIVE;
@@ -268,27 +313,27 @@ public class Calendar extends View {
 	}
 
 	private void instantiateLastMonth(int lastMonthDays, int firstDayWeek, int row, int col, int position) {
-		rows[row].cells[col] = new Cell(new CalendarDate(mShowDate.year,
-				mShowDate.month - 1, lastMonthDays - (firstDayWeek- position - 1)),
+		rows[row].cells[col] = new Cell(new CalendarDate(showDate.year,
+				showDate.month - 1, lastMonthDays - (firstDayWeek- position - 1)),
 				State.PAST_MONTH_DAY, col, row);
 	}
 
 	public void updateCurrentDate() {
-		instantiateMonth();
+		instantiateCalendar();
 		invalidate();
 	}
 
 	public void showDate(CalendarDate mShowDate) {
 		if(mShowDate != null){
-			this.mShowDate = mShowDate;
+			this.showDate = mShowDate;
 		}else {
-			this.mShowDate = new CalendarDate();
+			this.showDate = new CalendarDate();
 		}
 		updateCurrentDate();
 	}
 
 	public CalendarDate getShowCurrentDate() {
-		return this.mShowDate;
+		return this.showDate;
 	}
 
 	public void cancelClickState(){
@@ -307,12 +352,12 @@ public class Calendar extends View {
 	}
 
 	public void updateClickDate(){
-		instantiateMonth();
+		instantiateCalendar();
 	}
 
 	public void updateClickDate(CalendarDate date){
 		CalendarViewAdapter.setDate(date);
-		instantiateMonth();
+		instantiateCalendar();
 		invalidate();
 	}
 

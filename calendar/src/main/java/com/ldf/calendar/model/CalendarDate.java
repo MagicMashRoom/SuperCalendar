@@ -5,9 +5,10 @@
 
 package com.ldf.calendar.model;
 
-import com.ldf.calendar.utils.Utils;
+import com.ldf.calendar.Utils;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
 public class CalendarDate implements Serializable{
 	private static final long serialVersionUID = 1L;
@@ -37,6 +38,15 @@ public class CalendarDate implements Serializable{
 	public CalendarDate modifyDay(int day){
 		CalendarDate modifyDate = new CalendarDate(this.year, this.month, day);
 		return modifyDate;
+	}
+
+	public void modifyCurrentDateWeek(int offset){
+		Calendar c = Calendar.getInstance();
+		c.set(Calendar.YEAR, year);
+		c.set(Calendar.MONTH, month - 1);
+		c.set(Calendar.DAY_OF_MONTH, day);
+		c.add(Calendar.DATE, offset * 7);
+		setDay(c.get(Calendar.DATE));
 	}
 
 	public void modifyCurrentDateMonth(int offset){

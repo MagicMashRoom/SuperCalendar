@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
@@ -38,6 +40,7 @@ public class SyllabusActivity extends AppCompatActivity{
     private int mCurrentPage = MonthPager.CURRENT_DAY_INDEX;
     private Context context;
     private CalendarDate currentDate;
+    private RecyclerView rvToDoList;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,6 +52,10 @@ public class SyllabusActivity extends AppCompatActivity{
         textViewYearDisplay = (TextView) findViewById(R.id.show_year_view);
         textViewMonthDisplay = (TextView) findViewById(R.id.show_month_view);
         backToday = (TextView) findViewById(R.id.back_today_button);
+        rvToDoList = (RecyclerView) findViewById(R.id.list);
+        rvToDoList.setHasFixedSize(true);
+        rvToDoList.setLayoutManager(new LinearLayoutManager(this));//这里用线性显示 类似于listview
+        rvToDoList.setAdapter(new ExampleAdapter(this));
         initCurrentDate();
         initCalendarView();
         initBackTodayClickListener();
@@ -124,7 +131,7 @@ public class SyllabusActivity extends AppCompatActivity{
             @Override
             public void onPageSelected(int position) {
                 mCurrentPage = position;
-                currentCalendars = calendarAdapter.getAllItems();
+                currentCalendars = calendarAdapter.getPagers();
                 if(currentCalendars.get(position % currentCalendars.size()) instanceof Calendar){
                     CalendarDate date = currentCalendars.get(position % currentCalendars.size()).getShowCurrentDate();
                     currentDate = date;

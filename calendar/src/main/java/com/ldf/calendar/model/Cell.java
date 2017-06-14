@@ -4,9 +4,8 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.Log;
 
-import com.ldf.calendar.utils.Utils;
+import com.ldf.calendar.Utils;
 import com.ldf.calendar.view.Calendar;
 
 import java.util.HashMap;

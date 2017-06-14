@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -84,10 +85,26 @@
             style="@style/weekIndicatorStyle"
             android:text="日" />
     </LinearLayout>
-    <com.ldf.calendar.view.MonthPager
-        android:id="@+id/calendar_view"
+
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="270dp"
-        android:background="#fff">
-    </com.ldf.calendar.view.MonthPager>
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <com.ldf.calendar.view.MonthPager
+            android:id="@+id/calendar_view"
+            android:layout_width="match_parent"
+            android:layout_height="270dp"
+            android:background="#fff">
+        </com.ldf.calendar.view.MonthPager>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_behavior="com.ldf.calendar.RecyclerViewBehavior"
+            android:background="#C0C0C0"
+            android:layout_gravity="bottom"/>
+
+    </android.support.design.widget.CoordinatorLayout>
 </LinearLayout>
