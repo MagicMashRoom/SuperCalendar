@@ -50,12 +50,9 @@ public class Calendar extends View {
 	private int viewWidth;	// 视图的宽度
 	private int viewHeight;	// 视图的高度
 
-	public int getCellHeight() {
-		return cellHeight;
-	}
-
 	private int cellHeight; // 单元格高度
 	private int cellWidth; // 单元格宽度
+
 	private int currentMonthWeeks = TOTAL_ROW_SIX;
 
 	private Row rows[] = new Row[TOTAL_ROW_SIX];	// 行数组，每个元素代表一行
@@ -75,7 +72,6 @@ public class Calendar extends View {
 
 	@Override
 	protected void onDraw(Canvas canvas) {
-		Log.e("ldf","onDraw");
 		super.onDraw(canvas);
 		cellHeight = viewHeight / currentMonthWeeks;
 		Cell.setHeight(cellHeight);
@@ -207,7 +203,6 @@ public class Calendar extends View {
 		public void drawRow(Canvas canvas) {
 			for (int col = 0; col < cells.length; col++) {
 				if (cells[col] != null)
-					Log.e("ldf","date = " + cells[col].date.toString());
 					cells[col].drawCell(canvas);
 			}
 		}
@@ -381,5 +376,13 @@ public class Calendar extends View {
 	// 传入参数为Dp
 	public void setLineSize(float lineSize) {
 		this.lineSize = lineSize;
+	}
+
+	public int getCurrentMonthWeeks() {
+		return currentMonthWeeks;
+	}
+
+	public int getCellHeight() {
+		return cellHeight;
 	}
 }

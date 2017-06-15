@@ -15,11 +15,13 @@ import com.ldf.calendar.Utils;
 @CoordinatorLayout.DefaultBehavior(MonthPager.Behavior.class)
 public class MonthPager extends ViewPager {
     public static int CURRENT_DAY_INDEX = 600;
-    private static Context context;
-    private int mCellSpace;
+    private static int currentPosition = CURRENT_DAY_INDEX;
+
+    private static int cellHeight = 0;
     private static int rowCount = 6;
+
+    private int mCellSpace;
     private int totalRow = 6;
-    private int cellHeight = 0;
 
     private ViewPager.OnPageChangeListener viewPageChangeListener;
     private OnPageChangeListener monthPageChangeListener;
@@ -29,13 +31,11 @@ public class MonthPager extends ViewPager {
 
     public MonthPager(Context context) {
         this(context, null);
-        this.context = context;
         init();
     }
 
     public MonthPager(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.context = context;
         init();
     }
 
@@ -50,6 +50,8 @@ public class MonthPager extends ViewPager {
 
             @Override
             public void onPageSelected(int position) {
+                currentPosition = position;
+                Log.e("ldf","currentPosition = " + position);
                 if (pageChangeByGesture) {
                     if(monthPageChangeListener != null) {
                         monthPageChangeListener.onPageSelected(position);
@@ -73,14 +75,6 @@ public class MonthPager extends ViewPager {
     }
 
     @Override
-    public void setAdapter(PagerAdapter adapter) {
-        super.setAdapter(adapter);
-        CalendarViewAdapter calendarViewAdapter = (CalendarViewAdapter) adapter;
-        cellHeight = calendarViewAdapter.getPagers().get(0).getCellHeight();
-        Log.e("ldf","cellHeight = " + cellHeight);
-    }
-
-    @Override
     public void addOnPageChangeListener(ViewPager.OnPageChangeListener listener) {
         if(hasPageChangeListener) {
             Log.e("ldf","MonthPager Just Can Use Own OnPageChangeListener");
@@ -92,11 +86,6 @@ public class MonthPager extends ViewPager {
     public void addOnPageChangeListener(OnPageChangeListener listener) {
         this.monthPageChangeListener = listener;
         Log.e("ldf","MonthPager Just Can Use Own OnPageChangeListener");
-    }
-
-    @Override
-    protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        super.onLayout(changed, l, t, r, b);
     }
 
     @Override
@@ -122,14 +111,17 @@ public class MonthPager extends ViewPager {
 
     public static class Behavior extends CoordinatorLayout.Behavior<MonthPager> {
         private int top;
+        private int touchSlop = 24;
 
         @Override
         public boolean layoutDependsOn(CoordinatorLayout parent, MonthPager child, View dependency) {
+            Log.e("ldf","layoutDependsOn");
             return dependency instanceof RecyclerView;
         }
 
         @Override
         public boolean onLayoutChild(CoordinatorLayout parent, MonthPager child, int layoutDirection) {
+            Log.e("ldf","MonthPageBehavior onLayoutChild");
             parent.onLayoutChild(child, layoutDirection);
             child.offsetTopAndBottom(top);
             return true;
@@ -139,14 +131,11 @@ public class MonthPager extends ViewPager {
 
         @Override
         public boolean onDependentViewChanged(CoordinatorLayout parent, MonthPager child, View dependency) {
-            Log.e("ldf","onDependentViewChanged");
             CalendarViewAdapter calendarViewAdapter = (CalendarViewAdapter) child.getAdapter();
-            int touchSlop = Utils.getTouchSlop(context);
+            cellHeight = calendarViewAdapter.getPagers().get(currentPosition % 3).getCellHeight();
             if (dependentViewTop != -1) {
                 int dy = dependency.getTop() - dependentViewTop;    //dependency对其依赖的view(本例依赖的view是RecycleView)
-                Log.e("ldf","dy1 = " + dy);
                 int top = child.getTop();
-                Log.e("ldf","top = " + top);
 
                 if(dy > touchSlop){
                     calendarViewAdapter.switchToMonthType();
@@ -157,14 +146,11 @@ public class MonthPager extends ViewPager {
                 if (dy > -top){
                     dy = -top;
                 }
-                Log.e("ldf","dy2 = " + dy);
 
                 if (dy < -top - child.getTopMovableDistance()){
                     dy = -top - child.getTopMovableDistance();
                 }
-                Log.e("ldf","dy3 = " + dy);
 
-                Log.e("ldf","monthPager dy = " + dy);
                 child.offsetTopAndBottom(dy);
             }
             dependentViewTop = dependency.getTop();
@@ -194,11 +180,14 @@ public class MonthPager extends ViewPager {
 
     public int getTopMovableDistance() {
         rowCount = selectedCell / 7;
-        Log.e("ldf","cellHeight = " + cellHeight + "" + rowCount);
         return cellHeight * rowCount;
     }
+
     public int getMaxMovableDistance() {
-        Log.e("ldf","cellHeight = " + cellHeight);
         return getHeight() - cellHeight; //getHeight为本控件的高度
+    }
+
+    public static int getCellHeight() {
+        return cellHeight;
     }
 }
