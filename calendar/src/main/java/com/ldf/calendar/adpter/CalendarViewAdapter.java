@@ -7,7 +7,6 @@ package com.ldf.calendar.adpter;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -65,11 +64,11 @@ public class CalendarViewAdapter extends PagerAdapter {
 		CalendarDate date = new CalendarDate();
 		if(calendarType == Calendar.MONTH_TYPE) {
 			date.modifyCurrentDateMonth(position - MonthPager.CURRENT_DAY_INDEX);
-			calendar.setSelectedRow(0);//月切换的时候选择selected row 为第一行
+			calendar.setSelectedRowIndex(0);//月切换的时候选择selected row 为第一行
 			calendar.showDate(date);
 		} else {
 			date.modifyCurrentDateWeek(position - MonthPager.CURRENT_DAY_INDEX);
-			calendar.setSelectedRow(rowCount);
+			calendar.setSelectedRowIndex(rowCount);
 			calendar.showDate(Utils.getSunday(date.year , date.month , date.day));
 		}
 		calendar.getCellHeight();

@@ -14,19 +14,14 @@ public class MonthPager extends ViewPager {
     public static int CURRENT_DAY_INDEX = 600;
 
     private int currentPosition = CURRENT_DAY_INDEX;
-
     private int cellHeight = 0;
-
     private int rowIndex = 6;
-
     private int mCellSpace;
-    private int totalRow = 6;
 
     private ViewPager.OnPageChangeListener viewPageChangeListener;
     private OnPageChangeListener monthPageChangeListener;
     private boolean pageChangeByGesture = false;
     private boolean hasPageChangeListener = false;
-    private int selectedCell = 10;
 
     public MonthPager(Context context) {
         this(context, null);
@@ -107,25 +102,9 @@ public class MonthPager extends ViewPager {
         void onPageScrollStateChanged(int state);
     }
 
-    public void setSelectedCell(int selectedCell) {
-        Log.e("ldf","selectedCell = " + selectedCell);
-        this.selectedCell = selectedCell;
-        rowIndex = selectedCell / 7;
-    }
-
-    public int getSelectedCell(){
-        return selectedCell;
-    }
-
-    public void setSelecteCellOffset(int offset) {
-        selectedCell = selectedCell + offset;
-        if(selectedCell < 0){
-            selectedCell = 42 + selectedCell % 42;
-        }
-    }
-
     public int getTopMovableDistance() {
-        rowIndex = selectedCell / 7;
+        CalendarViewAdapter calendarViewAdapter = (CalendarViewAdapter) getAdapter();
+        rowIndex = calendarViewAdapter.getPagers().get(currentPosition  % 3).getSelectedRowIndex();
         return cellHeight * rowIndex;
     }
 

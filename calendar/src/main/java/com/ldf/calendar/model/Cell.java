@@ -126,11 +126,11 @@ public class Cell {
         if(this.date.toString().equals(today.toString())){
             date = "今";
         }
-        if(CalendarDate.isSameMonth(today , this.date)
-                && this.date.day < today.day
-                && state == Calendar.State.CURRENT_MONTH_DAY){
-            datePaint.setColor(Color.parseColor("#888888"));
-        }
+//        if(CalendarDate.isSameMonth(today , this.date)
+//                && this.date.day < today.day
+//                && state == Calendar.State.CURRENT_MONTH_DAY){
+//            datePaint.setColor(Color.parseColor("#888888"));
+//        }
         canvas.drawText(date,
                 (float) ((col + 0.5) * width - datePaint.measureText(date) / 2),
                 (float) ((row + 0.5) * height + Utils.dpi2px(context, 4)),

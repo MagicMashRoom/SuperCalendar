@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -54,15 +53,14 @@ public class Calendar extends View {
 	private int cellWidth; // 单元格宽度
 
 	private int currentMonthWeeks = TOTAL_ROW_SIX;
-
 	private Row rows[] = new Row[TOTAL_ROW_SIX];	// 行数组，每个元素代表一行
 
 	private CalendarDate showDate; //自定义的日期  包括year month day
 	private CalendarDate selectedDate; //被选中的日期  包括year month day
+
 	private OnSelectDateListener onCellClickListener;	// 单元格点击回调事件
 	private int touchSlop;
-	private int selectedRow = 0;
-
+	private int selectedRowIndex = 0;
 
 	public Calendar(Context context, OnSelectDateListener onCellClickListener) {
 		super(context);
@@ -160,6 +158,7 @@ public class Calendar extends View {
 				cancelClickState();
 				rows[row].cells[col].state = State.CLICK_DAY;
 				selectedDate = rows[row].cells[col].date;
+				selectedRowIndex = row;
 				CalendarViewAdapter.setDate(selectedDate);
 				onCellClickListener.onSelectDate(selectedDate);
 			} else if (rows[row].cells[col].state == State.PAST_MONTH_DAY){
@@ -181,14 +180,6 @@ public class Calendar extends View {
 			}
 			invalidate();
 		}
-	}
-
-	public int getSelectedRow() {
-		return selectedRow;
-	}
-
-	public void setSelectedRow(int selectedRow) {
-		this.selectedRow = selectedRow;
 	}
 
 	// 组
@@ -223,15 +214,15 @@ public class Calendar extends View {
 		CalendarDate sunday = Utils.getSunday(showDate.year , showDate.month , showDate.day);
 		showDate = sunday;
 		int lastMonthDays = Utils.getMonthDays(showDate.year, showDate.month - 1);
-		rows[selectedRow] = new Row(selectedRow);
+		rows[selectedRowIndex] = new Row(selectedRowIndex);
 		int day = sunday.day;
 		for (int i = TOTAL_COL - 1; i >= 0 ; i --) {
 			CalendarDate date = sunday.modifyDay(day);
 			if (Utils.isToday(date , day)) {
-				mTodayCell = new Cell(date, State.TODAY, i, selectedRow);
-				fillToday(day , selectedRow , i);
+				mTodayCell = new Cell(date, State.TODAY, i, selectedRowIndex);
+				fillToday(day , selectedRowIndex, i);
 			} else {
-				rows[selectedRow].cells[i] = new Cell(date, State.CURRENT_MONTH_DAY,i, selectedRow);
+				rows[selectedRowIndex].cells[i] = new Cell(date, State.CURRENT_MONTH_DAY,i, selectedRowIndex);
 			}
 			day -- ;
 			if (day < 1) {
@@ -280,8 +271,8 @@ public class Calendar extends View {
 		rows[row].cells[col] = new Cell(showDate.modifyDay(day),
 				State.CURRENT_MONTH_DAY, col, row);
 		if(rows[row].cells[col].date.equals(CalendarViewAdapter.getDate())){
-			rows[row].cells[col] = new Cell(showDate.modifyDay(day),
-					State.CLICK_DAY, col, row);
+			rows[row].cells[col] = new Cell(showDate.modifyDay(day), State.CLICK_DAY, col, row);
+			selectedRowIndex = row;
 		}
 	}
 
@@ -329,6 +320,7 @@ public class Calendar extends View {
 				for (int j = 0; j < TOTAL_COL; j++){
 					if(rows[i].cells[j].state == State.CLICK_DAY){
 						rows[i].cells[j].state = State.CURRENT_MONTH_DAY;
+						selectedRowIndex = 0;
 					}
 					if(rows[i].cells[j].date.equals(new CalendarDate())) {
 						rows[i].cells[j].state = State.TODAY;
@@ -384,5 +376,13 @@ public class Calendar extends View {
 
 	public int getCellHeight() {
 		return cellHeight;
+	}
+
+	public int getSelectedRowIndex() {
+		return selectedRowIndex;
+	}
+
+	public void setSelectedRowIndex(int selectedRowIndex) {
+		this.selectedRowIndex = selectedRowIndex;
 	}
 }

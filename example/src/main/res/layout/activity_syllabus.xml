@@ -103,7 +103,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_behavior="com.ldf.calendar.RecyclerViewBehavior"
-            android:background="#868686"
+            android:background="#c2c2c2"
             android:layout_gravity="bottom"/>
 
     </android.support.design.widget.CoordinatorLayout>
