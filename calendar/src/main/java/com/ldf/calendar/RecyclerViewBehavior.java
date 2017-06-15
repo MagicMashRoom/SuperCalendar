@@ -5,7 +5,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.Scroller;
 
@@ -32,14 +31,13 @@ public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<RecyclerVie
         } else if (initOffset != -1) {
             child.offsetTopAndBottom(top);
         }
-        minOffset = MonthPager.getCellHeight();
+        minOffset = getMonthPager(parent).getCellHeight();
         return true;
     }
 
     @Override
     public boolean onStartNestedScroll(CoordinatorLayout coordinatorLayout, RecyclerView child,
                                        View directTargetChild, View target, int nestedScrollAxes) {
-        Log.e("ldf","onStartNestedScroll");
         boolean isVertical = (nestedScrollAxes & ViewCompat.SCROLL_AXIS_VERTICAL) != 0;
 
         int firstRowVerticalPosition =
@@ -47,15 +45,12 @@ public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<RecyclerVie
 
         boolean recycleviewTopStatus = firstRowVerticalPosition >= 0;
 
-        //Only capture on the view currently being scrolled
         return isVertical && (recycleviewTopStatus || isGoingUp) && child == directTargetChild;
     }
 
     @Override
     public void onNestedPreScroll(CoordinatorLayout coordinatorLayout, RecyclerView child,
                                   View target, int dx, int dy, int[] consumed) {
-        Log.e("ldf","onNestedPreScroll");
-
         super.onNestedPreScroll(coordinatorLayout, child, target, dx, dy, consumed);
         if (child.getTop() <= initOffset && child.getTop() >= minOffset) {
             consumed[1] = Utils.scroll(child, dy, minOffset, initOffset);
@@ -65,8 +60,6 @@ public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<RecyclerVie
 
     @Override
     public void onStopNestedScroll(final CoordinatorLayout parent, final RecyclerView child, View target) {
-        Log.e("ldf","onStopNestedScroll");
-
         super.onStopNestedScroll(parent, child, target);
 
         if (isGoingUp) {

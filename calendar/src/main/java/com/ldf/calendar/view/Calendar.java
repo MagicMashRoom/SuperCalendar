@@ -22,7 +22,7 @@ public class Calendar extends View {
 	private static final int TOTAL_COL = 7;
 
 	private static final int TOTAL_ROW_SIX = 6;
-	private static final int TOTAL_ROW_FIVE = 5;
+	private static final int TOTAL_ROW_FIVE = 6;
 	private static final int PAST_MONTH = -1;
 	private static final int NEXT_MONTH = 1;
 

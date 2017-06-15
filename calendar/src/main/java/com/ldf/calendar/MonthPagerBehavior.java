@@ -11,10 +11,9 @@ import com.ldf.calendar.view.MonthPager;
  * Created by ldf on 17/6/15.
  */
 
-public class MonthPageBehavior extends CoordinatorLayout.Behavior<MonthPager> {
+public class MonthPagerBehavior extends CoordinatorLayout.Behavior<MonthPager> {
     private int top;
     private int touchSlop = 24;
-    private int rowCount;
 
     @Override
     public boolean layoutDependsOn(CoordinatorLayout parent, MonthPager child, View dependency) {
@@ -33,8 +32,6 @@ public class MonthPageBehavior extends CoordinatorLayout.Behavior<MonthPager> {
     @Override
     public boolean onDependentViewChanged(CoordinatorLayout parent, MonthPager child, View dependency) {
         CalendarViewAdapter calendarViewAdapter = (CalendarViewAdapter) child.getAdapter();
-
-//        cellHeight = calendarViewAdapter.getPagers().get(currentPosition % 3).getCellHeight();
         if (dependentViewTop != -1) {
             int dy = dependency.getTop() - dependentViewTop;    //dependency对其依赖的view(本例依赖的view是RecycleView)
             int top = child.getTop();
@@ -42,7 +39,7 @@ public class MonthPageBehavior extends CoordinatorLayout.Behavior<MonthPager> {
             if(dy > touchSlop){
                 calendarViewAdapter.switchToMonthType();
             } else if(dy < - touchSlop){
-                calendarViewAdapter.switchToWeekType(rowCount);
+                calendarViewAdapter.switchToWeekType(child.getRowIndex());
             }
 
             if (dy > -top){
