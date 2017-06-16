@@ -235,27 +235,24 @@ public class Calendar extends View {
 
 	private void instantiateCalendar(){
 		instantiateMonth();
-		if (calendarType == WEEK_TYPE) {
-			instantiateWeek();
-		}
 	}
 
-	private void instantiateWeek() {
+	public void instantiateWeek(int rowIndex) {
 		CalendarDate sunday = Utils.getSunday(seedDate.year , seedDate.month , seedDate.day);
-		rows[drawRowIndex] = new Row(drawRowIndex);
+		rows[rowIndex] = new Row(rowIndex);
 		int day = sunday.day;
 		for (int i = TOTAL_COL - 1; i >= 0 ; i --) {
 			CalendarDate date = sunday.modifyDay(day);
 
 			if (Utils.isToday(date , day)) {
-				mTodayCell = new Cell(date, State.TODAY, i, drawRowIndex);
-				fillToday(day , drawRowIndex, i);
+				mTodayCell = new Cell(date, State.TODAY, i, rowIndex);
+				fillToday(day , rowIndex, i);
 			} else {
-				rows[drawRowIndex].cells[i] = new Cell(date, State.CURRENT_MONTH_DAY,i, drawRowIndex);
+				rows[rowIndex].cells[i] = new Cell(date, State.CURRENT_MONTH_DAY,i, rowIndex);
 			}
 
-			if(rows[drawRowIndex].cells[i].date.equals(CalendarViewAdapter.getDate())){
-				rows[drawRowIndex].cells[i] = new Cell(date, State.CLICK_DAY, i, drawRowIndex);
+			if(rows[rowIndex].cells[i].date.equals(CalendarViewAdapter.getDate())){
+				rows[rowIndex].cells[i] = new Cell(date, State.CLICK_DAY, i, rowIndex);
 			}
 			day -- ;
 		}
@@ -301,8 +298,6 @@ public class Calendar extends View {
 		rows[row].cells[col] = new Cell(seedDate.modifyDay(day), State.CURRENT_MONTH_DAY, col, row);
 		if(rows[row].cells[col].date.equals(CalendarViewAdapter.getDate())){
 			rows[row].cells[col] = new Cell(seedDate.modifyDay(day), State.CLICK_DAY, col, row);
-//			selectedRowIndex = row;
-//			Log.e("ldf","select selectedRowIndex = " + selectedRowIndex);
 		}
 		if(rows[row].cells[col].date.equals(seedDate)){
 			selectedRowIndex = row;
@@ -424,9 +419,5 @@ public class Calendar extends View {
 
 	public void setSelectedRowIndex(int selectedRowIndex) {
 		this.selectedRowIndex = selectedRowIndex;
-	}
-
-	public void setDrawRowIndex(int rowIndex) {
-		this.drawRowIndex = rowIndex;
 	}
 }

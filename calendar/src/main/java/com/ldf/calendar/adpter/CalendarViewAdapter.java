@@ -81,8 +81,8 @@ public class CalendarViewAdapter extends PagerAdapter {
 			calendar.showDate(current);
 		} else {
 			CalendarDate current = seedDate.modifyCurrentDateWeek(position - MonthPager.CURRENT_DAY_INDEX);
-			calendar.setDrawRowIndex(rowCount);
 			calendar.showDate(Utils.getSunday(current.year , current.month , current.day));
+			calendar.instantiateWeek(rowCount);
 		}
 		calendar.getCellHeight();
 
@@ -174,20 +174,20 @@ public class CalendarViewAdapter extends PagerAdapter {
 
 			Calendar v1 =  calendars.get(currentPosition % 3);
 			v1.switchCalendarType(Calendar.WEEK_TYPE);
-			v1.setDrawRowIndex(rowIndex);
 			v1.showDate(seedDate);
+			v1.instantiateWeek(rowIndex);
 
 			Calendar v2 = calendars.get((currentPosition - 1) % 3);
 			v2.switchCalendarType(Calendar.WEEK_TYPE);
-			v2.setDrawRowIndex(rowIndex);
 			CalendarDate last = seedDate.modifyCurrentDateWeek(-1);
 			v2.showDate(last);
+			v2.instantiateWeek(rowIndex);
 
 			Calendar v3 = calendars.get((currentPosition + 1) % 3);
 			v3.switchCalendarType(Calendar.WEEK_TYPE);
-			v3.setDrawRowIndex(rowIndex);
 			CalendarDate next = seedDate.modifyCurrentDateWeek(1);
 			v3.showDate(next);
+			v3.instantiateWeek(rowIndex);
 
 		}
 	}
