@@ -4,7 +4,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion '25.0.0'
     defaultConfig {
-        applicationId "com.hqyxjy.ldf.fuckcalendar"
+        applicationId "com.hqyxjy.ldf.supercalendar"
         minSdkVersion 17
         targetSdkVersion 25
         versionCode 1

@@ -1,4 +1,4 @@
-package com.hqyxjy.ldf.fuckcalendar;
+package com.hqyxjy.ldf.supercalendar;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

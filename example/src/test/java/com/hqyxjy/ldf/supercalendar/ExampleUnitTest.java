@@ -1,4 +1,4 @@
-package com.hqyxjy.ldf.fuckcalendar;
+package com.hqyxjy.ldf.supercalendar;
 
 import org.junit.Test;
 

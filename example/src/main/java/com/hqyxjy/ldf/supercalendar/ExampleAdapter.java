@@ -1,4 +1,4 @@
-package com.hqyxjy.ldf.fuckcalendar;
+package com.hqyxjy.ldf.supercalendar;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
