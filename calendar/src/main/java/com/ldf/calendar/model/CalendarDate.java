@@ -5,6 +5,8 @@
 
 package com.ldf.calendar.model;
 
+import android.util.Log;
+
 import com.ldf.calendar.Utils;
 
 import java.io.Serializable;
@@ -36,40 +38,60 @@ public class CalendarDate implements Serializable{
 	}
 
 	public CalendarDate modifyDay(int day){
-		CalendarDate modifyDate = new CalendarDate(this.year, this.month, day);
+		int lastMonthDays = Utils.getMonthDays(this.year, this.month - 1);
+		int currentMonthDays = Utils.getMonthDays(this.year, this.month);
+
+		CalendarDate modifyDate;
+		if(day > currentMonthDays) {
+			modifyDate = new CalendarDate(this.year , this.month , this.day);
+			Log.e("ldf","移动天数过大");
+		} else if(day > 0) {
+			modifyDate = new CalendarDate(this.year, this.month, day);
+		} else if(day > 0 - lastMonthDays){
+			modifyDate = new CalendarDate(this.year, this.month - 1, lastMonthDays + day);
+		} else {
+			modifyDate = new CalendarDate(this.year , this.month , this.day);
+			Log.e("ldf","移动天数过大");
+		}
 		return modifyDate;
 	}
 
-	public void modifyCurrentDateWeek(int offset){
+	public CalendarDate modifyCurrentDateWeek(int offset){
+		CalendarDate result = new CalendarDate();
 		Calendar c = Calendar.getInstance();
 		c.set(Calendar.YEAR, year);
 		c.set(Calendar.MONTH, month - 1);
 		c.set(Calendar.DAY_OF_MONTH, day);
 		c.add(Calendar.DATE, offset * 7);
-		setDay(c.get(Calendar.DATE));
+		result.setYear(c.get(Calendar.YEAR));
+		result.setMonth(c.get(Calendar.MONTH) + 1);
+		result.setDay(c.get(Calendar.DATE));
+		return result;
 	}
 
-	public void modifyCurrentDateMonth(int offset){
+	public CalendarDate modifyCurrentDateMonth(int offset){
+		CalendarDate result = new CalendarDate();
 		int addToMonth = this.month + offset;
 		if(offset > 0){
 			if(addToMonth > 12){
-				setYear(this.year + (addToMonth - 1) / 12);
-				setMonth(addToMonth % 12 == 0 ? 12: addToMonth % 12);
+				result.setYear(this.year + (addToMonth - 1) / 12);
+				result.setMonth(addToMonth % 12 == 0 ? 12: addToMonth % 12);
 			}else {
-				setMonth(addToMonth);
+				result.setMonth(addToMonth);
 			}
 		}else{
 			if(addToMonth == 0){
-				setYear(this.year - 1);
-				setMonth(12);
+				result.setYear(this.year - 1);
+				result.setMonth(12);
 			}else if(addToMonth < 0){
-				setYear(this.year + addToMonth / 12 - 1);
+				result.setYear(this.year + addToMonth / 12 - 1);
 				int month = 12 - Math.abs(addToMonth) % 12;
-				setMonth(month == 0 ? 12 : month);
+				result.setMonth(month == 0 ? 12 : month);
 			}else {
-				setMonth(addToMonth == 0 ? 12 : addToMonth);
+				result.setMonth(addToMonth == 0 ? 12 : addToMonth);
 			}
 		}
+		return result;
 	}
 
 	@Override

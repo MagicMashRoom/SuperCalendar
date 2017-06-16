@@ -6,7 +6,7 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.util.Log;
 
-import com.ldf.calendar.MonthPagerBehavior;
+import com.ldf.calendar.behavior.MonthPagerBehavior;
 import com.ldf.calendar.adpter.CalendarViewAdapter;
 
 @CoordinatorLayout.DefaultBehavior(MonthPagerBehavior.class)
@@ -55,8 +55,8 @@ public class MonthPager extends ViewPager {
 
             @Override
             public void onPageScrollStateChanged(int state) {
-                CalendarViewAdapter adapter = (CalendarViewAdapter) getAdapter();
-                adapter.updateState();
+//                CalendarViewAdapter adapter = (CalendarViewAdapter) getAdapter();
+//                adapter.updateDate();
                 if(monthPageChangeListener != null) {
                     monthPageChangeListener.onPageScrollStateChanged(state);
                 }
@@ -123,6 +123,8 @@ public class MonthPager extends ViewPager {
     }
 
     public int getRowIndex() {
+        CalendarViewAdapter calendarViewAdapter = (CalendarViewAdapter) getAdapter();
+        rowIndex = calendarViewAdapter.getPagers().get(currentPosition  % 3).getSelectedRowIndex();
         return rowIndex;
     }
 

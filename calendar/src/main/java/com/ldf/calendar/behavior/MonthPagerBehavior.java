@@ -1,7 +1,8 @@
-package com.ldf.calendar;
+package com.ldf.calendar.behavior;
 
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.ldf.calendar.adpter.CalendarViewAdapter;
@@ -39,6 +40,7 @@ public class MonthPagerBehavior extends CoordinatorLayout.Behavior<MonthPager> {
             if(dy > touchSlop){
                 calendarViewAdapter.switchToMonthType();
             } else if(dy < - touchSlop){
+                Log.e("ldf","rowIndex = " + child.getRowIndex());
                 calendarViewAdapter.switchToWeekType(child.getRowIndex());
             }
 

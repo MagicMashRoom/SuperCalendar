@@ -7,6 +7,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -59,7 +60,6 @@ public class SyllabusActivity extends AppCompatActivity{
         initCurrentDate();
         initCalendarView();
         initBackTodayClickListener();
-        refreshMonthPager();
     }
 
     private void initBackTodayClickListener() {
@@ -103,6 +103,7 @@ public class SyllabusActivity extends AppCompatActivity{
 
             @Override
             public void onSelectOtherMonth(int offset) {
+                Log.e("ldf","onSelectOtherMonth");
                 monthPager.setCurrentItem(mCurrentPage + offset);
             }
         };
@@ -156,7 +157,7 @@ public class SyllabusActivity extends AppCompatActivity{
         monthPager.setAdapter(calendarAdapter);
         monthPager.setCurrentItem(MonthPager.CURRENT_DAY_INDEX);
         CalendarDate today = new CalendarDate();
-        calendarAdapter.updateState(today);
+        calendarAdapter.updateDate(today);
         refreshClickDate(today);
     }
 }

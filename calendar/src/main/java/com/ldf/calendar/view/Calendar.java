@@ -4,10 +4,12 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 
+import com.ldf.calendar.adpter.OnAdapterSelectListener;
 import com.ldf.calendar.listener.OnSelectDateListener;
 import com.ldf.calendar.adpter.CalendarViewAdapter;
 import com.ldf.calendar.model.Cell;
@@ -27,7 +29,7 @@ public class Calendar extends View {
 
 	public static final int MONTH_TYPE = 0;
 	public static final int WEEK_TYPE = 1;
-	public static int calendarType = MONTH_TYPE;
+	public int calendarType = MONTH_TYPE;
 
 	private Context context;
 
@@ -59,6 +61,13 @@ public class Calendar extends View {
 	private CalendarDate selectedDate; //被选中的日期  包括year month day
 
 	private OnSelectDateListener onCellClickListener;	// 单元格点击回调事件
+
+	public void setOnAdapterSelectListener(OnAdapterSelectListener onAdapterSelectListener) {
+		this.onAdapterSelectListener = onAdapterSelectListener;
+	}
+
+	private OnAdapterSelectListener onAdapterSelectListener;
+
 	private int touchSlop;
 	private int selectedRowIndex = 0;
 
@@ -154,30 +163,42 @@ public class Calendar extends View {
 		if (col >= TOTAL_COL || row >= TOTAL_ROW_SIX)
 			return;
 		if (rows[row] != null) {
-			if(rows[row].cells[col].state == State.CURRENT_MONTH_DAY){
-				cancelClickState();
+			onAdapterSelectListener.cancelSelectState();
+			if(calendarType == MONTH_TYPE) {
+				if(rows[row].cells[col].state == State.CURRENT_MONTH_DAY){
+					rows[row].cells[col].state = State.CLICK_DAY;
+					selectedDate = rows[row].cells[col].date;
+					showDate = rows[row].cells[col].date;
+					selectedRowIndex = row;
+					CalendarViewAdapter.setDate(selectedDate);
+					onCellClickListener.onSelectDate(selectedDate);
+				} else if (rows[row].cells[col].state == State.PAST_MONTH_DAY){
+					selectedDate = rows[row].cells[col].date;
+					CalendarViewAdapter.setDate(selectedDate);
+					onCellClickListener.onSelectOtherMonth(PAST_MONTH);
+					onCellClickListener.onSelectDate(selectedDate);
+				} else if (rows[row].cells[col].state == State.NEXT_MONTH_DAY){
+					selectedDate = rows[row].cells[col].date;
+					CalendarViewAdapter.setDate(selectedDate);
+					onCellClickListener.onSelectOtherMonth(NEXT_MONTH);
+					onCellClickListener.onSelectDate(selectedDate);
+				} else if (rows[row].cells[col].state == State.TODAY){
+					rows[row].cells[col].state = State.CLICK_DAY;
+					selectedDate = rows[row].cells[col].date;
+					showDate = rows[row].cells[col].date;
+					selectedRowIndex = row;
+					CalendarViewAdapter.setDate(selectedDate);
+					onCellClickListener.onSelectDate(selectedDate);
+				}
+			} else {
 				rows[row].cells[col].state = State.CLICK_DAY;
 				selectedDate = rows[row].cells[col].date;
+				showDate = rows[row].cells[col].date;
 				selectedRowIndex = row;
 				CalendarViewAdapter.setDate(selectedDate);
 				onCellClickListener.onSelectDate(selectedDate);
-			} else if (rows[row].cells[col].state == State.PAST_MONTH_DAY){
-				selectedDate = rows[row].cells[col].date;
-				CalendarViewAdapter.setDate(selectedDate);
-				onCellClickListener.onSelectOtherMonth(PAST_MONTH);
-				onCellClickListener.onSelectDate(selectedDate);
-			} else if (rows[row].cells[col].state == State.NEXT_MONTH_DAY){
-				selectedDate = rows[row].cells[col].date;
-				CalendarViewAdapter.setDate(selectedDate);
-				onCellClickListener.onSelectOtherMonth(NEXT_MONTH);
-				onCellClickListener.onSelectDate(selectedDate);
-			} else if (rows[row].cells[col].state == State.TODAY){
-				cancelClickState();
-				rows[row].cells[col].state = State.CLICK_DAY;
-				selectedDate = rows[row].cells[col].date;
-				CalendarViewAdapter.setDate(selectedDate);
-				onCellClickListener.onSelectDate(selectedDate);
 			}
+			onAdapterSelectListener.updateSelectState();
 			invalidate();
 		}
 	}
@@ -203,6 +224,14 @@ public class Calendar extends View {
 		TODAY, CURRENT_MONTH_DAY, PAST_MONTH_DAY, NEXT_MONTH_DAY, CLICK_DAY
 	}
 
+	public int getCalendarType() {
+		return calendarType;
+	}
+
+	public void switchCalendarType(int calendarType) {
+		this.calendarType = calendarType;
+	}
+
 	private void instantiateCalendar(){
 		instantiateMonth();
 		if (calendarType == WEEK_TYPE) {
@@ -212,22 +241,22 @@ public class Calendar extends View {
 
 	private void instantiateWeek() {
 		CalendarDate sunday = Utils.getSunday(showDate.year , showDate.month , showDate.day);
-		showDate = sunday;
-		int lastMonthDays = Utils.getMonthDays(showDate.year, showDate.month - 1);
 		rows[selectedRowIndex] = new Row(selectedRowIndex);
 		int day = sunday.day;
 		for (int i = TOTAL_COL - 1; i >= 0 ; i --) {
 			CalendarDate date = sunday.modifyDay(day);
+
 			if (Utils.isToday(date , day)) {
 				mTodayCell = new Cell(date, State.TODAY, i, selectedRowIndex);
 				fillToday(day , selectedRowIndex, i);
 			} else {
 				rows[selectedRowIndex].cells[i] = new Cell(date, State.CURRENT_MONTH_DAY,i, selectedRowIndex);
 			}
-			day -- ;
-			if (day < 1) {
-				day = lastMonthDays + day;
+
+			if(rows[selectedRowIndex].cells[i].date.equals(CalendarViewAdapter.getDate())){
+				rows[selectedRowIndex].cells[i] = new Cell(date, State.CLICK_DAY, i, selectedRowIndex);
 			}
+			day -- ;
 		}
 	}
 
@@ -273,6 +302,7 @@ public class Calendar extends View {
 		if(rows[row].cells[col].date.equals(CalendarViewAdapter.getDate())){
 			rows[row].cells[col] = new Cell(showDate.modifyDay(day), State.CLICK_DAY, col, row);
 			selectedRowIndex = row;
+			Log.e("ldf","fill selectedRowIndex = " + selectedRowIndex);
 		}
 	}
 
@@ -303,9 +333,9 @@ public class Calendar extends View {
 
 	public void showDate(CalendarDate mShowDate) {
 		if(mShowDate != null){
-			this.showDate = mShowDate;
+			showDate = mShowDate;
 		}else {
-			this.showDate = new CalendarDate();
+			showDate = new CalendarDate();
 		}
 		updateCurrentDate();
 	}
@@ -314,13 +344,15 @@ public class Calendar extends View {
 		return this.showDate;
 	}
 
-	public void cancelClickState(){
+	public void cancelSelectState(){
 		for (int i = 0; i < TOTAL_ROW_SIX; i++) {
 			if (rows[i] != null){
 				for (int j = 0; j < TOTAL_COL; j++){
 					if(rows[i].cells[j].state == State.CLICK_DAY){
 						rows[i].cells[j].state = State.CURRENT_MONTH_DAY;
-						selectedRowIndex = 0;
+						resetSelectedRowIndex();
+						Log.e("ldf","cancel selectedRowIndex = " + selectedRowIndex);
+
 					}
 					if(rows[i].cells[j].date.equals(new CalendarDate())) {
 						rows[i].cells[j].state = State.TODAY;
@@ -330,11 +362,11 @@ public class Calendar extends View {
 		}
 	}
 
-	public void updateClickDate(){
+	public void updateSelectDate(){
 		instantiateCalendar();
 	}
 
-	public void updateClickDate(CalendarDate date){
+	public void updateSelectDate(CalendarDate date){
 		CalendarViewAdapter.setDate(date);
 		instantiateCalendar();
 		invalidate();
@@ -378,11 +410,16 @@ public class Calendar extends View {
 		return cellHeight;
 	}
 
+	public void resetSelectedRowIndex(){
+		selectedRowIndex = 0;
+	}
+
 	public int getSelectedRowIndex() {
 		return selectedRowIndex;
 	}
 
 	public void setSelectedRowIndex(int selectedRowIndex) {
 		this.selectedRowIndex = selectedRowIndex;
+		Log.e("ldf","set selectedRowIndex = " + selectedRowIndex);
 	}
 }

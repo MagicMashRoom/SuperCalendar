@@ -1,4 +1,4 @@
-package com.ldf.calendar;
+package com.ldf.calendar.behavior;
 
 import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Scroller;
 
+import com.ldf.calendar.Utils;
 import com.ldf.calendar.view.MonthPager;
 
 public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<RecyclerView> {

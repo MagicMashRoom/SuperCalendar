@@ -7,6 +7,7 @@ package com.ldf.calendar;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewConfiguration;
 
@@ -185,7 +186,9 @@ public class Utils {
 			System.out.println(e.getMessage());
 		}
 		c.setTime(date);
-		c.add(Calendar.DAY_OF_MONTH, 7 - c.get(Calendar.DAY_OF_WEEK) + 1);
+		if(c.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+			c.add(Calendar.DAY_OF_MONTH, 7 - c.get(Calendar.DAY_OF_WEEK) + 1);
+		}
 		return new CalendarDate(c.get(Calendar.YEAR) ,
 				c.get(Calendar.MONTH) + 1 ,
 				c.get(Calendar.DAY_OF_MONTH));
