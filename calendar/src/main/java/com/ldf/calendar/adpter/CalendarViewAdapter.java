@@ -26,7 +26,7 @@ public class CalendarViewAdapter extends PagerAdapter {
 	private int currentPosition;
 	private int calendarType = Calendar.MONTH_TYPE;
 	private int rowCount = 0;
-	private CalendarDate centerDate;
+	private CalendarDate seedDate;
 
 	public static void setDate(CalendarDate calendarDate) {
 		date = calendarDate;
@@ -42,7 +42,7 @@ public class CalendarViewAdapter extends PagerAdapter {
 	}
 
 	private void init(Context context, OnSelectDateListener onSelectDateListener) {
-		centerDate = new CalendarDate();
+		seedDate = new CalendarDate();//初始化的种子日期为今天
 		for (int i = 0; i < 3; i++) {
 			Calendar calendar = new Calendar(context , onSelectDateListener);
 			calendar.setOnAdapterSelectListener(new OnAdapterSelectListener() {
@@ -76,12 +76,12 @@ public class CalendarViewAdapter extends PagerAdapter {
 		}
 		Calendar calendar = calendars.get(position % calendars.size());
 		if(calendarType == Calendar.MONTH_TYPE) {
-			CalendarDate current = centerDate.modifyCurrentDateMonth(position - MonthPager.CURRENT_DAY_INDEX);
+			CalendarDate current = seedDate.modifyCurrentDateMonth(position - MonthPager.CURRENT_DAY_INDEX);
 			calendar.resetSelectedRowIndex();//月切换的时候选择selected row 为第一行
 			calendar.showDate(current);
 		} else {
-			CalendarDate current = centerDate.modifyCurrentDateWeek(position - MonthPager.CURRENT_DAY_INDEX);
-			calendar.setSelectedRowIndex(rowCount);
+			CalendarDate current = seedDate.modifyCurrentDateWeek(position - MonthPager.CURRENT_DAY_INDEX);
+			calendar.setDrawRowIndex(rowCount);
 			calendar.showDate(Utils.getSunday(current.year , current.month , current.day));
 		}
 		calendar.getCellHeight();
@@ -145,49 +145,48 @@ public class CalendarViewAdapter extends PagerAdapter {
 			calendarType = Calendar.MONTH_TYPE;
 			MonthPager.CURRENT_DAY_INDEX = currentPosition;
 			Calendar v = calendars.get(currentPosition % 3);//0
-			CalendarDate current = v.getShowCurrentDate();
-			centerDate = v.getShowCurrentDate();
+			seedDate = v.getShowCurrentDate();
 
 			Calendar v1 =  calendars.get(currentPosition % 3);//0
 			v1.switchCalendarType(Calendar.MONTH_TYPE);
-			v1.showDate(current);
+			v1.showDate(seedDate);
 
 			Calendar v2 = calendars.get((currentPosition - 1) % 3);//2
 			v2.switchCalendarType(Calendar.MONTH_TYPE);
-			CalendarDate last = current.modifyCurrentDateMonth(-1);
+			CalendarDate last = seedDate.modifyCurrentDateMonth(-1);
 			v2.showDate(last);
 
 			Calendar v3 = calendars.get((currentPosition + 1) % 3);//1
 			v3.switchCalendarType(Calendar.MONTH_TYPE);
-			CalendarDate next = current.modifyCurrentDateMonth(1);
+			CalendarDate next = seedDate.modifyCurrentDateMonth(1);
 			v3.showDate(next);
 		}
 	}
 
 	public void switchToWeekType(int rowIndex) {
 		rowCount = rowIndex;
+		Log.e("ldf","rowIndex = " + rowIndex);
 		if(calendars != null && calendars.size() > 0 && calendarType != Calendar.WEEK_TYPE){
 			calendarType = Calendar.WEEK_TYPE;
 			MonthPager.CURRENT_DAY_INDEX = currentPosition;
 			Calendar v = calendars.get(currentPosition % 3);
-			CalendarDate current = v.getShowCurrentDate();
-			centerDate = v.getShowCurrentDate();
+			seedDate = v.getShowCurrentDate();
 
 			Calendar v1 =  calendars.get(currentPosition % 3);
 			v1.switchCalendarType(Calendar.WEEK_TYPE);
-			v1.setSelectedRowIndex(rowIndex);
-			v1.showDate(current);
+			v1.setDrawRowIndex(rowIndex);
+			v1.showDate(seedDate);
 
 			Calendar v2 = calendars.get((currentPosition - 1) % 3);
 			v2.switchCalendarType(Calendar.WEEK_TYPE);
-			v2.setSelectedRowIndex(rowIndex);
-			CalendarDate last = current.modifyCurrentDateWeek(-1);
+			v2.setDrawRowIndex(rowIndex);
+			CalendarDate last = seedDate.modifyCurrentDateWeek(-1);
 			v2.showDate(last);
 
 			Calendar v3 = calendars.get((currentPosition + 1) % 3);
 			v3.switchCalendarType(Calendar.WEEK_TYPE);
-			v3.setSelectedRowIndex(rowIndex);
-			CalendarDate next = current.modifyCurrentDateWeek(1);
+			v3.setDrawRowIndex(rowIndex);
+			CalendarDate next = seedDate.modifyCurrentDateWeek(1);
 			v3.showDate(next);
 
 		}

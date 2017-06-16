@@ -91,6 +91,7 @@ public class CalendarDate implements Serializable{
 				result.setMonth(addToMonth == 0 ? 12 : addToMonth);
 			}
 		}
+		result.setDay(1);//修改为每月的一号最为日历的种子日期
 		return result;
 	}
 

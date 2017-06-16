@@ -105,6 +105,7 @@ public class MonthPager extends ViewPager {
     public int getTopMovableDistance() {
         CalendarViewAdapter calendarViewAdapter = (CalendarViewAdapter) getAdapter();
         rowIndex = calendarViewAdapter.getPagers().get(currentPosition  % 3).getSelectedRowIndex();
+        Log.e("ldf","getTopMovableDistance rowIndex = " + rowIndex);
         return cellHeight * rowIndex;
     }
 
