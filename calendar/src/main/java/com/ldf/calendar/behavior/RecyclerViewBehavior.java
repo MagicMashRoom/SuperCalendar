@@ -5,6 +5,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.Scroller;
 
@@ -61,6 +62,7 @@ public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<RecyclerVie
 
     @Override
     public void onStopNestedScroll(final CoordinatorLayout parent, final RecyclerView child, View target) {
+        Log.e("ldf","onStopNestedScroll");
         super.onStopNestedScroll(parent, child, target);
 
         if (isGoingUp) {

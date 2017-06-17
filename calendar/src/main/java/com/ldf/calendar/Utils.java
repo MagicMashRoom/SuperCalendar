@@ -7,9 +7,13 @@ package com.ldf.calendar;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.view.ViewCompat;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewConfiguration;
+import android.widget.Scroller;
 
 import com.ldf.calendar.model.CalendarDate;
 
@@ -192,5 +196,41 @@ public class Utils {
 		return new CalendarDate(c.get(Calendar.YEAR) ,
 				c.get(Calendar.MONTH) + 1 ,
 				c.get(Calendar.DAY_OF_MONTH));
+	}
+
+	private static boolean isGoingUp;
+	private static int top;
+
+	public static void scrollTo(final CoordinatorLayout parent, final RecyclerView child, final int y, int duration){
+		final Scroller scroller = new Scroller(parent.getContext());
+		scroller.startScroll(0, top, 0, y - top, duration);   //设置scroller的滚动偏移量
+
+		ViewCompat.postOnAnimation(child, new Runnable() {
+			@Override
+			public void run() {
+				//返回值为boolean，true说明滚动尚未完成，false说明滚动已经完成。
+				// 这是一个很重要的方法，通常放在View.computeScroll()中，用来判断是否滚动是否结束。
+				if (scroller.computeScrollOffset()) {
+					int delta = scroller.getCurrY() - child.getTop();
+					child.offsetTopAndBottom(delta);
+
+					saveTop(child.getTop());
+					parent.dispatchDependentViewsChanged(child);
+
+					ViewCompat.postOnAnimation(child, this);
+				}
+			}
+		});
+	}
+
+
+	private static void saveTop(int y){
+		top = y;
+
+//		if (top == initOffset){
+//			isGoingUp = true;
+//		} else if (top == minOffset){
+//			isGoingUp = false;
+//		}
 	}
 }

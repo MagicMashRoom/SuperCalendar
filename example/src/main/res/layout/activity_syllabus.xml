@@ -46,6 +46,14 @@
                 android:textSize="13sp" />
         </LinearLayout>
 
+        <ImageView
+            android:id="@+id/scroll_switch"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="4dp"
+            android:layout_centerHorizontal="true"
+            android:background="@color/colorAccent"/>
+
         <TextView
             android:id="@+id/back_today_button"
             android:layout_width="46.3dp"
@@ -87,6 +95,7 @@
     </LinearLayout>
 
     <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1">
