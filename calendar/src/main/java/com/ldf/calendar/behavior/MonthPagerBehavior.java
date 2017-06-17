@@ -38,10 +38,10 @@ public class MonthPagerBehavior extends CoordinatorLayout.Behavior<MonthPager> {
             int top = child.getTop();
 
             if(dy > touchSlop){
-                calendarViewAdapter.switchToMonthType();
+                calendarViewAdapter.switchToMonth();
             } else if(dy < - touchSlop){
                 Log.e("ldf","rowIndex = " + child.getRowIndex());
-                calendarViewAdapter.switchToWeekType(child.getRowIndex());
+                calendarViewAdapter.switchToWeek(child.getRowIndex());
             }
 
             if (dy > -top){

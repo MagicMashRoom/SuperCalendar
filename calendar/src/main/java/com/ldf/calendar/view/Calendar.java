@@ -111,7 +111,7 @@ public class Calendar extends View {
 		linePaint.setColor(lineColor);
 		linePaint.setStrokeWidth(Utils.dpi2px(context, lineSize));
 		touchSlop = ViewConfiguration.get(context).getScaledTouchSlop() * 2;
-		selectedDate = CalendarViewAdapter.getDate();
+		selectedDate = CalendarViewAdapter.loadDate();
 		initDateData();
 	}
 
@@ -171,16 +171,16 @@ public class Calendar extends View {
 					selectedDate = rows[row].cells[col].date;
 					seedDate = rows[row].cells[col].date;
 					drawRowIndex = row;
-					CalendarViewAdapter.setDate(selectedDate);
+					CalendarViewAdapter.saveDate(selectedDate);
 					onCellClickListener.onSelectDate(selectedDate);
 				} else if (rows[row].cells[col].state == State.PAST_MONTH_DAY){
 					selectedDate = rows[row].cells[col].date;
-					CalendarViewAdapter.setDate(selectedDate);
+					CalendarViewAdapter.saveDate(selectedDate);
 					onCellClickListener.onSelectOtherMonth(PAST_MONTH);
 					onCellClickListener.onSelectDate(selectedDate);
 				} else if (rows[row].cells[col].state == State.NEXT_MONTH_DAY){
 					selectedDate = rows[row].cells[col].date;
-					CalendarViewAdapter.setDate(selectedDate);
+					CalendarViewAdapter.saveDate(selectedDate);
 					onCellClickListener.onSelectOtherMonth(NEXT_MONTH);
 					onCellClickListener.onSelectDate(selectedDate);
 				} else if (rows[row].cells[col].state == State.TODAY){
@@ -188,7 +188,7 @@ public class Calendar extends View {
 					selectedDate = rows[row].cells[col].date;
 					seedDate = rows[row].cells[col].date;
 					drawRowIndex = row;
-					CalendarViewAdapter.setDate(selectedDate);
+					CalendarViewAdapter.saveDate(selectedDate);
 					onCellClickListener.onSelectDate(selectedDate);
 				}
 			} else {
@@ -196,7 +196,7 @@ public class Calendar extends View {
 				selectedDate = rows[row].cells[col].date;
 				seedDate = rows[row].cells[col].date;
 				drawRowIndex = row;
-				CalendarViewAdapter.setDate(selectedDate);
+				CalendarViewAdapter.saveDate(selectedDate);
 				onCellClickListener.onSelectDate(selectedDate);
 			}
 			onAdapterSelectListener.updateSelectState();
@@ -233,11 +233,8 @@ public class Calendar extends View {
 		this.calendarType = calendarType;
 	}
 
-	private void instantiateCalendar(){
-		instantiateMonth();
-	}
 
-	public void instantiateWeek(int rowIndex) {
+	public void updateWeek(int rowIndex) {
 		CalendarDate sunday = Utils.getSunday(seedDate.year , seedDate.month , seedDate.day);
 		rows[rowIndex] = new Row(rowIndex);
 		int day = sunday.day;
@@ -251,11 +248,12 @@ public class Calendar extends View {
 				rows[rowIndex].cells[i] = new Cell(date, State.CURRENT_MONTH_DAY,i, rowIndex);
 			}
 
-			if(rows[rowIndex].cells[i].date.equals(CalendarViewAdapter.getDate())){
+			if(rows[rowIndex].cells[i].date.equals(CalendarViewAdapter.loadDate())){
 				rows[rowIndex].cells[i] = new Cell(date, State.CLICK_DAY, i, rowIndex);
 			}
 			day -- ;
 		}
+		invalidate();
 	}
 
 	private void instantiateMonth() {
@@ -276,7 +274,7 @@ public class Calendar extends View {
 				day ++;
 				fillCurrentMonthDay(day, row, col);
 				if (Utils.isToday(seedDate, day)
-						&& !rows[row].cells[col].date.equals(CalendarViewAdapter.getDate())) {
+						&& !rows[row].cells[col].date.equals(CalendarViewAdapter.loadDate())) {
 					fillToday(day, row, col);
 				}
 			} else if (position < firstDayWeek) { //last month
@@ -296,7 +294,7 @@ public class Calendar extends View {
 
 	private void fillCurrentMonthDay(int day, int row, int col) {
 		rows[row].cells[col] = new Cell(seedDate.modifyDay(day), State.CURRENT_MONTH_DAY, col, row);
-		if(rows[row].cells[col].date.equals(CalendarViewAdapter.getDate())){
+		if(rows[row].cells[col].date.equals(CalendarViewAdapter.loadDate())){
 			rows[row].cells[col] = new Cell(seedDate.modifyDay(day), State.CLICK_DAY, col, row);
 		}
 		if(rows[row].cells[col].date.equals(seedDate)){
@@ -325,10 +323,7 @@ public class Calendar extends View {
 				State.PAST_MONTH_DAY, col, row);
 	}
 
-	public void updateCurrentDate() {
-		instantiateCalendar();
-		invalidate();
-	}
+
 
 	public void showDate(CalendarDate mShowDate) {
 		if(mShowDate != null){
@@ -336,7 +331,12 @@ public class Calendar extends View {
 		}else {
 			seedDate = new CalendarDate();
 		}
-		updateCurrentDate();
+		update();
+	}
+
+	public void update() {
+		instantiateMonth();
+		invalidate();
 	}
 
 	public CalendarDate getShowCurrentDate() {
@@ -361,13 +361,11 @@ public class Calendar extends View {
 		}
 	}
 
-	public void updateSelectDate(){
-		instantiateCalendar();
-	}
 
-	public void updateSelectDate(CalendarDate date){
-		CalendarViewAdapter.setDate(date);
-		instantiateCalendar();
+
+	public void update(CalendarDate date){
+		CalendarViewAdapter.saveDate(date);
+		instantiateMonth();
 		invalidate();
 	}
 

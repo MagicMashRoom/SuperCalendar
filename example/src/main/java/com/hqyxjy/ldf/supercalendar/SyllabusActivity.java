@@ -32,8 +32,6 @@ public class SyllabusActivity extends AppCompatActivity{
     TextView textViewMonthDisplay;
     TextView backToday;
 
-    public static int CURRENT_OFFSET = 0;
-    private ArrayList<Calendar> showCalendars = new ArrayList<>();
     private ArrayList<Calendar> currentCalendars = new ArrayList<>();
 
     private CalendarViewAdapter calendarAdapter;
@@ -79,7 +77,9 @@ public class SyllabusActivity extends AppCompatActivity{
 
     private void initCalendarView() {
         initListener();
-        calendarAdapter = new CalendarViewAdapter(context , onSelectDateListener);
+        calendarAdapter = new CalendarViewAdapter(context ,
+                onSelectDateListener ,
+                Calendar.MONTH_TYPE);
         initMarkData();
         initMonthPager();
     }
@@ -153,11 +153,8 @@ public class SyllabusActivity extends AppCompatActivity{
     }
 
     private void refreshMonthPager() {
-        calendarAdapter = new CalendarViewAdapter(context , onSelectDateListener);
-        monthPager.setAdapter(calendarAdapter);
-        monthPager.setCurrentItem(MonthPager.CURRENT_DAY_INDEX);
         CalendarDate today = new CalendarDate();
-        calendarAdapter.updateDate(today);
+        calendarAdapter.notifyDataChanged(today);
         refreshClickDate(today);
     }
 }

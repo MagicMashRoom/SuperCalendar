@@ -11,7 +11,7 @@ import com.ldf.calendar.adpter.CalendarViewAdapter;
 
 @CoordinatorLayout.DefaultBehavior(MonthPagerBehavior.class)
 public class MonthPager extends ViewPager {
-    public static int CURRENT_DAY_INDEX = 600;
+    public static int CURRENT_DAY_INDEX = 1000;
 
     private int currentPosition = CURRENT_DAY_INDEX;
     private int cellHeight = 0;

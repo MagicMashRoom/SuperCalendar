@@ -28,16 +28,11 @@ public class CalendarViewAdapter extends PagerAdapter {
 	private int rowCount = 0;
 	private CalendarDate seedDate;
 
-	public static void setDate(CalendarDate calendarDate) {
-		date = calendarDate;
-	}
-
-	public static CalendarDate getDate() {
-		return date;
-	}
-
-	public CalendarViewAdapter(Context context , OnSelectDateListener onSelectDateListener) {
+	public CalendarViewAdapter(Context context ,
+							   OnSelectDateListener onSelectDateListener ,
+							   int calendarType) {
 		super();
+		this.calendarType = calendarType;
 		init(context, onSelectDateListener);
 	}
 
@@ -62,12 +57,15 @@ public class CalendarViewAdapter extends PagerAdapter {
 
 	@Override
 	public void setPrimaryItem(ViewGroup container, int position, Object object) {
+		Log.e("ldf","setPrimaryItem" + position);
 		super.setPrimaryItem(container, position, object);
 		this.currentPosition = position;
 	}
 
 	@Override
 	public Object instantiateItem(ViewGroup container, int position) {
+		Log.e("ldf","instantiateItem");
+
 		if(position < 2){
 			return null;
 		}
@@ -82,7 +80,7 @@ public class CalendarViewAdapter extends PagerAdapter {
 		} else {
 			CalendarDate current = seedDate.modifyCurrentDateWeek(position - MonthPager.CURRENT_DAY_INDEX);
 			calendar.showDate(Utils.getSunday(current.year , current.month , current.day));
-			calendar.instantiateWeek(rowCount);
+			calendar.updateWeek(rowCount);
 		}
 		calendar.getCellHeight();
 
@@ -119,20 +117,10 @@ public class CalendarViewAdapter extends PagerAdapter {
 	public void updateAllSelectState(){
 		for(int i = 0; i < calendars.size(); i++){
 			Calendar calendar = calendars.get(i);
-			if(i != (currentPosition % 3)) {
-				calendar.updateSelectDate();//不刷新正在展示月的状态
-				Log.e("ldf","update show date = " + calendar.getShowCurrentDate().toString());
-			} else {
-				Log.e("ldf","show date = " + calendar.getShowCurrentDate().toString());
+			calendar.update();
+			if(calendar.calendarType == Calendar.WEEK_TYPE) {
+				calendar.updateWeek(rowCount);
 			}
-		}
-	}
-
-	public void updateDate(CalendarDate date){
-		for(int i = 0; i < calendars.size(); i++){
-			Calendar calendar = calendars.get(i);
-			calendar.cancelSelectState();
-			calendar.updateSelectDate(date);
 		}
 	}
 
@@ -140,7 +128,7 @@ public class CalendarViewAdapter extends PagerAdapter {
         Utils.setMarkData(markData);
     }
 
-	public void switchToMonthType() {
+	public void switchToMonth() {
 		if(calendars != null && calendars.size() > 0 && calendarType != Calendar.MONTH_TYPE){
 			calendarType = Calendar.MONTH_TYPE;
 			MonthPager.CURRENT_DAY_INDEX = currentPosition;
@@ -163,7 +151,7 @@ public class CalendarViewAdapter extends PagerAdapter {
 		}
 	}
 
-	public void switchToWeekType(int rowIndex) {
+	public void switchToWeek(int rowIndex) {
 		rowCount = rowIndex;
 		Log.e("ldf","rowIndex = " + rowIndex);
 		if(calendars != null && calendars.size() > 0 && calendarType != Calendar.WEEK_TYPE){
@@ -175,20 +163,60 @@ public class CalendarViewAdapter extends PagerAdapter {
 			Calendar v1 =  calendars.get(currentPosition % 3);
 			v1.switchCalendarType(Calendar.WEEK_TYPE);
 			v1.showDate(seedDate);
-			v1.instantiateWeek(rowIndex);
+			v1.updateWeek(rowIndex);
 
 			Calendar v2 = calendars.get((currentPosition - 1) % 3);
 			v2.switchCalendarType(Calendar.WEEK_TYPE);
 			CalendarDate last = seedDate.modifyCurrentDateWeek(-1);
 			v2.showDate(last);
-			v2.instantiateWeek(rowIndex);
+			v2.updateWeek(rowIndex);
 
 			Calendar v3 = calendars.get((currentPosition + 1) % 3);
 			v3.switchCalendarType(Calendar.WEEK_TYPE);
 			CalendarDate next = seedDate.modifyCurrentDateWeek(1);
 			v3.showDate(next);
-			v3.instantiateWeek(rowIndex);
-
+			v3.updateWeek(rowIndex);
 		}
+	}
+
+	public void notifyDataChanged(CalendarDate date){
+		saveDate(date);
+		if(calendarType == Calendar.WEEK_TYPE) {
+			MonthPager.CURRENT_DAY_INDEX = currentPosition;
+			Calendar v1 =  calendars.get(currentPosition % 3);
+			v1.showDate(date);
+			v1.updateWeek(rowCount);
+
+			Calendar v2 = calendars.get((currentPosition - 1) % 3);
+			CalendarDate last = date.modifyCurrentDateWeek(-1);
+			v2.showDate(last);
+			v2.updateWeek(rowCount);
+
+			Calendar v3 = calendars.get((currentPosition + 1) % 3);
+			CalendarDate next = date.modifyCurrentDateWeek(1);
+			v3.showDate(next);
+			v3.updateWeek(rowCount);
+		} else {
+			MonthPager.CURRENT_DAY_INDEX = currentPosition;
+
+			Calendar v1 =  calendars.get(currentPosition % 3);//0
+			v1.showDate(date);
+
+			Calendar v2 = calendars.get((currentPosition - 1) % 3);//2
+			CalendarDate last = date.modifyCurrentDateMonth(-1);
+			v2.showDate(last);
+
+			Calendar v3 = calendars.get((currentPosition + 1) % 3);//1
+			CalendarDate next = date.modifyCurrentDateMonth(1);
+			v3.showDate(next);
+		}
+	}
+
+	public static void saveDate(CalendarDate calendarDate) {
+		date = calendarDate;
+	}
+
+	public static CalendarDate loadDate() {
+		return date;
 	}
 }
