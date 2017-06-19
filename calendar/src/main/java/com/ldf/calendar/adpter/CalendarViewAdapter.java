@@ -220,4 +220,8 @@ public class CalendarViewAdapter extends PagerAdapter {
 	public static CalendarDate loadDate() {
 		return date;
 	}
+
+	public int getCalendarType() {
+		return calendarType;
+	}
 }

@@ -200,7 +200,7 @@ public class Calendar extends View {
 				onCellClickListener.onSelectDate(selectedDate);
 			}
 			onAdapterSelectListener.updateSelectState();
-			invalidate();
+			this.invalidate();
 		}
 	}
 
@@ -253,7 +253,7 @@ public class Calendar extends View {
 			}
 			day -- ;
 		}
-		invalidate();
+		this.invalidate();
 	}
 
 	private void instantiateMonth() {
@@ -336,7 +336,7 @@ public class Calendar extends View {
 
 	public void update() {
 		instantiateMonth();
-		invalidate();
+		this.invalidate();
 	}
 
 	public CalendarDate getShowCurrentDate() {
@@ -359,14 +359,6 @@ public class Calendar extends View {
 				}
 			}
 		}
-	}
-
-
-
-	public void update(CalendarDate date){
-		CalendarViewAdapter.saveDate(date);
-		instantiateMonth();
-		invalidate();
 	}
 
 	public void setMarkColor(int markColor) {

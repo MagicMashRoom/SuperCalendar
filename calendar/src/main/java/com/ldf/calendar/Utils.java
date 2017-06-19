@@ -198,13 +198,14 @@ public class Utils {
 				c.get(Calendar.DAY_OF_MONTH));
 	}
 
-	private static boolean isGoingUp;
 	private static int top;
+	private static boolean custom = false;
 
 	public static void scrollTo(final CoordinatorLayout parent, final RecyclerView child, final int y, int duration){
+		custom = true;
 		final Scroller scroller = new Scroller(parent.getContext());
 		scroller.startScroll(0, top, 0, y - top, duration);   //设置scroller的滚动偏移量
-
+		Log.e("ldf","top = " + top);
 		ViewCompat.postOnAnimation(child, new Runnable() {
 			@Override
 			public void run() {
@@ -223,14 +224,17 @@ public class Utils {
 		});
 	}
 
-
-	private static void saveTop(int y){
+	public static void saveTop(int y){
+		Log.e("ldf","y = " + y);
 		top = y;
+	}
 
-//		if (top == initOffset){
-//			isGoingUp = true;
-//		} else if (top == minOffset){
-//			isGoingUp = false;
-//		}
+	public static int loadTop() {
+		custom= false;
+		return top;
+	}
+
+	public static boolean isCustomScroll () {
+		return custom;
 	}
 }
