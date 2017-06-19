@@ -97,8 +97,10 @@ public class SyllabusActivity extends AppCompatActivity{
             public void onClick(View view) {
                 if(calendarAdapter.getCalendarType() == Calendar.WEEK_TYPE) {
                     Utils.scrollTo(content , rvToDoList , 900 , 200);
+                    calendarAdapter.switchToMonth();
                 } else {
                     Utils.scrollTo(content , rvToDoList , 150 , 200);
+                    calendarAdapter.switchToWeek(monthPager.getRowIndex());
                 }
             }
         });
