@@ -47,29 +47,35 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/scroll_switch"
-            android:layout_width="24dp"
+            android:id="@+id/back_today_button"
+            android:layout_width="wrap_content"
             android:layout_height="24dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginLeft="24dp"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/back_today_button_bg"
-            android:text="切换周月"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/button_bg"
+            android:text="今天"
             android:gravity="center"
             android:textColor="#ff9c0e"
             android:textSize="14sp"/>
 
         <TextView
-            android:id="@+id/back_today_button"
-            android:layout_width="46.3dp"
-            android:layout_height="23dp"
-            android:layout_alignParentRight="true"
+            android:id="@+id/scroll_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:layout_toLeftOf="@id/back_today_button"
+            android:layout_marginRight="24dp"
             android:layout_centerVertical="true"
-            android:background="@drawable/back_today_button_bg"
-            android:text="今天"
+            android:background="@drawable/button_bg"
+            android:text="切换周月"
             android:gravity="center"
             android:textColor="#ff9c0e"
             android:textSize="14sp"/>
+
+
     </RelativeLayout>
     <LinearLayout
         android:orientation="horizontal"
