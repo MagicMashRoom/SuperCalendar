@@ -38,6 +38,7 @@ public class CalendarViewAdapter extends PagerAdapter {
 
 	private void init(Context context, OnSelectDateListener onSelectDateListener) {
 		seedDate = new CalendarDate();//初始化的种子日期为今天
+        saveDate(seedDate);
 		for (int i = 0; i < 3; i++) {
 			Calendar calendar = new Calendar(context , onSelectDateListener);
 			calendar.setOnAdapterSelectListener(new OnAdapterSelectListener() {

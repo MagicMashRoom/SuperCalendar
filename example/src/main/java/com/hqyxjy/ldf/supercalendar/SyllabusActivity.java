@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.ldf.calendar.Utils;
 import com.ldf.calendar.view.MonthPager;
 import com.ldf.calendar.listener.OnSelectDateListener;
 import com.ldf.calendar.adpter.CalendarViewAdapter;
@@ -45,6 +44,7 @@ public class SyllabusActivity extends AppCompatActivity{
     private Context context;
     private CalendarDate currentDate;
     private boolean scrolledTop = false;
+    private boolean initiated = false;
 
 
     @Override
@@ -58,7 +58,7 @@ public class SyllabusActivity extends AppCompatActivity{
         textViewYearDisplay = (TextView) findViewById(R.id.show_year_view);
         textViewMonthDisplay = (TextView) findViewById(R.id.show_month_view);
         backToday = (TextView) findViewById(R.id.back_today_button);
-        scrollSwitch = (ImageView) findViewById(R.id.scroll_switch);
+//        scrollSwitch = (ImageView) findViewById(R.id.scroll_switch);
         rvToDoList = (RecyclerView) findViewById(R.id.list);
         rvToDoList.setHasFixedSize(true);
         rvToDoList.setLayoutManager(new LinearLayoutManager(this));//这里用线性显示 类似于listview
@@ -66,6 +66,22 @@ public class SyllabusActivity extends AppCompatActivity{
         initCurrentDate();
         initCalendarView();
         initBackTodayClickListener();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.e("ldf","onResume");
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if(hasFocus && !initiated) {
+            refreshMonthPager();
+            initiated = true;
+        }
+        Log.e("ldf","onWindowFocusChanged " + hasFocus);
     }
 
     private void initBackTodayClickListener() {
