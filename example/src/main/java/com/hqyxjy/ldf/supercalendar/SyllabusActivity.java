@@ -75,20 +75,20 @@ public class SyllabusActivity extends AppCompatActivity{
                 onClickBackToDayBtn();
             }
         });
-        scrollSwitch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(scrolledTop) {
-                    Utils.scrollTo(content , rvToDoList , 900 , 200);
-                    calendarAdapter.switchToMonth();
-                    scrolledTop = false;
-                } else {
-                    Utils.scrollTo(content , rvToDoList , 150 , 200);
-                    calendarAdapter.switchToWeek(monthPager.getRowIndex());
-                    scrolledTop = true;
-                }
-            }
-        });
+//        scrollSwitch.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if(scrolledTop) {
+//                    Utils.scrollTo(content , rvToDoList , 900 , 200);
+//                    calendarAdapter.switchToMonth();
+//                    scrolledTop = false;
+//                } else {
+//                    Utils.scrollTo(content , rvToDoList , 150 , 200);
+//                    calendarAdapter.switchToWeek(monthPager.getRowIndex());
+//                    scrolledTop = true;
+//                }
+//            }
+//        });
     }
 
     private void initCurrentDate() {
@@ -117,7 +117,6 @@ public class SyllabusActivity extends AppCompatActivity{
 
     private void initListener() {
         onSelectDateListener = new OnSelectDateListener() {
-
             @Override
             public void onSelectDate(CalendarDate date) {
                 refreshClickDate(date);
@@ -125,7 +124,6 @@ public class SyllabusActivity extends AppCompatActivity{
 
             @Override
             public void onSelectOtherMonth(int offset) {
-                Log.e("ldf","onSelectOtherMonth");
                 monthPager.setCurrentItem(mCurrentPage + offset);
             }
         };
