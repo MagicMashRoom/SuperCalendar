@@ -77,13 +77,13 @@ public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<RecyclerVie
         super.onStopNestedScroll(parent, child, target);
 
         if (isGoingUp) {
-            if (initOffset - top > 60){
+            if (initOffset - top > 24){
                 scrollTo(parent, child, minOffset, 200);
             } else {
                 scrollTo(parent, child, initOffset, 80);
             }
         } else {
-            if (top - minOffset > 60){
+            if (top - minOffset > 24){
                 scrollTo(parent, child, initOffset, 200);
             } else {
                 scrollTo(parent, child, minOffset, 80);

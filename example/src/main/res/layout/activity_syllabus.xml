@@ -123,7 +123,10 @@
             android:layout_height="wrap_content"
             app:layout_behavior="com.ldf.calendar.behavior.RecyclerViewBehavior"
             android:background="#c2c2c2"
-            android:layout_gravity="bottom"/>
+            android:layout_gravity="bottom"
+            android:clipToPadding="false"
+            android:clipChildren="false"
+            android:layout_marginBottom="50dp"/><!-- paddingBottom或者magin距离必须是MonthPager高度的1/6-->
 
     </android.support.design.widget.CoordinatorLayout>
 </LinearLayout>
