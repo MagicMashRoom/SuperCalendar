@@ -9,8 +9,7 @@
         android:layout_height="44dp"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        android:background="#fff"
-        android:orientation="horizontal" >
+        android:background="#fff" >
 
         <LinearLayout
             android:id="@+id/choose_date_view"

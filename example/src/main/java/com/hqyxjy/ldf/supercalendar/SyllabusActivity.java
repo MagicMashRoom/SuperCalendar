@@ -10,7 +10,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ldf.calendar.Utils;
@@ -22,8 +21,6 @@ import com.ldf.calendar.view.Calendar;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import butterknife.ButterKnife;
 
 /**
  * Created by ldf on 16/11/4.
@@ -51,7 +48,6 @@ public class SyllabusActivity extends AppCompatActivity{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_syllabus);
-        ButterKnife.bind(this);
         context = this;
         content = (CoordinatorLayout) findViewById(R.id.content);
         monthPager = (MonthPager) findViewById(R.id.calendar_view);
