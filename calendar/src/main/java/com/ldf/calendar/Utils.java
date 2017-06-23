@@ -68,29 +68,7 @@ public class Utils {
 		return Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
 	}
 
-	public static CalendarDate getNextSunday() {
-		Calendar c = Calendar.getInstance();
-		c.add(Calendar.DATE, 7 - getWeekDay() + 1);
-		CalendarDate date = new CalendarDate(c.get(Calendar.YEAR),
-				c.get(Calendar.MONTH)+1, c.get(Calendar.DAY_OF_MONTH));
-		return date;
-	}
-
-	public static int[] getWeekSunday(int year, int month, int day, int pervious) {
-		int[] time = new int[3];
-		Calendar c = Calendar.getInstance();
-		c.set(Calendar.YEAR, year);
-		c.set(Calendar.MONTH, month);
-		c.set(Calendar.DAY_OF_MONTH, day);
-		c.add(Calendar.DAY_OF_MONTH, pervious);
-		time[0] = c.get(Calendar.YEAR);
-		time[1] = c.get(Calendar.MONTH )+1;
-		time[2] = c.get(Calendar.DAY_OF_MONTH);
-		return time;
-
-	}
-
-	public static String getWeekDayFromDate(CalendarDate date) {
+	public static String getWeekdayPosition(CalendarDate date) {
 		Calendar cal = Calendar.getInstance();
 		cal.set(date.getYear(), date.getMonth() - 1, date.getDay());
 		int week_index = cal.get(Calendar.DAY_OF_WEEK) + 5;
@@ -100,7 +78,7 @@ public class Utils {
 		return weekName[week_index];
 	}
 
-	public static int getWeekDayFromDate(int year, int month) {
+	public static int getFirstWeekdayPosition(int year, int month) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(getDateFromString(year, month));
 		int week_index = cal.get(Calendar.DAY_OF_WEEK) + 5;
@@ -110,14 +88,20 @@ public class Utils {
 		return week_index;
 	}
 
-	public static int getWeekDayFromDate(int year, int month, int day) {
+	public static int getFirstDayWeekPosition(int year, int month , int type) {
 		Calendar cal = Calendar.getInstance();
-		cal.set(year, month - 1, day);
-		int week_index = cal.get(Calendar.DAY_OF_WEEK) - 2;
-		if (week_index < 0) {
-			week_index = 0;
+		cal.setTime(getDateFromString(year, month));
+		int week_index = cal.get(Calendar.DAY_OF_WEEK) - 1;
+		if(type == 1) {
+			return week_index;
+		} else {
+			week_index = cal.get(Calendar.DAY_OF_WEEK) + 5;
+			if (week_index >= 7) {
+				week_index -= 7;
+			}
 		}
 		return week_index;
+
 	}
 
 	@SuppressLint("SimpleDateFormat")
@@ -193,6 +177,23 @@ public class Utils {
 		if(c.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
 			c.add(Calendar.DAY_OF_MONTH, 7 - c.get(Calendar.DAY_OF_WEEK) + 1);
 		}
+		return new CalendarDate(c.get(Calendar.YEAR) ,
+				c.get(Calendar.MONTH) + 1 ,
+				c.get(Calendar.DAY_OF_MONTH));
+	}
+
+	public static CalendarDate getSaturday(int year, int month, int day) {// TODO: 16/12/12 得到一个CustomDate对象
+		Calendar c = Calendar.getInstance();
+		String dateString = year + "-" + month + "-" + day;
+		Date date = null;
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-d");
+			date = sdf.parse(dateString);
+		} catch (ParseException e) {
+			System.out.println(e.getMessage());
+		}
+		c.setTime(date);
+		c.add(Calendar.DAY_OF_MONTH, 7 - c.get(Calendar.DAY_OF_WEEK));
 		return new CalendarDate(c.get(Calendar.YEAR) ,
 				c.get(Calendar.MONTH) + 1 ,
 				c.get(Calendar.DAY_OF_MONTH));

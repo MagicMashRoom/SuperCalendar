@@ -29,6 +29,7 @@ public class Calendar extends View {
 
 	public static final int MONTH_TYPE = 0;
 	public static final int WEEK_TYPE = 1;
+
 	public int calendarType = MONTH_TYPE;
 
 	private Context context;
@@ -235,11 +236,16 @@ public class Calendar extends View {
 
 
 	public void updateWeek(int rowIndex) {
-		CalendarDate sunday = Utils.getSunday(seedDate.year , seedDate.month , seedDate.day);
+		CalendarDate weekLastDay;
+		if(CalendarViewAdapter.weekType == 1) {
+			weekLastDay = Utils.getSaturday(seedDate.year , seedDate.month , seedDate.day);
+		} else {
+			weekLastDay = Utils.getSunday(seedDate.year , seedDate.month , seedDate.day);
+		}
 		rows[rowIndex] = new Row(rowIndex);
-		int day = sunday.day;
+		int day = weekLastDay.day;
 		for (int i = TOTAL_COL - 1; i >= 0 ; i --) {
-			CalendarDate date = sunday.modifyDay(day);
+			CalendarDate date = weekLastDay.modifyDay(day);
 
 			if (Utils.isToday(date , day)) {
 				mTodayCell = new Cell(date, State.TODAY, i, rowIndex);
@@ -259,7 +265,8 @@ public class Calendar extends View {
 	private void instantiateMonth() {
 		int lastMonthDays = Utils.getMonthDays(seedDate.year, seedDate.month - 1);	// 上个月的天数
 		int currentMonthDays = Utils.getMonthDays(seedDate.year, seedDate.month);	// 当前月的天数
-		int firstDayPosition = Utils.getWeekDayFromDate(seedDate.year, seedDate.month);//本月第一天是本月第一周的周几
+		int firstDayPosition = Utils.getFirstDayWeekPosition(seedDate.year, seedDate.month , CalendarViewAdapter.weekType);
+
 		int day = 0;
 		for (int row = 0; row < TOTAL_ROW_SIX; row++) {
 			day = fillWeek(lastMonthDays, currentMonthDays, firstDayPosition, day, row);
