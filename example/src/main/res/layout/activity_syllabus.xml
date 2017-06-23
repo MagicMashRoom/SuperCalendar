@@ -83,9 +83,6 @@
         android:background="#fff">
         <TextView
             style="@style/weekIndicatorStyle"
-            android:text="日" />
-        <TextView
-            style="@style/weekIndicatorStyle"
             android:text="一" />
         <TextView
             style="@style/weekIndicatorStyle"
@@ -102,7 +99,9 @@
         <TextView
             style="@style/weekIndicatorStyle"
             android:text="六" />
-
+        <TextView
+            style="@style/weekIndicatorStyle"
+            android:text="日" />
     </LinearLayout>
 
     <android.support.design.widget.CoordinatorLayout
