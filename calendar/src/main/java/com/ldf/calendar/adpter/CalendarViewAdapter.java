@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class CalendarViewAdapter extends PagerAdapter {
-	public static int weekArrayType = 1;//周排列方式 1 express Sunday as the first day of week
+	public static int weekArrayType = 0;//周排列方式 1 express Sunday as the first day of week
 
 	private static CalendarDate date = new CalendarDate();
 	private ArrayList<Calendar> calendars = new ArrayList<>();
