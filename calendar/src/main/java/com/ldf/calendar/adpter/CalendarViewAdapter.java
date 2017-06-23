@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class CalendarViewAdapter extends PagerAdapter {
-	public static int weekType = 1;//1 express Sunday as the first day of week
+	public static int weekArrayType = 1;//周排列方式 1 express Sunday as the first day of week
 
 	private static CalendarDate date = new CalendarDate();
 	private ArrayList<Calendar> calendars = new ArrayList<>();
@@ -82,10 +82,10 @@ public class CalendarViewAdapter extends PagerAdapter {
 			calendar.showDate(current);
 		} else {
 			CalendarDate current = seedDate.modifyCurrentDateWeek(position - MonthPager.CURRENT_DAY_INDEX);
-			if(weekType != 1) {
-				calendar.showDate(Utils.getSunday(current.year , current.month , current.day));
-			} else {
+			if(weekArrayType == 1) {
 				calendar.showDate(Utils.getSaturday(current.year , current.month , current.day));
+			} else {
+				calendar.showDate(Utils.getSunday(current.year , current.month , current.day));
 			}
 			calendar.updateWeek(rowCount);
 		}

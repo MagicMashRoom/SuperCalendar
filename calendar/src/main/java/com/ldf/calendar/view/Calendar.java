@@ -237,7 +237,7 @@ public class Calendar extends View {
 
 	public void updateWeek(int rowIndex) {
 		CalendarDate weekLastDay;
-		if(CalendarViewAdapter.weekType == 1) {
+		if(CalendarViewAdapter.weekArrayType == 1) {
 			weekLastDay = Utils.getSaturday(seedDate.year , seedDate.month , seedDate.day);
 		} else {
 			weekLastDay = Utils.getSunday(seedDate.year , seedDate.month , seedDate.day);
@@ -265,7 +265,7 @@ public class Calendar extends View {
 	private void instantiateMonth() {
 		int lastMonthDays = Utils.getMonthDays(seedDate.year, seedDate.month - 1);	// 上个月的天数
 		int currentMonthDays = Utils.getMonthDays(seedDate.year, seedDate.month);	// 当前月的天数
-		int firstDayPosition = Utils.getFirstDayWeekPosition(seedDate.year, seedDate.month , CalendarViewAdapter.weekType);
+		int firstDayPosition = Utils.getFirstDayWeekPosition(seedDate.year, seedDate.month , CalendarViewAdapter.weekArrayType);
 
 		int day = 0;
 		for (int row = 0; row < TOTAL_ROW_SIX; row++) {
