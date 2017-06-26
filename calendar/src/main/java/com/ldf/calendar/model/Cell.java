@@ -64,8 +64,8 @@ public class Cell {
     }
 
     // 绘制一个单元格 如果颜色需要自定义可以修改
-    public void drawCell(Canvas canvas) {
-        drawMark(canvas, date, Utils.getMarkData());
+    public void draw(Canvas canvas) {
+        drawMarker(canvas, date, Utils.getMarkData());
         switch (state) {
             case CURRENT_MONTH_DAY:
                 datePaint.setColor(Color.parseColor("#FF333333"));
@@ -95,9 +95,7 @@ public class Cell {
         drawDateText(canvas);
     }
 
-
-
-    private void drawMark(Canvas canvas, CalendarDate date, HashMap<String, String> markDateData) {
+    private void drawMarker(Canvas canvas, CalendarDate date, HashMap<String, String> markDateData) {
         if(markDateData != null){
             if(!date.toString().equals(new CalendarDate().toString())){//今天时不绘制MARK
                 if(markDateData.containsKey(date.toString())){

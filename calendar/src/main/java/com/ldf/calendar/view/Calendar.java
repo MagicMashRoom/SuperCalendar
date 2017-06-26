@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -62,7 +61,6 @@ public class Calendar extends View {
 	private CalendarDate selectedDate; //被选中的日期  包括year month day
 
 	private OnSelectDateListener onCellClickListener;	// 单元格点击回调事件
-	private int drawRowIndex;
 
 	public void setOnAdapterSelectListener(OnAdapterSelectListener onAdapterSelectListener) {
 		this.onAdapterSelectListener = onAdapterSelectListener;
@@ -77,22 +75,6 @@ public class Calendar extends View {
 		super(context);
 		this.onCellClickListener = onCellClickListener;
 		init(context);
-	}
-
-	@Override
-	protected void onDraw(Canvas canvas) {
-		super.onDraw(canvas);
-		cellHeight = viewHeight / currentMonthWeeks;
-		Cell.setHeight(cellHeight);
-		for (int row = 0; row < currentMonthWeeks; row++) {
-			if (rows[row] != null)
-				rows[row].drawRow(canvas);
-			drawLine(canvas, row);
-		}
-	}
-
-	private void drawLine(Canvas canvas, int row) {
-		canvas.drawLine(0, row * cellHeight, viewWidth , row * cellHeight, linePaint);
 	}
 
 	private void init(Context context) {
@@ -114,6 +96,22 @@ public class Calendar extends View {
 		touchSlop = ViewConfiguration.get(context).getScaledTouchSlop() * 2;
 		selectedDate = CalendarViewAdapter.loadDate();
 		initDateData();
+	}
+
+	@Override
+	protected void onDraw(Canvas canvas) {
+		super.onDraw(canvas);
+		cellHeight = viewHeight / currentMonthWeeks;
+		Cell.setHeight(cellHeight);
+		for (int row = 0; row < currentMonthWeeks; row++) {
+			if (rows[row] != null)
+				rows[row].drawRow(canvas);
+			drawLine(canvas, row);
+		}
+	}
+
+	private void drawLine(Canvas canvas, int row) {
+		canvas.drawLine(0, row * cellHeight, viewWidth , row * cellHeight, linePaint);
 	}
 
 	private void initDateData() {
@@ -152,7 +150,7 @@ public class Calendar extends View {
 				if (Math.abs(disX) < touchSlop && Math.abs(disY) < touchSlop) {
 					int col = (int) (mDownX / cellWidth);
 					int row = (int) (mDownY / cellHeight);
-					measureClickCell(col, row);
+					onClickDate(col, row);
 				}
 				break;
 		}
@@ -160,7 +158,7 @@ public class Calendar extends View {
 	}
 
 
-	private void measureClickCell(int col, int row) {
+	private void onClickDate(int col, int row) {
 
 		if (col >= TOTAL_COL || row >= TOTAL_ROW_SIX)
 			return;
@@ -171,7 +169,6 @@ public class Calendar extends View {
 					rows[row].cells[col].state = State.CLICK_DAY;
 					selectedDate = rows[row].cells[col].date;
 					seedDate = rows[row].cells[col].date;
-					drawRowIndex = row;
 					CalendarViewAdapter.saveDate(selectedDate);
 					onCellClickListener.onSelectDate(selectedDate);
 				} else if (rows[row].cells[col].state == State.PAST_MONTH_DAY){
@@ -188,7 +185,6 @@ public class Calendar extends View {
 					rows[row].cells[col].state = State.CLICK_DAY;
 					selectedDate = rows[row].cells[col].date;
 					seedDate = rows[row].cells[col].date;
-					drawRowIndex = row;
 					CalendarViewAdapter.saveDate(selectedDate);
 					onCellClickListener.onSelectDate(selectedDate);
 				}
@@ -196,7 +192,6 @@ public class Calendar extends View {
 				rows[row].cells[col].state = State.CLICK_DAY;
 				selectedDate = rows[row].cells[col].date;
 				seedDate = rows[row].cells[col].date;
-				drawRowIndex = row;
 				CalendarViewAdapter.saveDate(selectedDate);
 				onCellClickListener.onSelectDate(selectedDate);
 			}
@@ -217,7 +212,7 @@ public class Calendar extends View {
 		public void drawRow(Canvas canvas) {
 			for (int col = 0; col < cells.length; col++) {
 				if (cells[col] != null)
-					cells[col].drawCell(canvas);
+					cells[col].draw(canvas);
 			}
 		}
 	}
@@ -233,7 +228,6 @@ public class Calendar extends View {
 	public void switchCalendarType(int calendarType) {
 		this.calendarType = calendarType;
 	}
-
 
 	public void updateWeek(int rowIndex) {
 		CalendarDate weekLastDay;
@@ -279,7 +273,7 @@ public class Calendar extends View {
 			int position = col + row * TOTAL_COL;	// 单元格位置
 			if (position >= firstDayWeek && position < firstDayWeek + currentMonthDays) {	// 本月的
 				day ++;
-				fillCurrentMonthDay(day, row, col);
+				fillCurrentMonthDate(day, row, col);
 				if (Utils.isToday(seedDate, day)
 						&& !rows[row].cells[col].date.equals(CalendarViewAdapter.loadDate())) {
 					fillToday(day, row, col);
@@ -299,19 +293,17 @@ public class Calendar extends View {
 		rows[row].cells[col] = mTodayCell;
 	}
 
-	private void fillCurrentMonthDay(int day, int row, int col) {
+	private void fillCurrentMonthDate(int day, int row, int col) {
 		rows[row].cells[col] = new Cell(seedDate.modifyDay(day), State.CURRENT_MONTH_DAY, col, row);
 		if(rows[row].cells[col].date.equals(CalendarViewAdapter.loadDate())){
 			rows[row].cells[col] = new Cell(seedDate.modifyDay(day), State.CLICK_DAY, col, row);
 		}
 		if(rows[row].cells[col].date.equals(seedDate)){
 			selectedRowIndex = row;
-			Log.e("ldf","seed selectedRowIndex = " + selectedRowIndex);
 		}
 	}
 
 	private void instantiateNextMonth(int currentMonthDays, int firstDayWeek, int row, int col, int position) {
-
 		rows[row].cells[col] = new Cell((new CalendarDate(seedDate.year,
 				seedDate.month + 1, position - firstDayWeek - currentMonthDays + 1)),
 				State.NEXT_MONTH_DAY, col, row);
@@ -329,8 +321,6 @@ public class Calendar extends View {
 				seedDate.month - 1, lastMonthDays - (firstDayWeek- position - 1)),
 				State.PAST_MONTH_DAY, col, row);
 	}
-
-
 
 	public void showDate(CalendarDate mShowDate) {
 		if(mShowDate != null){
@@ -357,8 +347,6 @@ public class Calendar extends View {
 					if(rows[i].cells[j].state == State.CLICK_DAY){
 						rows[i].cells[j].state = State.CURRENT_MONTH_DAY;
 						resetSelectedRowIndex();
-						Log.e("ldf","cancel selectedRowIndex = " + selectedRowIndex);
-
 					}
 					if(rows[i].cells[j].date.equals(new CalendarDate())) {
 						rows[i].cells[j].state = State.TODAY;
