@@ -35,8 +35,6 @@ public class MonthPagerBehavior extends CoordinatorLayout.Behavior<MonthPager> {
         CalendarViewAdapter calendarViewAdapter = (CalendarViewAdapter) child.getAdapter();
         if (dependentViewTop != -1) {
             int dy = dependency.getTop() - dependentViewTop;    //dependency对其依赖的view(本例依赖的view是RecycleView)
-            Log.e("ldf","dependency.getTop() = " + dependency.getTop());
-            Log.e("ldf","dependentViewTop = " + dependentViewTop);
 
             int top = child.getTop();
 

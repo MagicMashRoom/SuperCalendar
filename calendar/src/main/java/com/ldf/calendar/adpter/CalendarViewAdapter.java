@@ -60,15 +60,12 @@ public class CalendarViewAdapter extends PagerAdapter {
 
 	@Override
 	public void setPrimaryItem(ViewGroup container, int position, Object object) {
-		Log.e("ldf","setPrimaryItem" + position);
 		super.setPrimaryItem(container, position, object);
 		this.currentPosition = position;
 	}
 
 	@Override
 	public Object instantiateItem(ViewGroup container, int position) {
-		Log.e("ldf","instantiateItem");
-
 		if(position < 2){
 			return null;
 		}
@@ -160,7 +157,6 @@ public class CalendarViewAdapter extends PagerAdapter {
 
 	public void switchToWeek(int rowIndex) {
 		rowCount = rowIndex;
-		Log.e("ldf","rowIndex = " + rowIndex);
 		if(calendars != null && calendars.size() > 0 && calendarType != Calendar.WEEK_TYPE){
 			calendarType = Calendar.WEEK_TYPE;
 			MonthPager.CURRENT_DAY_INDEX = currentPosition;

@@ -55,8 +55,6 @@ public class MonthPager extends ViewPager {
 
             @Override
             public void onPageScrollStateChanged(int state) {
-//                CalendarViewAdapter adapter = (CalendarViewAdapter) getAdapter();
-//                adapter.updateDate();
                 if(monthPageChangeListener != null) {
                     monthPageChangeListener.onPageScrollStateChanged(state);
                 }
@@ -83,7 +81,7 @@ public class MonthPager extends ViewPager {
 
     @Override
     protected void onSizeChanged(int w, int h, int oldW, int oldH) {
-        mCellSpace = Math.min(h / 6, w / 7);
+        mCellSpace = h / 6;
         super.onSizeChanged(w, h, oldW, oldH);
     }
 
