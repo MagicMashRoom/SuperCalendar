@@ -67,7 +67,6 @@ public class SyllabusActivity extends AppCompatActivity{
     @Override
     protected void onResume() {
         super.onResume();
-        Log.e("ldf","onResume");
     }
 
     @Override
@@ -92,10 +91,10 @@ public class SyllabusActivity extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 if(calendarAdapter.getCalendarType() == Calendar.WEEK_TYPE) {
-                    Utils.scrollTo(content , rvToDoList , 900 , 200);
+                    Utils.scrollTo(content , rvToDoList , monthPager.getViewHeight() , 200);
                     calendarAdapter.switchToMonth();
                 } else {
-                    Utils.scrollTo(content , rvToDoList , 150 , 200);
+                    Utils.scrollTo(content , rvToDoList , monthPager.getCellHeight() , 200);
                     calendarAdapter.switchToWeek(monthPager.getRowIndex());
                 }
             }
@@ -135,7 +134,7 @@ public class SyllabusActivity extends AppCompatActivity{
 
             @Override
             public void onSelectOtherMonth(int offset) {
-                monthPager.setCurrentItem(mCurrentPage + offset);
+                monthPager.selectOtherMonth(offset);
             }
         };
     }

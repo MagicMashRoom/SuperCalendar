@@ -94,6 +94,12 @@ public class MonthPager extends ViewPager {
         }
     }
 
+    public void selectOtherMonth(int offset) {
+        setCurrentItem(currentPosition + offset);
+        CalendarViewAdapter calendarViewAdapter = (CalendarViewAdapter) getAdapter();
+        calendarViewAdapter.notifyDataChanged(CalendarViewAdapter.loadDate());
+    }
+
     public interface OnPageChangeListener {
         void onPageScrolled(int position, float positionOffset, int positionOffsetPixels);
         void onPageSelected(int position);
@@ -110,6 +116,10 @@ public class MonthPager extends ViewPager {
         CalendarViewAdapter calendarViewAdapter = (CalendarViewAdapter) getAdapter();
         cellHeight = calendarViewAdapter.getPagers().get(currentPosition  % 3).getCellHeight();
         return cellHeight;
+    }
+
+    public int getViewHeight () {
+        return cellHeight * 6;
     }
 
     public int getCurrentPosition() {
