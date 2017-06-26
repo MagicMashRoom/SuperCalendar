@@ -226,7 +226,6 @@ public class Utils {
 	}
 
 	public static void saveTop(int y){
-		Log.e("ldf","y = " + y);
 		top = y;
 	}
 

@@ -16,15 +16,16 @@ public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<RecyclerVie
     private int initOffset = -1;
     private int minOffset = -1;
     private int top;
+    private Context context;
 
     public RecyclerViewBehavior(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.context = context;
     }
 
     @Override
     public boolean onLayoutChild(CoordinatorLayout parent, RecyclerView child, int layoutDirection) {
         parent.onLayoutChild(child, layoutDirection);
-        Log.e("ldf","onLayoutChild");
         MonthPager monthPager = getMonthPager(parent);
         if(!Utils.isCustomScroll()) {
             if (monthPager.getBottom() > 0 && initOffset == -1) {
@@ -77,13 +78,13 @@ public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<RecyclerVie
         super.onStopNestedScroll(parent, child, target);
 
         if (isGoingUp) {
-            if (initOffset - top > 24){
+            if (initOffset - top > Utils.getTouchSlop(context)){
                 scrollTo(parent, child, minOffset, 200);
             } else {
                 scrollTo(parent, child, initOffset, 80);
             }
         } else {
-            if (top - minOffset > 24){
+            if (top - minOffset > Utils.getTouchSlop(context)){
                 scrollTo(parent, child, initOffset, 200);
             } else {
                 scrollTo(parent, child, minOffset, 80);
