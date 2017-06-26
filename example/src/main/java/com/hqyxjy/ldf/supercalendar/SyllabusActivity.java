@@ -76,7 +76,6 @@ public class SyllabusActivity extends AppCompatActivity{
             refreshMonthPager();
             initiated = true;
             Utils.saveTop(rvToDoList.getTop());
-            Log.e("ldf","rvToDoList.getTop() = " + rvToDoList.getTop());
         }
     }
 
@@ -134,6 +133,7 @@ public class SyllabusActivity extends AppCompatActivity{
 
             @Override
             public void onSelectOtherMonth(int offset) {
+                //偏移量 -1表示上一个月 ， 1表示下一个月
                 monthPager.selectOtherMonth(offset);
             }
         };

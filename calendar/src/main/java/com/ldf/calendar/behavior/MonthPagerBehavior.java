@@ -1,10 +1,8 @@
 package com.ldf.calendar.behavior;
 
-import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
@@ -19,13 +17,6 @@ import com.ldf.calendar.view.MonthPager;
 public class MonthPagerBehavior extends CoordinatorLayout.Behavior<MonthPager> {
     private int top;
     private int touchSlop = 24;
-    private Context context;
-
-    public MonthPagerBehavior(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        this.context = context;
-        touchSlop = Utils.getTouchSlop(context);
-    }
 
     @Override
     public boolean layoutDependsOn(CoordinatorLayout parent, MonthPager child, View dependency) {
@@ -43,15 +34,15 @@ public class MonthPagerBehavior extends CoordinatorLayout.Behavior<MonthPager> {
 
     @Override
     public boolean onDependentViewChanged(CoordinatorLayout parent, MonthPager child, View dependency) {
-        Log.e("ldf","onDependentViewChanged");
         CalendarViewAdapter calendarViewAdapter = (CalendarViewAdapter) child.getAdapter();
         if (dependentViewTop != -1) {
             int dy = dependency.getTop() - dependentViewTop;    //dependency对其依赖的view(本例依赖的view是RecycleView)
+
             int top = child.getTop();
 
-            if( dy > touchSlop){
+            if( dy > touchSlop * 2){
                 calendarViewAdapter.switchToMonth();
-            } else if(dy < - touchSlop){
+            } else if(dy < - touchSlop * 2){
                 calendarViewAdapter.switchToWeek(child.getRowIndex());
             }
 

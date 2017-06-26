@@ -206,7 +206,6 @@ public class Utils {
 		custom = true;
 		final Scroller scroller = new Scroller(parent.getContext());
 		scroller.startScroll(0, top, 0, y - top, duration);   //设置scroller的滚动偏移量
-		Log.e("ldf","top = " + top);
 		ViewCompat.postOnAnimation(child, new Runnable() {
 			@Override
 			public void run() {
