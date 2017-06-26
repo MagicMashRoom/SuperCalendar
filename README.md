@@ -5,7 +5,7 @@
 >
 
 # Example 
-![Example](http://upload-images.jianshu.io/upload_images/3874191-366d7f0d343989c9.gif?imageMogr2/auto-orient/strip)
+![Example](http://upload-images.jianshu.io/upload_images/3874191-a39a2e71699836dd.gif?imageMogr2/auto-orient/strip)
 
 Usage
 -----
