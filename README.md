@@ -1,3 +1,18 @@
+# 简介
+
+*        由于项目的需求，研究了众多日历软件。本软件是一款高仿小米的自定义日历>控件，周月视图平滑滚动，平滑切换，可以在xml文件中进行属性的配置定制，加入你自己的RecyclerView后，实现日历与列表的无缝连接。
+*       解释一下为什么认为他是第十好的Android开源日历呢，看到本篇文章的同学估计也是实验课或者项目需求中需要一个日历表，当我接到这个需求的时候，当时脑子压根连想都没想，这么通用的控件，GitHub上一搜一大堆不是嘛。可是等到真正做起来的时候，扎心了老铁，GitHub上的大神居然异常的不给力，都是实现了基本功能，能够滑动切换月份，找实现了周月切换功能的开源库很难。终于我费尽千辛万苦找到一个能够完美切换的项目时，扎铁了老心。。。你周月切换之后的数据乱的一塌糊涂啊！！！
+*        算了，自己撸一个！！！
+
+# 主要的优点：
+* 完全自定义，原理简单，扩展性强
+* 左右滑动切换上下周月，上下滑动切换周月模式
+* 抽屉式周月切换效果
+* 标记指定日期（marker）
+* 跳转到指定日期
+
+不多废话，直接看：
+
 # SuperCalendar
 ==========================
 > 简单使用的日历  [项目链接 求Star](https://github.com/MagicMashRoom/SuperCalendar)
@@ -5,13 +20,10 @@
 >
 
 # Example 
-![Example](http://upload-images.jianshu.io/upload_images/3874191-a39a2e71699836dd.gif?imageMogr2/auto-orient/strip)
 
-Usage
------
+![example](http://upload-images.jianshu.io/upload_images/3874191-366d7f0d343989c9.gif?imageMogr2/auto-orient/strip)
 
-Include `MonthPager` in your layout XML.
-MonthPager必须和下方的RecyclerView包裹在同一个CoordinatorLayout内.且RecyclerView的layout_behavior为com.ldf.calendar.behavior.RecyclerViewBehavior
+RecyclerView的layout_behavior为com.ldf.calendar.behavior.RecyclerViewBehavior
 
 ```xml
  <android.support.design.widget.CoordinatorLayout
@@ -64,12 +76,13 @@ private void initListener() {
         onSelectDateListener = new OnSelectDateListener() {
             @Override
             public void onSelectDate(CalendarDate date) {
-                refreshClickDate(date);
+                //your code
             }
 
             @Override
             public void onSelectOtherMonth(int offset) {
-                monthPager.setCurrentItem(mCurrentPage + offset);
+                //偏移量 -1表示上一个月 ， 1表示下一个月
+                monthPager.selectOtherMonth(offset);
             }
         };
     }
@@ -79,6 +92,7 @@ private void initListener() {
 ```java
 private void initMarkData() {
        HashMap markData = new HashMap<>();
+        //1表示红点，0表示灰点
        markData.put("2017-8-9" , "1");
        markData.put("2017-7-9" , "0");
        markData.put("2017-6-9" , "1");
