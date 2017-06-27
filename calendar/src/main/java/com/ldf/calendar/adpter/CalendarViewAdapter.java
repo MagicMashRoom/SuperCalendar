@@ -136,22 +136,20 @@ public class CalendarViewAdapter extends PagerAdapter {
 		if(calendars != null && calendars.size() > 0 && calendarType != Calendar.MONTH_TYPE){
 			calendarType = Calendar.MONTH_TYPE;
 			MonthPager.CURRENT_DAY_INDEX = currentPosition;
-			Calendar v = calendars.get(currentPosition % 3);//0
-			seedDate = v.getShowCurrentDate();
+			Calendar v0 = calendars.get(currentPosition % 3);//0
+			seedDate = v0.getShowCurrentDate();
+			v0.switchCalendarType(Calendar.MONTH_TYPE);
+			v0.update();
 
-			Calendar v1 =  calendars.get(currentPosition % 3);//0
+			Calendar v1 = calendars.get((currentPosition - 1) % 3);//2
 			v1.switchCalendarType(Calendar.MONTH_TYPE);
-			v1.showDate(seedDate);
-
-			Calendar v2 = calendars.get((currentPosition - 1) % 3);//2
-			v2.switchCalendarType(Calendar.MONTH_TYPE);
 			CalendarDate last = seedDate.modifyCurrentDateMonth(-1);
-			v2.showDate(last);
+			v1.showDate(last);
 
-			Calendar v3 = calendars.get((currentPosition + 1) % 3);//1
-			v3.switchCalendarType(Calendar.MONTH_TYPE);
+			Calendar v2 = calendars.get((currentPosition + 1) % 3);//1
+			v2.switchCalendarType(Calendar.MONTH_TYPE);
 			CalendarDate next = seedDate.modifyCurrentDateMonth(1);
-			v3.showDate(next);
+			v2.showDate(next);
 		}
 	}
 
@@ -183,33 +181,30 @@ public class CalendarViewAdapter extends PagerAdapter {
 	}
 
 	public void notifyDataChanged(CalendarDate date){
+		seedDate = date;
 		saveDate(date);
+		MonthPager.CURRENT_DAY_INDEX = currentPosition;
+		Calendar v1 =  calendars.get(currentPosition % 3);
+		Calendar v2 = calendars.get((currentPosition - 1) % 3);
+		Calendar v3 = calendars.get((currentPosition + 1) % 3);
+
 		if(calendarType == Calendar.WEEK_TYPE) {
-			MonthPager.CURRENT_DAY_INDEX = currentPosition;
-			Calendar v1 =  calendars.get(currentPosition % 3);
 			v1.showDate(date);
 			v1.updateWeek(rowCount);
 
-			Calendar v2 = calendars.get((currentPosition - 1) % 3);
 			CalendarDate last = date.modifyCurrentDateWeek(-1);
 			v2.showDate(last);
 			v2.updateWeek(rowCount);
 
-			Calendar v3 = calendars.get((currentPosition + 1) % 3);
 			CalendarDate next = date.modifyCurrentDateWeek(1);
 			v3.showDate(next);
 			v3.updateWeek(rowCount);
 		} else {
-			MonthPager.CURRENT_DAY_INDEX = currentPosition;
-
-			Calendar v1 =  calendars.get(currentPosition % 3);//0
 			v1.showDate(date);
 
-			Calendar v2 = calendars.get((currentPosition - 1) % 3);//2
 			CalendarDate last = date.modifyCurrentDateMonth(-1);
 			v2.showDate(last);
 
-			Calendar v3 = calendars.get((currentPosition + 1) % 3);//1
 			CalendarDate next = date.modifyCurrentDateMonth(1);
 			v3.showDate(next);
 		}
