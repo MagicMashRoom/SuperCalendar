@@ -1,7 +1,6 @@
 package com.hqyxjy.ldf.supercalendar;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,6 +19,8 @@ public class CustomDayView extends DayView {
     private TextView dateTv;
     private ImageView marker;
     private View selectedBackground;
+    private View todayBackground;
+    private final CalendarDate today = new CalendarDate();
 
     /**
      * Constructor. Sets up the MarkerView with a custom layout resource.
@@ -32,16 +33,22 @@ public class CustomDayView extends DayView {
         dateTv = (TextView) findViewById(R.id.date);
         marker = (ImageView) findViewById(R.id.maker);
         selectedBackground = findViewById(R.id.selected_background);
+        selectedBackground = findViewById(R.id.selected_background);
+        todayBackground = findViewById(R.id.today_background);
     }
 
-    // be used to update the content (user-interface)
     @Override
     public void refreshContent(CalendarDate date, State state) {
-        Log.e("ldf","date = " + date.toString());
         if(date != null) {
-            dateTv.setText(date.day + "");
+            if(date.equals(today)) {
+                dateTv.setText("今");
+                todayBackground.setVisibility(VISIBLE);
+            } else {
+                dateTv.setText(date.day + "");
+                todayBackground.setVisibility(GONE);
+            }
         }
-        if(state == State.CLICK_DAY || state == State.TODAY) {
+        if(state == State.SELECT) {
             selectedBackground.setVisibility(VISIBLE);
         } else {
             selectedBackground.setVisibility(GONE);

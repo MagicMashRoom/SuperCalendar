@@ -2,7 +2,6 @@ package com.ldf.calendar.component;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.util.Log;
 
 import com.ldf.calendar.Utils;
 import com.ldf.calendar.interf.OnSelectDateListener;
@@ -48,31 +47,25 @@ public class CalendarRenderer {
             return;
         if (weeks[row] != null) {
             if(attr.getCalendarType() == CalendarAttr.CalendayType.MONTH) {
-                if(weeks[row].days[col].getState() == State.CURRENT_MONTH_DAY){
-                    weeks[row].days[col].refreshState(State.CLICK_DAY);
+                if(weeks[row].days[col].getState() == State.CURRENT_MONTH){
+                    weeks[row].days[col].refreshState(State.SELECT);
                     selectedDate = weeks[row].days[col].getDate();
                     seedDate = weeks[row].days[col].getDate();
                     CalendarViewAdapter.saveDate(selectedDate);
                     onSelectDateListener.onSelectDate(selectedDate);
-                } else if (weeks[row].days[col].getState() == State.PAST_MONTH_DAY){
+                } else if (weeks[row].days[col].getState() == State.PAST_MONTH){
                     selectedDate = weeks[row].days[col].getDate();
                     CalendarViewAdapter.saveDate(selectedDate);
                     onSelectDateListener.onSelectOtherMonth(-1);
                     onSelectDateListener.onSelectDate(selectedDate);
-                } else if (weeks[row].days[col].getState() == State.NEXT_MONTH_DAY){
+                } else if (weeks[row].days[col].getState() == State.NEXT_MONTH){
                     selectedDate = weeks[row].days[col].getDate();
                     CalendarViewAdapter.saveDate(selectedDate);
                     onSelectDateListener.onSelectOtherMonth(1);
                     onSelectDateListener.onSelectDate(selectedDate);
-                } else if (weeks[row].days[col].getState() == State.TODAY){
-                    weeks[row].days[col].refreshState(State.CLICK_DAY);
-                    selectedDate = weeks[row].days[col].getDate();
-                    seedDate = weeks[row].days[col].getDate();
-                    CalendarViewAdapter.saveDate(selectedDate);
-                    onSelectDateListener.onSelectDate(selectedDate);
                 }
             } else {
-                weeks[row].days[col].refreshState(State.CLICK_DAY);
+                weeks[row].days[col].refreshState(State.SELECT);
                 selectedDate = weeks[row].days[col].getDate();
                 seedDate = weeks[row].days[col].getDate();
                 CalendarViewAdapter.saveDate(selectedDate);
@@ -88,19 +81,13 @@ public class CalendarRenderer {
         } else {
             weekLastDay = Utils.getSunday(seedDate.year , seedDate.month , seedDate.day);
         }
-        weeks[rowIndex] = new Week(rowIndex);
         int day = weekLastDay.day;
         for (int i = TOTAL_COL - 1; i >= 0 ; i --) {
             CalendarDate date = weekLastDay.modifyDay(day);
-
-            if (Utils.isToday(date , day)) {
-                fillToday(day , rowIndex, i);
+            if (weeks[rowIndex].days[i].getDate().equals(CalendarViewAdapter.loadDate())) {
+                weeks[rowIndex].days[i].refreshContent(date , State.SELECT);
             } else {
-                weeks[rowIndex].days[i].refreshContent(date , State.CURRENT_MONTH_DAY);
-            }
-
-            if(weeks[rowIndex].days[i].getState().equals(CalendarViewAdapter.loadDate())){
-                weeks[rowIndex].days[i].refreshState(State.CLICK_DAY);
+                weeks[rowIndex].days[i].refreshContent(date , State.CURRENT_MONTH);
             }
             day -- ;
         }
@@ -133,19 +120,13 @@ public class CalendarRenderer {
         return day;
     }
 
-    private void fillToday(int day, int row, int col) {
-        if(weeks[row].days[col] != null) {
-            weeks[row].days[col].refreshContent(seedDate.modifyDay(day), State.TODAY);
-        }
-    }
-
     private void fillCurrentMonthDate(int day, int row, int col) {
         CalendarDate date = seedDate.modifyDay(day);
         if(weeks[row].days[col] != null) {
             if(date.equals(CalendarViewAdapter.loadDate())) {
-                weeks[row].days[col].refreshContent(seedDate.modifyDay(day) , State.CLICK_DAY);
+                weeks[row].days[col].refreshContent(seedDate.modifyDay(day) , State.SELECT);
             } else {
-                weeks[row].days[col].refreshContent(seedDate.modifyDay(day) , State.CURRENT_MONTH_DAY);
+                weeks[row].days[col].refreshContent(seedDate.modifyDay(day) , State.CURRENT_MONTH);
             }
         }
         if(date.equals(seedDate)){
@@ -159,8 +140,7 @@ public class CalendarRenderer {
                 seedDate.month + 1,
                 position - firstDayWeek - currentMonthDays + 1);
         if(weeks[row].days[col] != null) {
-            Log.e("ldf","next month date = " + date.toString());
-            weeks[row].days[col].refreshContent(date, State.NEXT_MONTH_DAY);
+            weeks[row].days[col].refreshContent(date, State.NEXT_MONTH);
         }
         if(position - firstDayWeek - currentMonthDays + 1 >= 7) { //当下一个月的天数大于七时，说明该月有六周
 //            cellHeight = cellHeight * currentMonthWeeks / TOTAL_ROW_FIVE;
@@ -173,7 +153,7 @@ public class CalendarRenderer {
                 seedDate.month - 1,
                 lastMonthDays - (firstDayWeek- position - 1));
         if(weeks[row].days[col] != null) {
-            weeks[row].days[col].refreshContent(date , State.NEXT_MONTH_DAY);
+            weeks[row].days[col].refreshContent(date , State.NEXT_MONTH);
         }
     }
 
@@ -199,12 +179,9 @@ public class CalendarRenderer {
         for (int i = 0; i < TOTAL_ROW_SIX; i++) {
             if (weeks[i] != null){
                 for (int j = 0; j < TOTAL_COL; j++){
-                    if(weeks[i].days[j].getState() == State.CLICK_DAY){
-                        weeks[i].days[j].refreshState(State.CURRENT_MONTH_DAY);
+                    if(weeks[i].days[j].getState() == State.SELECT){
+                        weeks[i].days[j].refreshState(State.CURRENT_MONTH);
                         resetSelectedRowIndex();
-                    }
-                    if(weeks[i].days[j].getDate().equals(new CalendarDate())) {
-                        weeks[i].days[j].refreshState(State.TODAY);
                     }
                 }
             }

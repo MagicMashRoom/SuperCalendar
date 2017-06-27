@@ -130,11 +130,4 @@ public class CalendarDate implements Serializable{
 		}
 		return false;
 	}
-
-	public static boolean isSameMonth(CalendarDate con, CalendarDate com){
-		if(con.month == com.month && com.year == com.year){
-			return true;
-		}
-		return false;
-	}
 }

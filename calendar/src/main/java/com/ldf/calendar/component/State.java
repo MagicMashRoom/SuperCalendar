@@ -5,5 +5,5 @@ package com.ldf.calendar.component;
  */
 
 public enum State {
-    TODAY, CURRENT_MONTH_DAY, PAST_MONTH_DAY, NEXT_MONTH_DAY, CLICK_DAY
+    CURRENT_MONTH, PAST_MONTH, NEXT_MONTH, SELECT
 }

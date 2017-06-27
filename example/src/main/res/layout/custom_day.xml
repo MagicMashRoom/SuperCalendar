@@ -4,17 +4,19 @@
     android:layout_width="51.4dp"
     android:layout_height="60dp">
     <View
-        android:id="@+id/selected_background"
-        android:layout_width="33dp"
-        android:layout_height="33dp"
-        android:background="@drawable/selected_background"
-        android:layout_centerInParent="true" />
-    <View
         android:id="@+id/today_background"
         android:layout_width="33dp"
         android:layout_height="33dp"
         android:background="@drawable/today_background"
-        android:layout_centerInParent="true"/>
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+    <View
+        android:id="@+id/selected_background"
+        android:layout_width="33dp"
+        android:layout_height="33dp"
+        android:background="@drawable/selected_background"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
     <TextView
         android:id="@+id/date"
         android:layout_width="wrap_content"
@@ -26,5 +28,6 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
 </RelativeLayout>
