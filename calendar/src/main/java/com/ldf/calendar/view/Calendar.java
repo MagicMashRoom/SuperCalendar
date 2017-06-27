@@ -2,6 +2,7 @@ package com.ldf.calendar.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -36,7 +37,7 @@ public class Calendar extends View {
 	private CalendarDate seedDate; //种子日期  包括year month day
 	private CalendarDate selectedDate; //被选中的日期  包括year month day
 
-	private OnSelectDateListener onCellClickListener;	// 单元格点击回调事件
+	private OnSelectDateListener onSelectDateListener;	// 单元格点击回调事件
 	private Context context;
 	private CalendarAttr calendarAttr;
 	private CalendarRenderer renderer;
@@ -44,9 +45,9 @@ public class Calendar extends View {
 	private OnAdapterSelectListener onAdapterSelectListener;
 	private float touchSlop;
 
-	public Calendar(Context context, OnSelectDateListener onCellClickListener) {
+	public Calendar(Context context, OnSelectDateListener onSelectDateListener) {
 		super(context);
-		this.onCellClickListener = onCellClickListener;
+		this.onSelectDateListener = onSelectDateListener;
 		init(context);
 	}
 
@@ -61,6 +62,7 @@ public class Calendar extends View {
 		calendarAttr.setWeekArrayType(CalendarAttr.WeekArrayType.Monday);
 		calendarAttr.setCalendarType(CalendarAttr.CalendayType.MONTH);
 		renderer = new CalendarRenderer(this , calendarAttr , context);
+		renderer.setOnSelectDateListener(onSelectDateListener);
 	}
 
 	@Override
@@ -79,15 +81,13 @@ public class Calendar extends View {
 		renderer.setAttr(calendarAttr);
 	}
 
-	private DayView mTodayCell;
+	private float posX = 0;
+	private float posY = 0;
 	/*
-     *
      * 触摸事件为了确定点击的位置日期
      */
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		float posX = 0;
-		float posY = 0;
 		switch (event.getAction()) {
 			case MotionEvent.ACTION_DOWN:
 				posX = event.getX();
@@ -97,6 +97,7 @@ public class Calendar extends View {
 				float disX = event.getX() - posX;
 				float disY = event.getY() - posY;
 				if (Math.abs(disX) < touchSlop && Math.abs(disY) < touchSlop) {
+					Log.e("ldf","onClickDate");
 					int col = (int) (posX / cellWidth);
 					int row = (int) (posY / cellHeight);
 					onAdapterSelectListener.cancelSelectState();

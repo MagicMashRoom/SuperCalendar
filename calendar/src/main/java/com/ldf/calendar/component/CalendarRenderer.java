@@ -23,7 +23,8 @@ public class CalendarRenderer {
     private Calendar calendar;
     private CalendarAttr attr;
     private Context context;
-    private OnSelectDateListener onCellClickListener;	// 单元格点击回调事件
+
+    private OnSelectDateListener onSelectDateListener;	// 单元格点击回调事件
     private CalendarDate seedDate; //种子日期  包括year month day
     private CalendarDate selectedDate; //被选中的日期  包括year month day
     private int selectedRowIndex = 0;
@@ -42,14 +43,6 @@ public class CalendarRenderer {
 		}
     }
 
-    public void setWeeks(Week[] weeks) {
-        this.weeks = weeks;
-    }
-
-    public Week[] getWeeks() {
-        return weeks;
-    }
-
     public void onClickDate(int col, int row) {
         if (col >= TOTAL_COL || row >= TOTAL_ROW_SIX)
             return;
@@ -60,30 +53,30 @@ public class CalendarRenderer {
                     selectedDate = weeks[row].days[col].getDate();
                     seedDate = weeks[row].days[col].getDate();
                     CalendarViewAdapter.saveDate(selectedDate);
-                    onCellClickListener.onSelectDate(selectedDate);
+                    onSelectDateListener.onSelectDate(selectedDate);
                 } else if (weeks[row].days[col].getState() == State.PAST_MONTH_DAY){
                     selectedDate = weeks[row].days[col].getDate();
                     CalendarViewAdapter.saveDate(selectedDate);
-                    onCellClickListener.onSelectOtherMonth(-1);
-                    onCellClickListener.onSelectDate(selectedDate);
+                    onSelectDateListener.onSelectOtherMonth(-1);
+                    onSelectDateListener.onSelectDate(selectedDate);
                 } else if (weeks[row].days[col].getState() == State.NEXT_MONTH_DAY){
                     selectedDate = weeks[row].days[col].getDate();
                     CalendarViewAdapter.saveDate(selectedDate);
-                    onCellClickListener.onSelectOtherMonth(1);
-                    onCellClickListener.onSelectDate(selectedDate);
+                    onSelectDateListener.onSelectOtherMonth(1);
+                    onSelectDateListener.onSelectDate(selectedDate);
                 } else if (weeks[row].days[col].getState() == State.TODAY){
                     weeks[row].days[col].refreshState(State.CLICK_DAY);
                     selectedDate = weeks[row].days[col].getDate();
                     seedDate = weeks[row].days[col].getDate();
                     CalendarViewAdapter.saveDate(selectedDate);
-                    onCellClickListener.onSelectDate(selectedDate);
+                    onSelectDateListener.onSelectDate(selectedDate);
                 }
             } else {
                 weeks[row].days[col].refreshState(State.CLICK_DAY);
                 selectedDate = weeks[row].days[col].getDate();
                 seedDate = weeks[row].days[col].getDate();
                 CalendarViewAdapter.saveDate(selectedDate);
-                onCellClickListener.onSelectDate(selectedDate);
+                onSelectDateListener.onSelectDate(selectedDate);
             }
         }
     }
@@ -190,7 +183,6 @@ public class CalendarRenderer {
         }else {
             this.seedDate = new CalendarDate();
         }
-        Log.e("ldf","showDate");
         update();
     }
 
@@ -245,7 +237,6 @@ public class CalendarRenderer {
 
     public void setAttr(CalendarAttr attr) {
         this.attr = attr;
-
     }
 
     public Context getContext() {
@@ -254,5 +245,17 @@ public class CalendarRenderer {
 
     public void setContext(Context context) {
         this.context = context;
+    }
+
+    public void setOnSelectDateListener(OnSelectDateListener onSelectDateListener) {
+        this.onSelectDateListener = onSelectDateListener;
+    }
+
+    public void setWeeks(Week[] weeks) {
+        this.weeks = weeks;
+    }
+
+    public Week[] getWeeks() {
+        return weeks;
     }
 }

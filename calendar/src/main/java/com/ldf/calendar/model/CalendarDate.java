@@ -1,8 +1,3 @@
-/*
- * Copyright (c) 2016.
- * wb-lijinwei.a@alibaba-inc.com
- */
-
 package com.ldf.calendar.model;
 
 import android.util.Log;
