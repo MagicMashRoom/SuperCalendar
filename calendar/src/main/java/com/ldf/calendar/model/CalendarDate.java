@@ -56,7 +56,7 @@ public class CalendarDate implements Serializable{
 		return modifyDate;
 	}
 
-	public CalendarDate modifyCurrentDateWeek(int offset){
+	public CalendarDate modifyWeek(int offset){
 		CalendarDate result = new CalendarDate();
 		Calendar c = Calendar.getInstance();
 		c.set(Calendar.YEAR, year);
@@ -69,7 +69,7 @@ public class CalendarDate implements Serializable{
 		return result;
 	}
 
-	public CalendarDate modifyCurrentDateMonth(int offset){
+	public CalendarDate modifyMonth(int offset){
 		CalendarDate result = new CalendarDate();
 		int addToMonth = this.month + offset;
 		if(offset > 0){

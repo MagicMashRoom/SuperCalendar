@@ -8,13 +8,14 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.ldf.calendar.Utils;
 import com.ldf.calendar.view.MonthPager;
 import com.ldf.calendar.interf.OnSelectDateListener;
-import com.ldf.calendar.adpter.CalendarViewAdapter;
+import com.ldf.calendar.component.CalendarViewAdapter;
 import com.ldf.calendar.model.CalendarDate;
 import com.ldf.calendar.view.Calendar;
 
@@ -107,9 +108,13 @@ public class SyllabusActivity extends AppCompatActivity{
 
     private void initCalendarView() {
         initListener();
-        calendarAdapter = new CalendarViewAdapter(context ,
+        CustomDayView customDayView = new CustomDayView(context , R.layout.custom_day);
+        Log.e("ldf","customDayView = " + (customDayView == null));
+        calendarAdapter = new CalendarViewAdapter(
+                context ,
                 onSelectDateListener ,
-                Calendar.MONTH_TYPE);
+                Calendar.MONTH_TYPE ,
+                customDayView);
         initMarkData();
         initMonthPager();
     }

@@ -7,7 +7,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 
 import com.ldf.calendar.behavior.MonthPagerBehavior;
-import com.ldf.calendar.adpter.CalendarViewAdapter;
+import com.ldf.calendar.component.CalendarViewAdapter;
 
 @CoordinatorLayout.DefaultBehavior(MonthPagerBehavior.class)
 public class MonthPager extends ViewPager {

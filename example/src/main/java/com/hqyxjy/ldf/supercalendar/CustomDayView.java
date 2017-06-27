@@ -1,18 +1,21 @@
-package com.ldf.calendar.view;
+package com.hqyxjy.ldf.supercalendar;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ldf.calendar.component.State;
+import com.ldf.calendar.interf.IDayRenderer;
 import com.ldf.calendar.model.CalendarDate;
-import com.ldf.mi.calendar.R;
+import com.ldf.calendar.view.DayView;
 
 /**
  * Created by ldf on 17/6/26.
  */
 
-public class CustomDayView extends DayView{
+public class CustomDayView extends DayView {
 
     private TextView dateTv;
     private ImageView marker;
@@ -34,12 +37,20 @@ public class CustomDayView extends DayView{
     // be used to update the content (user-interface)
     @Override
     public void refreshContent(CalendarDate date, State state) {
+        Log.e("ldf","date = " + date.toString());
         if(date != null) {
-            dateTv.setText(date.day);
+            dateTv.setText(date.day + "");
         }
         if(state == State.CLICK_DAY || state == State.TODAY) {
             selectedBackground.setVisibility(VISIBLE);
+        } else {
+            selectedBackground.setVisibility(GONE);
         }
         super.refreshContent(date, state);
+    }
+
+    @Override
+    public IDayRenderer copy() {
+        return new CustomDayView(context , layoutResource);
     }
 }

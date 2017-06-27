@@ -5,7 +5,7 @@ import android.graphics.Canvas;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.ldf.calendar.adpter.OnAdapterSelectListener;
+import com.ldf.calendar.interf.OnAdapterSelectListener;
 import com.ldf.calendar.component.CalendarAttr;
 import com.ldf.calendar.component.CalendarRenderer;
 import com.ldf.calendar.interf.OnSelectDateListener;
@@ -156,4 +156,10 @@ public class Calendar extends View {
 	public CalendarDate getShowCurrentDate() {
 		return renderer.getShowCurrentDate();
 	}
+
+	public void setWeeks(Week[] weeks){
+		renderer.setWeeks(weeks);
+	}
+
+
 }

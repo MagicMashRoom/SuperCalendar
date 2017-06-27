@@ -2,14 +2,12 @@ package com.ldf.calendar.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
 
-import com.ldf.calendar.Utils;
-import com.ldf.calendar.interf.ICeller;
+import com.ldf.calendar.component.State;
+import com.ldf.calendar.interf.IDayRenderer;
 import com.ldf.calendar.model.CalendarDate;
 
 import java.lang.ref.WeakReference;
@@ -19,12 +17,12 @@ import java.util.HashMap;
  * Created by ldf on 16/10/19.
  */
 
-public class DayView extends RelativeLayout implements ICeller{
+public abstract class DayView extends RelativeLayout implements IDayRenderer {
 
-    private WeakReference<Calendar> calendar;
     public State state;
     public CalendarDate date;
-    public Context context;
+    protected Context context;
+    protected int layoutResource;
 
     /**
      * Constructor. Sets up the DayView with a custom layout resource.
@@ -35,6 +33,8 @@ public class DayView extends RelativeLayout implements ICeller{
     public DayView(Context context, int layoutResource) {
         super(context);
         setupLayoutResource(layoutResource);
+        this.context = context;
+        this.layoutResource = layoutResource;
     }
 
     /**
@@ -51,19 +51,18 @@ public class DayView extends RelativeLayout implements ICeller{
         inflated.layout(0, 0, inflated.getMeasuredWidth(), inflated.getMeasuredHeight());
     }
 
-    private void drawMarker(Canvas canvas, CalendarDate date, HashMap<String, String> markDateData) {
-        if(markDateData != null){
-            if(!date.toString().equals(new CalendarDate().toString())){//今天时不绘制MARK
-                if(markDateData.containsKey(date.toString())){
-                    if(markDateData.get(date.toString()).equals("0")){
-                    }else{
-                    }
-                }
-            }
-        }
+    @Override
+    public void refreshDate(CalendarDate date) {
+        this.date = date;
+        refreshContent(date , state);
     }
 
-    // be used to update the content (user-interface)
+    @Override
+    public void refreshState(State state) {
+        this.state = state;
+        refreshContent(date , state);
+    }
+
     @Override
     public void refreshContent(CalendarDate date, State state) {
         this.state = state;
@@ -74,9 +73,19 @@ public class DayView extends RelativeLayout implements ICeller{
     }
 
     @Override
+    public State getState() {
+        return state;
+    }
+
+    @Override
+    public CalendarDate getDate() {
+        return date;
+    }
+
+    @Override
     public void drawDay(Canvas canvas , float posX , float posY) {
         int saveId = canvas.save();
-        canvas.translate(posX, posY);
+        canvas.translate(posX * getMeasuredWidth(), posY * getMeasuredHeight());
         draw(canvas);
         canvas.restoreToCount(saveId);
     }
@@ -95,9 +104,5 @@ public class DayView extends RelativeLayout implements ICeller{
 
     public void drawLines(){
 
-    }
-
-    public enum State {
-        TODAY, CURRENT_MONTH_DAY, PAST_MONTH_DAY, NEXT_MONTH_DAY, CLICK_DAY
     }
 }

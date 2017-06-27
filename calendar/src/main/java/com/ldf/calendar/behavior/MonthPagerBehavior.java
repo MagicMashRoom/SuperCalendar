@@ -1,13 +1,10 @@
 package com.ldf.calendar.behavior;
 
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
-import com.ldf.calendar.Utils;
-import com.ldf.calendar.adpter.CalendarViewAdapter;
+import com.ldf.calendar.component.CalendarViewAdapter;
 import com.ldf.calendar.view.MonthPager;
 
 /**

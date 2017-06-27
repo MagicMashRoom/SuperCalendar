@@ -2,15 +2,13 @@ package com.ldf.calendar.component;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.util.Log;
 
 import com.ldf.calendar.Utils;
-import com.ldf.calendar.adpter.CalendarViewAdapter;
 import com.ldf.calendar.interf.OnSelectDateListener;
 import com.ldf.calendar.model.CalendarDate;
-import com.ldf.calendar.view.CustomDayView;
-import com.ldf.calendar.view.DayView;
 import com.ldf.calendar.view.Calendar;
-import com.ldf.mi.calendar.R;
+import com.ldf.calendar.view.Week;
 
 /**
  * Created by ldf on 17/6/26.
@@ -44,20 +42,12 @@ public class CalendarRenderer {
 		}
     }
 
-    private class Week {
-        public int row;
-        Week(int row) {
-            this.row = row;
-        }
+    public void setWeeks(Week[] weeks) {
+        this.weeks = weeks;
+    }
 
-        public DayView[] cells = new DayView[TOTAL_COL];
-
-        public void drawRow(Canvas canvas) {
-            for (int col = 0; col < cells.length; col++) {
-                if (cells[col] != null)
-                    cells[col].draw(canvas);
-            }
-        }
+    public Week[] getWeeks() {
+        return weeks;
     }
 
     public void onClickDate(int col, int row) {
@@ -65,33 +55,33 @@ public class CalendarRenderer {
             return;
         if (weeks[row] != null) {
             if(attr.getCalendarType() == CalendarAttr.CalendayType.MONTH) {
-                if(weeks[row].cells[col].state == DayView.State.CURRENT_MONTH_DAY){
-                    weeks[row].cells[col].state = DayView.State.CLICK_DAY;
-                    selectedDate = weeks[row].cells[col].date;
-                    seedDate = weeks[row].cells[col].date;
+                if(weeks[row].days[col].getState() == State.CURRENT_MONTH_DAY){
+                    weeks[row].days[col].refreshState(State.CLICK_DAY);
+                    selectedDate = weeks[row].days[col].getDate();
+                    seedDate = weeks[row].days[col].getDate();
                     CalendarViewAdapter.saveDate(selectedDate);
                     onCellClickListener.onSelectDate(selectedDate);
-                } else if (weeks[row].cells[col].state == DayView.State.PAST_MONTH_DAY){
-                    selectedDate = weeks[row].cells[col].date;
+                } else if (weeks[row].days[col].getState() == State.PAST_MONTH_DAY){
+                    selectedDate = weeks[row].days[col].getDate();
                     CalendarViewAdapter.saveDate(selectedDate);
                     onCellClickListener.onSelectOtherMonth(-1);
                     onCellClickListener.onSelectDate(selectedDate);
-                } else if (weeks[row].cells[col].state == DayView.State.NEXT_MONTH_DAY){
-                    selectedDate = weeks[row].cells[col].date;
+                } else if (weeks[row].days[col].getState() == State.NEXT_MONTH_DAY){
+                    selectedDate = weeks[row].days[col].getDate();
                     CalendarViewAdapter.saveDate(selectedDate);
                     onCellClickListener.onSelectOtherMonth(1);
                     onCellClickListener.onSelectDate(selectedDate);
-                } else if (weeks[row].cells[col].state == DayView.State.TODAY){
-                    weeks[row].cells[col].state = DayView.State.CLICK_DAY;
-                    selectedDate = weeks[row].cells[col].date;
-                    seedDate = weeks[row].cells[col].date;
+                } else if (weeks[row].days[col].getState() == State.TODAY){
+                    weeks[row].days[col].refreshState(State.CLICK_DAY);
+                    selectedDate = weeks[row].days[col].getDate();
+                    seedDate = weeks[row].days[col].getDate();
                     CalendarViewAdapter.saveDate(selectedDate);
                     onCellClickListener.onSelectDate(selectedDate);
                 }
             } else {
-                weeks[row].cells[col].state = DayView.State.CLICK_DAY;
-                selectedDate = weeks[row].cells[col].date;
-                seedDate = weeks[row].cells[col].date;
+                weeks[row].days[col].refreshState(State.CLICK_DAY);
+                selectedDate = weeks[row].days[col].getDate();
+                seedDate = weeks[row].days[col].getDate();
                 CalendarViewAdapter.saveDate(selectedDate);
                 onCellClickListener.onSelectDate(selectedDate);
             }
@@ -113,12 +103,11 @@ public class CalendarRenderer {
             if (Utils.isToday(date , day)) {
                 fillToday(day , rowIndex, i);
             } else {
-                weeks[rowIndex].cells[i] = new CustomDayView(context , R.layout.);
-                // TODO: 17/6/26 使用接口 
+                weeks[rowIndex].days[i].refreshContent(date , State.CURRENT_MONTH_DAY);
             }
 
-            if(weeks[rowIndex].cells[i].date.equals(CalendarViewAdapter.loadDate())){
-                weeks[rowIndex].cells[i] = new DayView(date, DayView.State.CLICK_DAY, i, rowIndex);
+            if(weeks[rowIndex].days[i].getState().equals(CalendarViewAdapter.loadDate())){
+                weeks[rowIndex].days[i].refreshState(State.CLICK_DAY);
             }
             day -- ;
         }
@@ -137,16 +126,11 @@ public class CalendarRenderer {
     }
 
     private int fillWeek(int lastMonthDays, int currentMonthDays, int firstDayWeek, int day, int row) {
-        weeks[row] = new Week(row);
         for (int col = 0; col < TOTAL_COL; col++) {
             int position = col + row * TOTAL_COL;	// 单元格位置
             if (position >= firstDayWeek && position < firstDayWeek + currentMonthDays) {	// 本月的
                 day ++;
                 fillCurrentMonthDate(day, row, col);
-                if (Utils.isToday(seedDate, day)
-                        && !weeks[row].cells[col].date.equals(CalendarViewAdapter.loadDate())) {
-                    fillToday(day, row, col);
-                }
             } else if (position < firstDayWeek) { //last month
                 instantiateLastMonth(lastMonthDays, firstDayWeek, row, col, position);
             } else if (position >= firstDayWeek + currentMonthDays) {//next month
@@ -157,33 +141,47 @@ public class CalendarRenderer {
     }
 
     private void fillToday(int day, int row, int col) {
-        CalendarDate date = seedDate.modifyDay(day);
-        weeks[row].cells[col] = new DayView(date, DayView.State.TODAY, col, row);
+        if(weeks[row].days[col] != null) {
+            weeks[row].days[col].refreshContent(seedDate.modifyDay(day), State.TODAY);
+        }
     }
 
     private void fillCurrentMonthDate(int day, int row, int col) {
-        weeks[row].cells[col] = new DayView(seedDate.modifyDay(day), DayView.State.CURRENT_MONTH_DAY, col, row);
-        if(weeks[row].cells[col].date.equals(CalendarViewAdapter.loadDate())){
-            weeks[row].cells[col] = new DayView(seedDate.modifyDay(day), DayView.State.CLICK_DAY, col, row);
+        CalendarDate date = seedDate.modifyDay(day);
+        if(weeks[row].days[col] != null) {
+            if(date.equals(CalendarViewAdapter.loadDate())) {
+                weeks[row].days[col].refreshContent(seedDate.modifyDay(day) , State.CLICK_DAY);
+            } else {
+                weeks[row].days[col].refreshContent(seedDate.modifyDay(day) , State.CURRENT_MONTH_DAY);
+            }
         }
-        if(weeks[row].cells[col].date.equals(seedDate)){
+        if(date.equals(seedDate)){
             selectedRowIndex = row;
         }
     }
 
     private void instantiateNextMonth(int currentMonthDays, int firstDayWeek, int row, int col, int position) {
-        weeks[row].cells[col] = new DayView((new CalendarDate(seedDate.year,
-                seedDate.month + 1, position - firstDayWeek - currentMonthDays + 1)),
-                DayView.State.NEXT_MONTH_DAY, col, row);
+        CalendarDate date = new CalendarDate(
+                seedDate.year,
+                seedDate.month + 1,
+                position - firstDayWeek - currentMonthDays + 1);
+        if(weeks[row].days[col] != null) {
+            Log.e("ldf","next month date = " + date.toString());
+            weeks[row].days[col].refreshContent(date, State.NEXT_MONTH_DAY);
+        }
         if(position - firstDayWeek - currentMonthDays + 1 >= 7) { //当下一个月的天数大于七时，说明该月有六周
 //            cellHeight = cellHeight * currentMonthWeeks / TOTAL_ROW_FIVE;
         }
     }
 
     private void instantiateLastMonth(int lastMonthDays, int firstDayWeek, int row, int col, int position) {
-        weeks[row].cells[col] = new DayView(new CalendarDate(seedDate.year,
-                seedDate.month - 1, lastMonthDays - (firstDayWeek- position - 1)),
-                DayView.State.PAST_MONTH_DAY, col, row);
+        CalendarDate date = new CalendarDate(
+                seedDate.year,
+                seedDate.month - 1,
+                lastMonthDays - (firstDayWeek- position - 1));
+        if(weeks[row].days[col] != null) {
+            weeks[row].days[col].refreshContent(date , State.NEXT_MONTH_DAY);
+        }
     }
 
     public void showDate(CalendarDate seedDate) {
@@ -192,6 +190,7 @@ public class CalendarRenderer {
         }else {
             this.seedDate = new CalendarDate();
         }
+        Log.e("ldf","showDate");
         update();
     }
 
@@ -208,12 +207,12 @@ public class CalendarRenderer {
         for (int i = 0; i < TOTAL_ROW_SIX; i++) {
             if (weeks[i] != null){
                 for (int j = 0; j < TOTAL_COL; j++){
-                    if(weeks[i].cells[j].state == DayView.State.CLICK_DAY){
-                        weeks[i].cells[j].state = DayView.State.CURRENT_MONTH_DAY;
+                    if(weeks[i].days[j].getState() == State.CLICK_DAY){
+                        weeks[i].days[j].refreshState(State.CURRENT_MONTH_DAY);
                         resetSelectedRowIndex();
                     }
-                    if(weeks[i].cells[j].date.equals(new CalendarDate())) {
-                        weeks[i].cells[j].state = DayView.State.TODAY;
+                    if(weeks[i].days[j].getDate().equals(new CalendarDate())) {
+                        weeks[i].days[j].refreshState(State.TODAY);
                     }
                 }
             }
@@ -246,6 +245,7 @@ public class CalendarRenderer {
 
     public void setAttr(CalendarAttr attr) {
         this.attr = attr;
+
     }
 
     public Context getContext() {
