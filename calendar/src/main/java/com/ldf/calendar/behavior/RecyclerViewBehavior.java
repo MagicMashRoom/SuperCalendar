@@ -48,8 +48,6 @@ public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<RecyclerVie
     @Override
     public boolean onStartNestedScroll(CoordinatorLayout coordinatorLayout, RecyclerView child,
                                        View directTargetChild, View target, int nestedScrollAxes) {
-        Log.e("ldf","onStartNestedScroll");
-
         boolean isVertical = (nestedScrollAxes & ViewCompat.SCROLL_AXIS_VERTICAL) != 0;
 
         int firstRowVerticalPosition =
@@ -63,8 +61,6 @@ public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<RecyclerVie
     @Override
     public void onNestedPreScroll(CoordinatorLayout coordinatorLayout, RecyclerView child,
                                   View target, int dx, int dy, int[] consumed) {
-        Log.e("ldf","onNestedPreScroll");
-
         super.onNestedPreScroll(coordinatorLayout, child, target, dx, dy, consumed);
         if (child.getTop() <= initOffset && child.getTop() >= minOffset) {
             consumed[1] = Utils.scroll(child, dy, minOffset, initOffset);
@@ -74,9 +70,7 @@ public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<RecyclerVie
 
     @Override
     public void onStopNestedScroll(final CoordinatorLayout parent, final RecyclerView child, View target) {
-        Log.e("ldf","onStopNestedScroll");
         super.onStopNestedScroll(parent, child, target);
-
         if (isGoingUp) {
             if (initOffset - top > Utils.getTouchSlop(context)){
                 scrollTo(parent, child, minOffset, 200);

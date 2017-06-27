@@ -2,6 +2,7 @@ package com.ldf.calendar.component;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.util.Log;
 
 import com.ldf.calendar.Const;
 import com.ldf.calendar.Utils;
@@ -43,6 +44,7 @@ public class CalendarRenderer {
             return;
         if (weeks[row] != null) {
             if(attr.getCalendarType() == CalendarAttr.CalendayType.MONTH) {
+                Log.e("ldf","MONTH");
                 if(weeks[row].days[col].getState() == State.CURRENT_MONTH){
                     weeks[row].days[col].refreshState(State.SELECT);
                     selectedDate = weeks[row].days[col].getDate();
@@ -61,9 +63,11 @@ public class CalendarRenderer {
                     onSelectDateListener.onSelectDate(selectedDate);
                 }
             } else {
+                Log.e("ldf","WEEK");
                 weeks[row].days[col].refreshState(State.SELECT);
                 selectedDate = weeks[row].days[col].getDate();
                 seedDate = weeks[row].days[col].getDate();
+                Log.e("ldf","saveDate = " + selectedDate.toString());
                 CalendarViewAdapter.saveDate(selectedDate);
                 onSelectDateListener.onSelectDate(selectedDate);
             }
@@ -77,10 +81,11 @@ public class CalendarRenderer {
         } else {
             currentWeekLastDay = Utils.getSunday(seedDate.year , seedDate.month , seedDate.day);
         }
+        Log.e("ldf","currentWeekLastDay = " + currentWeekLastDay.toString());
         int day = currentWeekLastDay.day;
         for (int i = Const.TOTAL_COL - 1; i >= 0 ; i --) {
             CalendarDate date = currentWeekLastDay.modifyDay(day);
-            if (weeks[rowIndex].days[i].getDate().equals(CalendarViewAdapter.loadDate())) {
+            if (date.equals(CalendarViewAdapter.loadDate())) {
                 weeks[rowIndex].days[i].refreshContent(date , State.SELECT);
             } else {
                 weeks[rowIndex].days[i].refreshContent(date , State.CURRENT_MONTH);

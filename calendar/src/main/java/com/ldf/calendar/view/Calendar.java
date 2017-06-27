@@ -18,11 +18,7 @@ public class Calendar extends View {
 	/**
 	 * 日历列数
 	 */
-	public static final int MONTH_TYPE = 0;
-	public static final int WEEK_TYPE = 1;
-
-	public int calendarType = MONTH_TYPE;
-
+	private CalendarAttr.CalendayType calendarType;
 	private int cellHeight; // 单元格高度
 	private int cellWidth; // 单元格宽度
 
@@ -99,12 +95,13 @@ public class Calendar extends View {
 		return true;
 	}
 
-	public int getCalendarType() {
-		return calendarType;
+	public CalendarAttr.CalendayType getCalendarType() {
+		return calendarAttr.getCalendarType();
 	}
 
-	public void switchCalendarType(int calendarType) {
-		this.calendarType = calendarType;
+	public void switchCalendarType(CalendarAttr.CalendayType calendarType) {
+		calendarAttr.setCalendarType(calendarType);
+		renderer.setAttr(calendarAttr);
 	}
 
 	public int getCellHeight() {
@@ -143,7 +140,7 @@ public class Calendar extends View {
 		renderer.cancelSelectState();
 	}
 
-	public CalendarDate getShowCurrentDate() {
+	public CalendarDate getSeedDate() {
 		return renderer.getSeedDate();
 	}
 

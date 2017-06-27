@@ -8,10 +8,12 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.ldf.calendar.Utils;
+import com.ldf.calendar.component.CalendarAttr;
 import com.ldf.calendar.view.MonthPager;
 import com.ldf.calendar.interf.OnSelectDateListener;
 import com.ldf.calendar.component.CalendarViewAdapter;
@@ -91,7 +93,7 @@ public class SyllabusActivity extends AppCompatActivity{
         scrollSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(calendarAdapter.getCalendarType() == Calendar.WEEK_TYPE) {
+                if(calendarAdapter.getCalendarType() == CalendarAttr.CalendayType.WEEK) {
                     Utils.scrollTo(content , rvToDoList , monthPager.getViewHeight() , 200);
                     calendarAdapter.switchToMonth();
                 } else {
@@ -120,7 +122,7 @@ public class SyllabusActivity extends AppCompatActivity{
         calendarAdapter = new CalendarViewAdapter(
                 context ,
                 onSelectDateListener ,
-                Calendar.MONTH_TYPE ,
+                CalendarAttr.CalendayType.MONTH ,
                 customDayView);
         initMarkData();
         initMonthPager();
@@ -176,7 +178,7 @@ public class SyllabusActivity extends AppCompatActivity{
                 mCurrentPage = position;
                 currentCalendars = calendarAdapter.getPagers();
                 if(currentCalendars.get(position % currentCalendars.size()) instanceof Calendar){
-                    CalendarDate date = currentCalendars.get(position % currentCalendars.size()).getShowCurrentDate();
+                    CalendarDate date = currentCalendars.get(position % currentCalendars.size()).getSeedDate();
                     currentDate = date;
                     textViewYearDisplay.setText(date.getYear() + "年");
                     textViewMonthDisplay.setText(date.getMonth() + "");
