@@ -8,7 +8,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -34,6 +33,8 @@ public class SyllabusActivity extends AppCompatActivity{
     MonthPager monthPager;
     RecyclerView rvToDoList;
     TextView scrollSwitch;
+    TextView themeSwitch;
+
 
     private ArrayList<Calendar> currentCalendars = new ArrayList<>();
     private CalendarViewAdapter calendarAdapter;
@@ -55,13 +56,14 @@ public class SyllabusActivity extends AppCompatActivity{
         textViewMonthDisplay = (TextView) findViewById(R.id.show_month_view);
         backToday = (TextView) findViewById(R.id.back_today_button);
         scrollSwitch = (TextView) findViewById(R.id.scroll_switch);
+        themeSwitch = (TextView) findViewById(R.id.theme_switch);
         rvToDoList = (RecyclerView) findViewById(R.id.list);
         rvToDoList.setHasFixedSize(true);
         rvToDoList.setLayoutManager(new LinearLayoutManager(this));//这里用线性显示 类似于listview
         rvToDoList.setAdapter(new ExampleAdapter(this));
         initCurrentDate();
         initCalendarView();
-        initBackTodayClickListener();
+        initToolbarClickListener();
     }
 
     @Override
@@ -79,7 +81,7 @@ public class SyllabusActivity extends AppCompatActivity{
         }
     }
 
-    private void initBackTodayClickListener() {
+    private void initToolbarClickListener() {
         backToday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -98,6 +100,12 @@ public class SyllabusActivity extends AppCompatActivity{
                 }
             }
         });
+        themeSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                refreshSelectBackground();
+            }
+        });
     }
 
     private void initCurrentDate() {
@@ -109,7 +117,6 @@ public class SyllabusActivity extends AppCompatActivity{
     private void initCalendarView() {
         initListener();
         CustomDayView customDayView = new CustomDayView(context , R.layout.custom_day);
-        Log.e("ldf","customDayView = " + (customDayView == null));
         calendarAdapter = new CalendarViewAdapter(
                 context ,
                 onSelectDateListener ,
@@ -190,6 +197,13 @@ public class SyllabusActivity extends AppCompatActivity{
         CalendarDate today = new CalendarDate();
         calendarAdapter.notifyDataChanged(today);
         refreshClickDate(today);
+    }
+
+    private void refreshSelectBackground(){
+        ThemeDayView themeDayView = new ThemeDayView(context , R.layout.custom_day_focus);
+        calendarAdapter.setCustomDayView(themeDayView);
+        calendarAdapter.notifyDataSetChanged();
+        calendarAdapter.notifyDataChanged(new CalendarDate());
     }
 }
 

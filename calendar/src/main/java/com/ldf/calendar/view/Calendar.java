@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.ldf.calendar.Const;
 import com.ldf.calendar.interf.OnAdapterSelectListener;
 import com.ldf.calendar.component.CalendarAttr;
 import com.ldf.calendar.component.CalendarRenderer;
@@ -17,13 +18,6 @@ public class Calendar extends View {
 	/**
 	 * 日历列数
 	 */
-	private static final int TOTAL_COL = 7;
-
-	private static final int TOTAL_ROW_SIX = 6;
-	private static final int TOTAL_ROW_FIVE = 6;
-	private static final int PAST_MONTH = -1;
-	private static final int NEXT_MONTH = 1;
-
 	public static final int MONTH_TYPE = 0;
 	public static final int WEEK_TYPE = 1;
 
@@ -31,11 +25,6 @@ public class Calendar extends View {
 
 	private int cellHeight; // 单元格高度
 	private int cellWidth; // 单元格宽度
-
-	private int currentMonthWeeks = TOTAL_ROW_SIX;
-
-	private CalendarDate seedDate; //种子日期  包括year month day
-	private CalendarDate selectedDate; //被选中的日期  包括year month day
 
 	private OnSelectDateListener onSelectDateListener;	// 单元格点击回调事件
 	private Context context;
@@ -74,8 +63,8 @@ public class Calendar extends View {
 	@Override
 	protected void onSizeChanged(int w, int h, int oldW, int oldH) {
 		super.onSizeChanged(w, h, oldW, oldH);
-		cellHeight = w / TOTAL_ROW_SIX;
-		cellWidth = w / TOTAL_COL;
+		cellHeight = w / Const.TOTAL_ROW;
+		cellWidth = w / Const.TOTAL_COL;
 		calendarAttr.setCellHeight(cellHeight);
 		calendarAttr.setCellWidth(cellWidth);
 		renderer.setAttr(calendarAttr);
@@ -155,7 +144,7 @@ public class Calendar extends View {
 	}
 
 	public CalendarDate getShowCurrentDate() {
-		return renderer.getShowCurrentDate();
+		return renderer.getSeedDate();
 	}
 
 	public void setWeeks(Week[] weeks){

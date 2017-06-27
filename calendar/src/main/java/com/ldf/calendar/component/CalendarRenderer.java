@@ -3,6 +3,7 @@ package com.ldf.calendar.component;
 import android.content.Context;
 import android.graphics.Canvas;
 
+import com.ldf.calendar.Const;
 import com.ldf.calendar.Utils;
 import com.ldf.calendar.interf.OnSelectDateListener;
 import com.ldf.calendar.model.CalendarDate;
@@ -14,18 +15,13 @@ import com.ldf.calendar.view.Week;
  */
 
 public class CalendarRenderer {
-    private static final int TOTAL_COL = 7;
-    private static final int TOTAL_ROW_SIX = 6;
-
-    private Week weeks[] = new Week[TOTAL_ROW_SIX];	// 行数组，每个元素代表一行
-
+    private Week weeks[] = new Week[Const.TOTAL_ROW];	// 行数组，每个元素代表一行
     private Calendar calendar;
     private CalendarAttr attr;
     private Context context;
-
     private OnSelectDateListener onSelectDateListener;	// 单元格点击回调事件
-    private CalendarDate seedDate; //种子日期  包括year month day
-    private CalendarDate selectedDate; //被选中的日期  包括year month day
+    private CalendarDate seedDate; //种子日期
+    private CalendarDate selectedDate; //被选中的日期
     private int selectedRowIndex = 0;
 
     public CalendarRenderer(Calendar calendar , CalendarAttr attr , Context context) {
@@ -36,14 +32,14 @@ public class CalendarRenderer {
     }
 
     public void draw(Canvas canvas) {
-        for (int row = 0; row < TOTAL_ROW_SIX; row++) {
+        for (int row = 0; row < Const.TOTAL_ROW; row++) {
 			if (weeks[row] != null)
 				weeks[row].drawRow(canvas);
 		}
     }
 
     public void onClickDate(int col, int row) {
-        if (col >= TOTAL_COL || row >= TOTAL_ROW_SIX)
+        if (col >= Const.TOTAL_COL || row >= Const.TOTAL_ROW)
             return;
         if (weeks[row] != null) {
             if(attr.getCalendarType() == CalendarAttr.CalendayType.MONTH) {
@@ -75,15 +71,15 @@ public class CalendarRenderer {
     }
 
     public void updateWeek(int rowIndex) {
-        CalendarDate weekLastDay;
+        CalendarDate currentWeekLastDay;
         if(CalendarViewAdapter.weekArrayType == 1) {
-            weekLastDay = Utils.getSaturday(seedDate.year , seedDate.month , seedDate.day);
+            currentWeekLastDay = Utils.getSaturday(seedDate.year , seedDate.month , seedDate.day);
         } else {
-            weekLastDay = Utils.getSunday(seedDate.year , seedDate.month , seedDate.day);
+            currentWeekLastDay = Utils.getSunday(seedDate.year , seedDate.month , seedDate.day);
         }
-        int day = weekLastDay.day;
-        for (int i = TOTAL_COL - 1; i >= 0 ; i --) {
-            CalendarDate date = weekLastDay.modifyDay(day);
+        int day = currentWeekLastDay.day;
+        for (int i = Const.TOTAL_COL - 1; i >= 0 ; i --) {
+            CalendarDate date = currentWeekLastDay.modifyDay(day);
             if (weeks[rowIndex].days[i].getDate().equals(CalendarViewAdapter.loadDate())) {
                 weeks[rowIndex].days[i].refreshContent(date , State.SELECT);
             } else {
@@ -100,14 +96,14 @@ public class CalendarRenderer {
         int firstDayPosition = Utils.getFirstDayWeekPosition(seedDate.year, seedDate.month , CalendarViewAdapter.weekArrayType);
 
         int day = 0;
-        for (int row = 0; row < TOTAL_ROW_SIX; row++) {
+        for (int row = 0; row < Const.TOTAL_ROW; row++) {
             day = fillWeek(lastMonthDays, currentMonthDays, firstDayPosition, day, row);
         }
     }
 
     private int fillWeek(int lastMonthDays, int currentMonthDays, int firstDayWeek, int day, int row) {
-        for (int col = 0; col < TOTAL_COL; col++) {
-            int position = col + row * TOTAL_COL;	// 单元格位置
+        for (int col = 0; col < Const.TOTAL_COL; col++) {
+            int position = col + row * Const.TOTAL_COL;	// 单元格位置
             if (position >= firstDayWeek && position < firstDayWeek + currentMonthDays) {	// 本月的
                 day ++;
                 fillCurrentMonthDate(day, row, col);
@@ -142,9 +138,9 @@ public class CalendarRenderer {
         if(weeks[row].days[col] != null) {
             weeks[row].days[col].refreshContent(date, State.NEXT_MONTH);
         }
-        if(position - firstDayWeek - currentMonthDays + 1 >= 7) { //当下一个月的天数大于七时，说明该月有六周
-//            cellHeight = cellHeight * currentMonthWeeks / TOTAL_ROW_FIVE;
-        }
+        // TODO: 17/6/27  当下一个月的天数大于七时，说明该月有六周
+//        if(position - firstDayWeek - currentMonthDays + 1 >= 7) { //当下一个月的天数大于七时，说明该月有六周
+//        }
     }
 
     private void instantiateLastMonth(int lastMonthDays, int firstDayWeek, int row, int col, int position) {
@@ -160,7 +156,7 @@ public class CalendarRenderer {
     public void showDate(CalendarDate seedDate) {
         if(seedDate != null){
             this.seedDate = seedDate;
-        }else {
+        } else {
             this.seedDate = new CalendarDate();
         }
         update();
@@ -171,14 +167,14 @@ public class CalendarRenderer {
         calendar.invalidate();
     }
 
-    public CalendarDate getShowCurrentDate() {
+    public CalendarDate getSeedDate() {
         return this.seedDate;
     }
 
     public void cancelSelectState(){
-        for (int i = 0; i < TOTAL_ROW_SIX; i++) {
+        for (int i = 0; i < Const.TOTAL_ROW; i++) {
             if (weeks[i] != null){
-                for (int j = 0; j < TOTAL_COL; j++){
+                for (int j = 0; j < Const.TOTAL_ROW; j++){
                     if(weeks[i].days[j].getState() == State.SELECT){
                         weeks[i].days[j].refreshState(State.CURRENT_MONTH);
                         resetSelectedRowIndex();
