@@ -1,9 +1,41 @@
 # SuperCalendar
 ==========================
-> 简单使用的日历  [项目链接 求Star](https://github.com/MagicMashRoom/SuperCalendar)
+> Simple Use Calendar  [project link if you like please star](https://github.com/MagicMashRoom/SuperCalendar)
+> [中文介绍](https://magicmashroom.github.io/blog/2017/06/27/SuperCalendar/)
 > 
 >
+# update
+* support custom date click effect (if you want to experient new effect please compile v1.2.0)
 
+![new](http://upload-images.jianshu.io/upload_images/3874191-88dc2d783a833c8d.gif?imageMogr2/auto-orient/strip)
+
+####      change click effect
+
+* new CustomDayView extends DayView
+* override refreshContent and copy method
+```java
+@Override
+    public void refreshContent(CalendarDate date, State state) {
+        //you code
+        super.refreshContent(date, state);
+    }
+
+    @Override
+    public IDayRenderer copy() {
+        return new CustomDayView(context , layoutResource);
+    }
+```
+* new CustomDayView object，and new CalendarViewAdapter with CustomDayView
+```java
+CustomDayView customDayView = new CustomDayView(
+        context , R.layout.custom_day);
+calendarAdapter = new CalendarViewAdapter(
+                context ,
+                onSelectDateListener ,
+                Calendar.MONTH_TYPE ,
+                customDayView);
+```
+* success if not clear please down DEMO
 # Example 
 ![Example](http://upload-images.jianshu.io/upload_images/3874191-a39a2e71699836dd.gif?imageMogr2/auto-orient/strip)
 
@@ -11,7 +43,7 @@ Usage
 -----
 
 Include `MonthPager` in your layout XML.
-MonthPager必须和下方的RecyclerView包裹在同一个CoordinatorLayout内.且RecyclerView的layout_behavior为com.ldf.calendar.behavior.RecyclerViewBehavior
+MonthPager must have same CoordinatorLayout with RecyclerView, and RecyclerView's layout_behavioris com.ldf.calendar.behavior.RecyclerViewBehavior
 
 ```xml
  <android.support.design.widget.CoordinatorLayout
@@ -38,7 +70,7 @@ MonthPager必须和下方的RecyclerView包裹在同一个CoordinatorLayout内.�
     </android.support.design.widget.CoordinatorLayout>
     
 ```
-目前来看 相比于Dialog选择日历 我的控件更适合于Activity/Fragment在Activity的`onCreate`   或者Fragment的`onCreateView`  你需要实现这两个方法来启动日历并装填进数据
+so far my lib suit Activity/Fragment Activity的`onCreate`   or Fragment `onCreateView`  you need fill data in you init method 
 
 ```java
 @Override
@@ -58,7 +90,7 @@ MonthPager必须和下方的RecyclerView包裹在同一个CoordinatorLayout内.�
     } 
 ```
 
-使用此方法回调日历点击事件
+use this method new click callback
 ```java
 private void initListener() {
         onSelectDateListener = new OnSelectDateListener() {
@@ -75,7 +107,7 @@ private void initListener() {
     }
 ```
  
- 使用此方法初始化日历标记数据
+use this method init markdata
 ```java
 private void initMarkData() {
        HashMap markData = new HashMap<>();
@@ -86,7 +118,7 @@ private void initMarkData() {
        calendarAdapter.setMarkData(markData);
    }
 ```
- 使用此方法给MonthPager添加上相关监听
+ use this method add MonthPager some listener
 ```java
 monthPager.addOnPageChangeListener(new MonthPager.OnPageChangeListener() {
             @Override
