@@ -1,4 +1,4 @@
-package com.ldf.calendar.view;
+package com.ldf.calendar.component;
 
 /**
  * Created by ldf on 17/6/26.
@@ -7,13 +7,13 @@ package com.ldf.calendar.view;
 public class CalendarAttr {
     /**
      * 以何种方式排列星期:<br/>
-     * {@link com.ldf.calendar.view.CalendarAttr.WeekArrayType} <br/>
+     * {@link CalendarAttr.WeekArrayType} <br/>
      */
     private WeekArrayType weekArrayType;
 
     /**
      * 日历才去周布局或者月布局:<br/>
-     * {@link com.ldf.calendar.view.CalendarAttr.CalendayType} 布局类型<br/>
+     * {@link CalendarAttr.CalendayType} 布局类型<br/>
      */
     private CalendayType calendarType;
 
