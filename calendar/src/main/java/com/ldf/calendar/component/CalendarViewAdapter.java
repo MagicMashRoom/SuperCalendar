@@ -47,7 +47,7 @@ public class CalendarViewAdapter extends PagerAdapter {
 
 	private void init(Context context, OnSelectDateListener onSelectDateListener) {
 		seedDate = new CalendarDate();//初始化的种子日期为今天
-        saveDate(seedDate);
+		saveDate(seedDate);
 		for (int i = 0; i < 3; i++) {
 			Calendar calendar = new Calendar(context , onSelectDateListener);
 			calendar.setOnAdapterSelectListener(new OnAdapterSelectListener() {
@@ -67,8 +67,6 @@ public class CalendarViewAdapter extends PagerAdapter {
 
 	@Override
 	public void setPrimaryItem(ViewGroup container, int position, Object object) {
-		Log.e("ldf","setPrimaryItem");
-
 		super.setPrimaryItem(container, position, object);
 		this.currentPosition = position;
 	}
@@ -82,8 +80,6 @@ public class CalendarViewAdapter extends PagerAdapter {
 		if (container.getChildCount() == calendars.size()) {
 			container.removeView(calendars.get(position % 3));
 		}
-		Log.e("ldf","instantiateItem");
-
 		Calendar calendar = calendars.get(position % calendars.size());
 		if(calendarType == Calendar.MONTH_TYPE) {
 			CalendarDate current = seedDate.modifyMonth(position - MonthPager.CURRENT_DAY_INDEX);
@@ -140,9 +136,9 @@ public class CalendarViewAdapter extends PagerAdapter {
 		}
 	}
 
-    public void setMarkData(HashMap<String, String> markData) {
-        Utils.setMarkData(markData);
-    }
+	public void setMarkData(HashMap<String, String> markData) {
+		Utils.setMarkData(markData);
+	}
 
 	public void switchToMonth() {
 		if(calendars != null && calendars.size() > 0 && calendarType != Calendar.MONTH_TYPE){
