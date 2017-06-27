@@ -7,7 +7,7 @@
 # update
 * support custom date click effect (if you want to experient new effect please compile v1.2.0)
 
-![new](http://upload-images.jianshu.io/upload_images/3874191-88dc2d783a833c8d.gif = 360 * 640)
+![new](http://upload-images.jianshu.io/upload_images/3874191-88dc2d783a833c8d.gif =100x)
 
 ####      change click effect
 
