@@ -7,7 +7,7 @@
 # update
 * support custom date click effect (if you want to experient new effect please compile v1.2.0)
 
-![new](http://upload-images.jianshu.io/upload_images/3874191-88dc2d783a833c8d.gif?imageMogr2/auto-orient/strip)
+![2017-06-27 18.54.09.gif](http://upload-images.jianshu.io/upload_images/3874191-753a3d67e80b53f6.gif?imageMogr2/auto-orient/strip)
 
 ####      change click effect
 
