@@ -2,6 +2,7 @@ package com.ldf.calendar.behavior;
 
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.ldf.calendar.component.CalendarViewAdapter;
@@ -13,6 +14,7 @@ import com.ldf.calendar.view.MonthPager;
 
 public class MonthPagerBehavior extends CoordinatorLayout.Behavior<MonthPager> {
     private int top;
+    private int initRecyclerViewTop;
     private int touchSlop = 24;
 
     @Override
@@ -37,9 +39,9 @@ public class MonthPagerBehavior extends CoordinatorLayout.Behavior<MonthPager> {
 
             int top = child.getTop();
 
-            if( dy > touchSlop * 2){
+            if( dy > touchSlop){
                 calendarViewAdapter.switchToMonth();
-            } else if(dy < - touchSlop * 2){
+            } else if(dy < - touchSlop){
                 calendarViewAdapter.switchToWeek(child.getRowIndex());
             }
 
@@ -52,9 +54,29 @@ public class MonthPagerBehavior extends CoordinatorLayout.Behavior<MonthPager> {
             }
 
             child.offsetTopAndBottom(dy);
+        } else {
+            initRecyclerViewTop = dependency.getTop();
         }
+
         dependentViewTop = dependency.getTop();
         top = child.getTop();
+
+        if((initRecyclerViewTop - dependentViewTop) >= child.getCellHeight()) {
+            calendarViewAdapter.switchToWeek(child.getRowIndex());
+            initRecyclerViewTop = dependentViewTop;
+        }
+        if((dependentViewTop - initRecyclerViewTop) >= child.getCellHeight()) {
+            calendarViewAdapter.switchToMonth();
+            initRecyclerViewTop = dependentViewTop;
+        }
+//        if(Math.abs(dependentViewTop - top) == child.getTopMovableDistance()) {
+//            calendarViewAdapter.switchToWeek(child.getRowIndex());
+//        }
+//        if(Math.abs(dependentViewTop - top) == child.getViewHeight()) {
+//            calendarViewAdapter.switchToMonth();
+//        }
+        Log.e("ldf","dependentViewTop = " + dependentViewTop);
+        Log.e("ldf","top = " + top);
 
         return true;
         // TODO: 16/12/8 dy为负时表示向上滑动，dy为正时表示向下滑动，dy为零时表示滑动停止

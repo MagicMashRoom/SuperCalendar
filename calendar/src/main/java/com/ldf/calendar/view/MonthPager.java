@@ -130,6 +130,7 @@ public class MonthPager extends ViewPager {
     public int getRowIndex() {
         CalendarViewAdapter calendarViewAdapter = (CalendarViewAdapter) getAdapter();
         rowIndex = calendarViewAdapter.getPagers().get(currentPosition  % 3).getSelectedRowIndex();
+        Log.e("ldf","getRowIndex = " + rowIndex);
         return rowIndex;
     }
 

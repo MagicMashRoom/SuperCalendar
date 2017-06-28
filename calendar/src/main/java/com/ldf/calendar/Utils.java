@@ -10,7 +10,6 @@ import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.Scroller;
@@ -163,9 +162,9 @@ public class Utils {
 		return ViewConfiguration.get(context).getScaledTouchSlop();
 	}
 
-	public static CalendarDate getSunday(int year, int month, int day) {// TODO: 16/12/12 得到一个CustomDate对象
+	public static CalendarDate getSunday(CalendarDate seedDate) {// TODO: 16/12/12 得到一个CustomDate对象
 		Calendar c = Calendar.getInstance();
-		String dateString = year + "-" + month + "-" + day;
+		String dateString = seedDate.toString();
 		Date date = null;
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-d");
@@ -182,9 +181,9 @@ public class Utils {
 				c.get(Calendar.DAY_OF_MONTH));
 	}
 
-	public static CalendarDate getSaturday(int year, int month, int day) {// TODO: 16/12/12 得到一个CustomDate对象
+	public static CalendarDate getSaturday(CalendarDate seedDate) {// TODO: 16/12/12 得到一个CustomDate对象
 		Calendar c = Calendar.getInstance();
-		String dateString = year + "-" + month + "-" + day;
+		String dateString = seedDate.toString();
 		Date date = null;
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-d");

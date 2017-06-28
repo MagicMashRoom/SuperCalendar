@@ -2,7 +2,6 @@ package com.ldf.calendar.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -82,7 +81,6 @@ public class Calendar extends View {
 				float disX = event.getX() - posX;
 				float disY = event.getY() - posY;
 				if (Math.abs(disX) < touchSlop && Math.abs(disY) < touchSlop) {
-					Log.e("ldf","onClickDate");
 					int col = (int) (posX / cellWidth);
 					int row = (int) (posY / cellHeight);
 					onAdapterSelectListener.cancelSelectState();
@@ -147,6 +145,4 @@ public class Calendar extends View {
 	public void setWeeks(Week[] weeks){
 		renderer.setWeeks(weeks);
 	}
-
-
 }

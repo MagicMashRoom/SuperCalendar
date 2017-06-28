@@ -70,6 +70,7 @@ public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<RecyclerVie
 
     @Override
     public void onStopNestedScroll(final CoordinatorLayout parent, final RecyclerView child, View target) {
+        Log.e("ldf","onStopNestedScroll");
         super.onStopNestedScroll(parent, child, target);
         if (isGoingUp) {
             if (initOffset - top > Utils.getTouchSlop(context)){
