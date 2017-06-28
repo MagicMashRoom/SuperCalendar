@@ -33,7 +33,6 @@ public class CustomDayView extends DayView {
         dateTv = (TextView) findViewById(R.id.date);
         marker = (ImageView) findViewById(R.id.maker);
         selectedBackground = findViewById(R.id.selected_background);
-        selectedBackground = findViewById(R.id.selected_background);
         todayBackground = findViewById(R.id.today_background);
     }
 

@@ -16,7 +16,6 @@ public class MonthPager extends ViewPager {
     private int currentPosition = CURRENT_DAY_INDEX;
     private int cellHeight = 0;
     private int rowIndex = 6;
-    private int mCellSpace;
 
     private ViewPager.OnPageChangeListener viewPageChangeListener;
     private OnPageChangeListener monthPageChangeListener;
@@ -81,13 +80,13 @@ public class MonthPager extends ViewPager {
 
     @Override
     protected void onSizeChanged(int w, int h, int oldW, int oldH) {
-        mCellSpace = h / 6;
+        cellHeight = h / 6;
         super.onSizeChanged(w, h, oldW, oldH);
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        if(mCellSpace > 0){
-            super.onMeasure(widthMeasureSpec,MeasureSpec.makeMeasureSpec(mCellSpace * 6,
+        if(cellHeight > 0){
+            super.onMeasure(widthMeasureSpec,MeasureSpec.makeMeasureSpec(cellHeight * 6,
                     MeasureSpec.EXACTLY));
         } else {
             super.onMeasure(widthMeasureSpec,heightMeasureSpec);
@@ -113,8 +112,6 @@ public class MonthPager extends ViewPager {
     }
 
     public int getCellHeight() {
-        CalendarViewAdapter calendarViewAdapter = (CalendarViewAdapter) getAdapter();
-        cellHeight = calendarViewAdapter.getPagers().get(currentPosition  % 3).getCellHeight();
         return cellHeight;
     }
 

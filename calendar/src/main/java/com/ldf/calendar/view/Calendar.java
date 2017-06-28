@@ -59,7 +59,7 @@ public class Calendar extends View {
 	@Override
 	protected void onSizeChanged(int w, int h, int oldW, int oldH) {
 		super.onSizeChanged(w, h, oldW, oldH);
-		cellHeight = w / Const.TOTAL_ROW;
+		cellHeight = h / Const.TOTAL_ROW;
 		cellWidth = w / Const.TOTAL_COL;
 		calendarAttr.setCellHeight(cellHeight);
 		calendarAttr.setCellWidth(cellWidth);

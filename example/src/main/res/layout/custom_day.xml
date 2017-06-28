@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="51.4dp"
-    android:layout_height="60dp">
+    android:layout_height="50dp">
     <View
         android:id="@+id/today_background"
         android:layout_width="33dp"
