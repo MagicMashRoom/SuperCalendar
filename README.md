@@ -5,7 +5,7 @@
 > 
 >
 # update
-* support custom date click effect (if you want to experient new effect please compile v1.2.0)
+* support custom date click effect (if you want to experient new effect please compile v1.2.2)
 
 ![2017-06-27 18.54.09.gif](http://upload-images.jianshu.io/upload_images/3874191-753a3d67e80b53f6.gif?imageMogr2/auto-orient/strip)
 
@@ -155,7 +155,7 @@ Step 2. Add the dependency
 
 ```groovy
 	dependencies {
-	        compile 'com.github.MagicMashRoom:SuperCalendar:v1.2.0'
+	        compile 'com.github.MagicMashRoom:SuperCalendar:v1.2.2'
 	}
 
 ```
