@@ -128,20 +128,24 @@
         <com.ldf.calendar.view.MonthPager
             android:id="@+id/calendar_view"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="270dp"
             android:background="#fff">
         </com.ldf.calendar.view.MonthPager>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:background="#ffffff"
             app:layout_behavior="com.ldf.calendar.behavior.RecyclerViewBehavior"
-            android:background="#e7e7e7"
             android:layout_gravity="bottom"
             android:clipToPadding="false"
             android:clipChildren="false"
-            android:layout_marginBottom="50dp"/><!-- paddingBottom或者magin距离必须是MonthPager高度的1/6-->
+            android:layout_marginBottom="45dp"/>
+        <!-- paddingBottom或者magin距离必须是MonthPager高度的1/6-->
+        <!-- RecyclerView的高度必须是MatchParent-->
+        <!-- RecyclerView的background必须是非透明-->
+
 
     </android.support.design.widget.CoordinatorLayout>
 </LinearLayout>
