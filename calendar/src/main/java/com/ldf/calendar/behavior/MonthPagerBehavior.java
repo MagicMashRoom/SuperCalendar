@@ -70,12 +70,7 @@ public class MonthPagerBehavior extends CoordinatorLayout.Behavior<MonthPager> {
             calendarViewAdapter.switchToMonth();
             initRecyclerViewTop = dependentViewTop;
         }
-//        if(Math.abs(dependentViewTop - top) == child.getTopMovableDistance()) {
-//            calendarViewAdapter.switchToWeek(child.getRowIndex());
-//        }
-//        if(Math.abs(dependentViewTop - top) == child.getViewHeight()) {
-//            calendarViewAdapter.switchToMonth();
-//        }
+
         Log.e("ldf","dependentViewTop = " + dependentViewTop);
         Log.e("ldf","top = " + top);
 

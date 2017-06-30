@@ -228,11 +228,6 @@ public class Utils {
 	}
 
 	public static int loadTop() {
-		custom= false;
 		return top;
-	}
-
-	public static boolean isCustomScroll () {
-		return custom;
 	}
 }

@@ -4,157 +4,151 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <android.support.v4.widget.SwipeRefreshLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <LinearLayout
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:background="#fff" >
+            android:layout_height="44dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:background="#fff" >
 
-                <LinearLayout
-                    android:id="@+id/choose_date_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="28dp"
-                    android:layout_centerVertical="true"
-                    android:orientation="horizontal" >
-                    <TextView
-                        android:id="@+id/show_month_view"
-                        android:layout_width="24dp"
-                        android:layout_height="match_parent"
-                        android:gravity="bottom|center"
-                        android:maxLines="1"
-                        android:text="17"
-                        android:textColor="#ff25adff"
-                        android:textSize="19.3sp" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginRight="14dp"
-                        android:gravity="bottom"
-                        android:maxLines="1"
-                        android:text="月"
-                        android:textColor="#ff25adff"
-                        android:textSize="19.3sp" />
-                    <TextView
-                        android:id="@+id/show_year_view"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="bottom"
-                        android:text="2014年"
-                        android:textColor="#ff25adff"
-                        android:textSize="13sp" />
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/back_today_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="24dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/button_bg"
-                    android:text="今天"
-                    android:gravity="center"
-                    android:textColor="#ff9c0e"
-                    android:textSize="14sp"/>
-
-                <TextView
-                    android:id="@+id/scroll_switch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="24dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:layout_toLeftOf="@id/back_today_button"
-                    android:layout_marginRight="16dp"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/button_bg"
-                    android:text="切换周月"
-                    android:gravity="center"
-                    android:textColor="#ff9c0e"
-                    android:textSize="14sp"/>
-
-                <TextView
-                    android:id="@+id/theme_switch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="24dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:layout_toLeftOf="@id/scroll_switch"
-                    android:layout_marginRight="16dp"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/button_bg"
-                    android:text="更改效果"
-                    android:gravity="center"
-                    android:textColor="#ff9c0e"
-                    android:textSize="14sp"/>
-
-
-            </RelativeLayout>
             <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
+                android:id="@+id/choose_date_view"
+                android:layout_width="wrap_content"
                 android:layout_height="28dp"
-                android:background="#fff">
+                android:layout_centerVertical="true"
+                android:orientation="horizontal" >
                 <TextView
-                    style="@style/weekIndicatorStyle"
-                    android:text="一" />
+                    android:id="@+id/show_month_view"
+                    android:layout_width="24dp"
+                    android:layout_height="match_parent"
+                    android:gravity="bottom|center"
+                    android:maxLines="1"
+                    android:text="17"
+                    android:textColor="#ff25adff"
+                    android:textSize="19.3sp" />
                 <TextView
-                    style="@style/weekIndicatorStyle"
-                    android:text="二"/>
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="14dp"
+                    android:gravity="bottom"
+                    android:maxLines="1"
+                    android:text="月"
+                    android:textColor="#ff25adff"
+                    android:textSize="19.3sp" />
                 <TextView
-                    style="@style/weekIndicatorStyle"
-                    android:text="三" />
-                <TextView
-                    style="@style/weekIndicatorStyle"
-                    android:text="四" />
-                <TextView
-                    style="@style/weekIndicatorStyle"
-                    android:text="五" />
-                <TextView
-                    style="@style/weekIndicatorStyle"
-                    android:text="六" />
-                <TextView
-                    style="@style/weekIndicatorStyle"
-                    android:text="日" />
+                    android:id="@+id/show_year_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="bottom"
+                    android:text="2014年"
+                    android:textColor="#ff25adff"
+                    android:textSize="13sp" />
             </LinearLayout>
 
-            <android.support.design.widget.CoordinatorLayout
-                android:id="@+id/content"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
+            <TextView
+                android:id="@+id/back_today_button"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/button_bg"
+                android:text="今天"
+                android:gravity="center"
+                android:textColor="#ff9c0e"
+                android:textSize="14sp"/>
 
-                <com.ldf.calendar.view.MonthPager
-                    android:id="@+id/calendar_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="270dp"
-                    android:background="#fff">
-                </com.ldf.calendar.view.MonthPager>
+            <TextView
+                android:id="@+id/scroll_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:layout_toLeftOf="@id/back_today_button"
+                android:layout_marginRight="16dp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/button_bg"
+                android:text="切换周月"
+                android:gravity="center"
+                android:textColor="#ff9c0e"
+                android:textSize="14sp"/>
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/list"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="#ffffff"
-                    app:layout_behavior="com.ldf.calendar.behavior.RecyclerViewBehavior"
-                    android:layout_gravity="bottom"
-                    android:clipToPadding="false"
-                    android:clipChildren="false"
-                    android:layout_marginBottom="45dp"/>
-                <!-- paddingBottom或者magin距离必须是MonthPager高度的1/6-->
-                <!-- RecyclerView的高度必须是MatchParent-->
-                <!-- RecyclerView的background必须是非透明-->
+            <TextView
+                android:id="@+id/theme_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:layout_toLeftOf="@id/scroll_switch"
+                android:layout_marginRight="16dp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/button_bg"
+                android:text="更改效果"
+                android:gravity="center"
+                android:textColor="#ff9c0e"
+                android:textSize="14sp"/>
 
 
-            </android.support.design.widget.CoordinatorLayout>
+        </RelativeLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="28dp"
+            android:background="#fff">
+            <TextView
+                style="@style/weekIndicatorStyle"
+                android:text="一" />
+            <TextView
+                style="@style/weekIndicatorStyle"
+                android:text="二"/>
+            <TextView
+                style="@style/weekIndicatorStyle"
+                android:text="三" />
+            <TextView
+                style="@style/weekIndicatorStyle"
+                android:text="四" />
+            <TextView
+                style="@style/weekIndicatorStyle"
+                android:text="五" />
+            <TextView
+                style="@style/weekIndicatorStyle"
+                android:text="六" />
+            <TextView
+                style="@style/weekIndicatorStyle"
+                android:text="日" />
         </LinearLayout>
-    </android.support.v4.widget.SwipeRefreshLayout>
+
+        <android.support.design.widget.CoordinatorLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <com.ldf.calendar.view.MonthPager
+                android:id="@+id/calendar_view"
+                android:layout_width="match_parent"
+                android:layout_height="270dp"
+                android:background="#fff">
+            </com.ldf.calendar.view.MonthPager>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#ffffff"
+                app:layout_behavior="com.ldf.calendar.behavior.RecyclerViewBehavior"
+                android:layout_gravity="bottom"
+                android:clipToPadding="false"
+                android:clipChildren="false"
+                android:layout_marginBottom="45dp"/>
+            <!-- paddingBottom或者magin距离必须是MonthPager高度的1/6-->
+            <!-- RecyclerView的高度必须是MatchParent-->
+            <!-- RecyclerView的background必须是非透明-->
+        </android.support.design.widget.CoordinatorLayout>
+    </LinearLayout>
 </LinearLayout>

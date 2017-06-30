@@ -37,7 +37,6 @@ public class SyllabusActivity extends AppCompatActivity{
     TextView scrollSwitch;
     TextView themeSwitch;
 
-
     private ArrayList<Calendar> currentCalendars = new ArrayList<>();
     private CalendarViewAdapter calendarAdapter;
     private OnSelectDateListener onSelectDateListener;
@@ -79,7 +78,6 @@ public class SyllabusActivity extends AppCompatActivity{
         if(hasFocus && !initiated) {
             refreshMonthPager();
             initiated = true;
-            Utils.saveTop(rvToDoList.getTop());
         }
     }
 

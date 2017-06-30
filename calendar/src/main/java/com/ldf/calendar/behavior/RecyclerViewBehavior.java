@@ -27,21 +27,12 @@ public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<RecyclerVie
     public boolean onLayoutChild(CoordinatorLayout parent, RecyclerView child, int layoutDirection) {
         parent.onLayoutChild(child, layoutDirection);
         MonthPager monthPager = getMonthPager(parent);
-        if(!Utils.isCustomScroll()) {
-            if (monthPager.getBottom() > 0 && initOffset == -1) {
-                initOffset = monthPager.getBottom();
-                child.offsetTopAndBottom(initOffset);
-                saveTop(initOffset);
-            } else if (initOffset != -1) {
-                child.offsetTopAndBottom(top);
-            }
-        } else {
-            child.offsetTopAndBottom(Utils.loadTop());
-            saveTop(Utils.loadTop());
+        if (monthPager.getBottom() > 0 && initOffset == -1) {
+            initOffset = monthPager.getBottom();
+            saveTop(initOffset);
         }
-
+        child.offsetTopAndBottom(Utils.loadTop());
         minOffset = getMonthPager(parent).getCellHeight();
-
         return true;
     }
 
