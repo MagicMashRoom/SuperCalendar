@@ -133,7 +133,6 @@ public class Calendar extends View {
 
 	public void update() {
 		renderer.update();
-		invalidate();
 	}
 
 	public void cancelSelectState() {

@@ -162,6 +162,7 @@ public class CalendarRenderer {
 
     public void update() {
         instantiateMonth();
+        calendar.invalidate();
     }
 
     public CalendarDate getSeedDate() {
