@@ -128,10 +128,12 @@ public class Calendar extends View {
 
 	public void updateWeek(int rowCount) {
 		renderer.updateWeek(rowCount);
+		invalidate();
 	}
 
 	public void update() {
 		renderer.update();
+		invalidate();
 	}
 
 	public void cancelSelectState() {

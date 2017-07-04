@@ -120,7 +120,13 @@ public class CalendarViewAdapter extends PagerAdapter {
 	}
 
 	public void invalidateCurrentCalendar(){
-		calendars.get(currentPosition % 3).invalidate();
+		for(int i = 0; i < calendars.size(); i++){
+			Calendar calendar = calendars.get(i);
+			calendar.update();
+			if(calendar.getCalendarType() == CalendarAttr.CalendayType.WEEK) {
+				calendar.updateWeek(rowCount);
+			}
+		}
 	}
 
 	public void setMarkData(HashMap<String, String> markData) {
