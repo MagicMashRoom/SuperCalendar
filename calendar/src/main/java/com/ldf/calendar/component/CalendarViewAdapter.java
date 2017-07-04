@@ -2,7 +2,6 @@ package com.ldf.calendar.component;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -47,12 +46,12 @@ public class CalendarViewAdapter extends PagerAdapter {
 			calendar.setOnAdapterSelectListener(new OnAdapterSelectListener() {
 				@Override
 				public void cancelSelectState() {
-					cancelAllSelectState();
+					cancelOtherSelectState();
 				}
 
 				@Override
 				public void updateSelectState() {
-					updateAllSelectState();
+					invalidateCurrentCalendar();
 				}
 			});
 			calendars.add(calendar);
@@ -113,23 +112,16 @@ public class CalendarViewAdapter extends PagerAdapter {
 		return calendars;
 	}
 
-	public void cancelAllSelectState(){
+	public void cancelOtherSelectState(){
 		for(int i = 0; i < calendars.size(); i++){
 			Calendar calendar = calendars.get(i);
 			calendar.cancelSelectState();
 		}
 	}
 
-	public void updateAllSelectState(){
-		for(int i = 0; i < calendars.size(); i++){
-			Calendar calendar = calendars.get(i);
-			calendar.update();
-			if(calendar.getCalendarType() == CalendarAttr.CalendayType.WEEK) {
-				calendar.updateWeek(rowCount);
-			}
-		}
+	public void invalidateCurrentCalendar(){
+		calendars.get(currentPosition % 3).invalidate();
 	}
-
 
 	public void setMarkData(HashMap<String, String> markData) {
 		Utils.setMarkData(markData);

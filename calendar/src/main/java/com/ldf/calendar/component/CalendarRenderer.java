@@ -65,12 +65,6 @@ public class CalendarRenderer {
                 CalendarViewAdapter.saveDate(selectedDate);
                 onSelectDateListener.onSelectDate(selectedDate);
                 seedDate = selectedDate;
-
-//                if(CalendarViewAdapter.weekArrayType == 1) {
-//                    seedDate = Utils.getSaturday(selectedDate);
-//                } else {
-//                    seedDate = Utils.getSunday(selectedDate);
-//                }
             }
         }
     }
@@ -92,7 +86,6 @@ public class CalendarRenderer {
             }
             day -- ;
         }
-        calendar.invalidate();
     }
 
     private void instantiateMonth() {
@@ -169,7 +162,6 @@ public class CalendarRenderer {
 
     public void update() {
         instantiateMonth();
-        calendar.invalidate();
     }
 
     public CalendarDate getSeedDate() {
@@ -179,10 +171,11 @@ public class CalendarRenderer {
     public void cancelSelectState(){
         for (int i = 0; i < Const.TOTAL_ROW; i++) {
             if (weeks[i] != null){
-                for (int j = 0; j < Const.TOTAL_ROW; j++){
+                for (int j = 0; j < Const.TOTAL_COL; j++){
                     if(weeks[i].days[j].getState() == State.SELECT){
                         weeks[i].days[j].refreshState(State.CURRENT_MONTH);
                         resetSelectedRowIndex();
+                        break;
                     }
                 }
             }

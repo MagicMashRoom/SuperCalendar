@@ -86,7 +86,7 @@ public class Calendar extends View {
 					onAdapterSelectListener.cancelSelectState();
 					renderer.onClickDate(col, row);
 					onAdapterSelectListener.updateSelectState();
-					this.invalidate();
+					invalidate();
 				}
 				break;
 		}

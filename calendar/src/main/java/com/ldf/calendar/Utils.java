@@ -133,7 +133,7 @@ public class Utils {
 		return (int) (context.getResources().getDisplayMetrics().density * dpi + 0.5f);
 	}
 
-	public static HashMap<String, String> getMarkData() {
+	public static HashMap<String, String> loadMarkData() {
 		return markData;
 	}
 

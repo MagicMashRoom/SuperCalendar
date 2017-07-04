@@ -19,8 +19,8 @@ import java.util.HashMap;
 
 public abstract class DayView extends RelativeLayout implements IDayRenderer {
 
-    public State state;
-    public CalendarDate date;
+    protected State state;
+    protected CalendarDate date;
     protected Context context;
     protected int layoutResource;
 
@@ -43,12 +43,7 @@ public abstract class DayView extends RelativeLayout implements IDayRenderer {
      * @param layoutResource
      */
     private void setupLayoutResource(int layoutResource) {
-
-        View inflated = LayoutInflater.from(getContext()).inflate(layoutResource, this);
-
-        inflated.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
-        inflated.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-        inflated.layout(0, 0, inflated.getMeasuredWidth(), inflated.getMeasuredHeight());
+        LayoutInflater.from(getContext()).inflate(layoutResource, this);
     }
 
     @Override
@@ -88,21 +83,5 @@ public abstract class DayView extends RelativeLayout implements IDayRenderer {
         canvas.translate(posX * getMeasuredWidth(), posY * getMeasuredHeight());
         draw(canvas);
         canvas.restoreToCount(saveId);
-    }
-
-    public void drawData(){
-
-    }
-
-    public void drawHighlight(){
-
-    }
-
-    public void drawExtras(){
-        drawLines();
-    }
-
-    public void drawLines(){
-
     }
 }
