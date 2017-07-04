@@ -15,7 +15,6 @@ import com.ldf.calendar.view.MonthPager;
 public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<RecyclerView> {
     private int initOffset = -1;
     private int minOffset = -1;
-    private int top;
     private Context context;
 
     public RecyclerViewBehavior(Context context, AttributeSet attrs) {
@@ -46,7 +45,7 @@ public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<RecyclerVie
 
         boolean recycleviewTopStatus = firstRowVerticalPosition >= 0;
 
-        return isVertical && (recycleviewTopStatus || isGoingUp) && child == directTargetChild;
+        return isVertical && (recycleviewTopStatus || !Utils.isScrollToBottom()) && child == directTargetChild;
     }
 
     @Override
@@ -63,14 +62,14 @@ public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<RecyclerVie
     public void onStopNestedScroll(final CoordinatorLayout parent, final RecyclerView child, View target) {
         Log.e("ldf","onStopNestedScroll");
         super.onStopNestedScroll(parent, child, target);
-        if (isGoingUp) {
-            if (initOffset - top > Utils.getTouchSlop(context)){
+        if (!Utils.isScrollToBottom()) {
+            if (initOffset - Utils.loadTop() > Utils.getTouchSlop(context)){
                 scrollTo(parent, child, minOffset, 200);
             } else {
                 scrollTo(parent, child, initOffset, 80);
             }
         } else {
-            if (top - minOffset > Utils.getTouchSlop(context)){
+            if (Utils.loadTop() - minOffset > Utils.getTouchSlop(context)){
                 scrollTo(parent, child, initOffset, 200);
             } else {
                 scrollTo(parent, child, minOffset, 80);
@@ -80,7 +79,7 @@ public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<RecyclerVie
 
     private void scrollTo(final CoordinatorLayout parent, final RecyclerView child, final int y, int duration){
         final Scroller scroller = new Scroller(parent.getContext());
-        scroller.startScroll(0, top, 0, y - top, duration);   //设置scroller的滚动偏移量
+        scroller.startScroll(0, Utils.loadTop(), 0, y - Utils.loadTop(), duration);   //设置scroller的滚动偏移量
 
         ViewCompat.postOnAnimation(child, new Runnable() {
             @Override
@@ -105,15 +104,12 @@ public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<RecyclerVie
         return monthPager;
     }
 
-    private boolean isGoingUp;
-
     private void saveTop(int top){
-        this.top = top;
         Utils.saveTop(top);
-        if (this.top == initOffset){
-            isGoingUp = true;
-        } else if (this.top == minOffset){
-            isGoingUp = false;
+        if (Utils.loadTop() == initOffset){
+            Utils.setScrollToBottom(false);
+        } else if (Utils.loadTop() == minOffset){
+            Utils.setScrollToBottom(true);
         }
     }
 }

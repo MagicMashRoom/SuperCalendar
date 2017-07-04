@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 
+import com.ldf.calendar.Utils;
 import com.ldf.calendar.component.CalendarViewAdapter;
 import com.ldf.calendar.view.MonthPager;
 
@@ -63,16 +64,15 @@ public class MonthPagerBehavior extends CoordinatorLayout.Behavior<MonthPager> {
         top = child.getTop();
 
         if((initRecyclerViewTop - dependentViewTop) >= child.getCellHeight()) {
+            Utils.setScrollToBottom(false);
             calendarViewAdapter.switchToWeek(child.getRowIndex());
             initRecyclerViewTop = dependentViewTop;
         }
         if((dependentViewTop - initRecyclerViewTop) >= child.getCellHeight()) {
+            Utils.setScrollToBottom(true);
             calendarViewAdapter.switchToMonth();
             initRecyclerViewTop = dependentViewTop;
         }
-
-        Log.e("ldf","dependentViewTop = " + dependentViewTop);
-        Log.e("ldf","top = " + top);
 
         return true;
         // TODO: 16/12/8 dy为负时表示向上滑动，dy为正时表示向下滑动，dy为零时表示滑动停止

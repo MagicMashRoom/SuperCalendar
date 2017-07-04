@@ -83,10 +83,10 @@ public class CalendarDate implements Serializable{
 				int month = 12 - Math.abs(addToMonth) % 12;
 				result.setMonth(month == 0 ? 12 : month);
 			}else {
+				result.setYear(this.year);
 				result.setMonth(addToMonth == 0 ? 12 : addToMonth);
 			}
 		}
-		result.setDay(1);//修改为每月的一号最为日历的种子日期
 		return result;
 	}
 
@@ -130,4 +130,9 @@ public class CalendarDate implements Serializable{
 		}
 		return false;
 	}
+
+	public CalendarDate cloneSelf() {
+		return new CalendarDate(year , month , day);
+	}
+
 }

@@ -199,10 +199,17 @@ public class Utils {
 	}
 
 	private static int top;
-	private static boolean custom = false;
+	private static boolean customScrollToBottom = false;
+
+	public static boolean isScrollToBottom() {
+		return customScrollToBottom;
+	}
+
+	public static void setScrollToBottom(boolean customScrollToBottom) {
+		Utils.customScrollToBottom = customScrollToBottom;
+	}
 
 	public static void scrollTo(final CoordinatorLayout parent, final RecyclerView child, final int y, int duration){
-		custom = true;
 		final Scroller scroller = new Scroller(parent.getContext());
 		scroller.startScroll(0, top, 0, y - top, duration);   //设置scroller的滚动偏移量
 		ViewCompat.postOnAnimation(child, new Runnable() {

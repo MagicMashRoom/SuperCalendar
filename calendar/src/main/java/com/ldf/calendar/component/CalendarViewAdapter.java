@@ -77,7 +77,6 @@ public class CalendarViewAdapter extends PagerAdapter {
 		Calendar calendar = calendars.get(position % calendars.size());
 		if(calendarType == CalendarAttr.CalendayType.MONTH) {
 			CalendarDate current = seedDate.modifyMonth(position - MonthPager.CURRENT_DAY_INDEX);
-			Log.e("ldf","current = " + current.toString());
 			current.setDay(1);//每月的种子日期都是1号
 			calendar.showDate(current);
 		} else {
