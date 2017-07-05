@@ -60,7 +60,6 @@ public abstract class DayView extends RelativeLayout implements IDayRenderer {
         int saveId = canvas.save();
         canvas.translate(day.getPosCol() * getMeasuredWidth(),
                 day.getPosRow() * getMeasuredHeight());
-        Log.e("ldf","posY = " + day.getPosCol());
         draw(canvas);
         canvas.restoreToCount(saveId);
     }

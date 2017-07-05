@@ -72,6 +72,7 @@ public class CalendarDate implements Serializable{
 				result.setYear(this.year + (addToMonth - 1) / 12);
 				result.setMonth(addToMonth % 12 == 0 ? 12: addToMonth % 12);
 			}else {
+				result.setYear(this.year);
 				result.setMonth(addToMonth);
 			}
 		}else{
