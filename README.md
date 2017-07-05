@@ -155,8 +155,9 @@ Step 2. Add the dependency
 
 ```groovy
 	dependencies {
-	        compile 'com.github.MagicMashRoom:SuperCalendar:v1.3.0'
+	        compile 'com.github.MagicMashRoom:SuperCalendar:v1.3.1'
 	}
+
 
 ```
 [![](https://www.jitpack.io/v/MagicMashRoom/SuperCalendar.svg)](https://www.jitpack.io/#MagicMashRoom/SuperCalendar)
