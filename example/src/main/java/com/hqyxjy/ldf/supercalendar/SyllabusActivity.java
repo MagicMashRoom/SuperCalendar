@@ -8,7 +8,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -201,7 +200,7 @@ public class SyllabusActivity extends AppCompatActivity{
 
     private void refreshSelectBackground(){
         ThemeDayView themeDayView = new ThemeDayView(context , R.layout.custom_day_focus);
-        calendarAdapter.setCustomDayView(themeDayView);
+        calendarAdapter.setCustomDayRenderer(themeDayView);
         calendarAdapter.notifyDataSetChanged();
         calendarAdapter.notifyDataChanged(new CalendarDate());
     }

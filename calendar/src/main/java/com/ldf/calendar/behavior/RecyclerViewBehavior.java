@@ -3,6 +3,7 @@ package com.ldf.calendar.behavior;
 import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -38,13 +39,15 @@ public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<RecyclerVie
     @Override
     public boolean onStartNestedScroll(CoordinatorLayout coordinatorLayout, RecyclerView child,
                                        View directTargetChild, View target, int nestedScrollAxes) {
-        boolean isVertical = (nestedScrollAxes & ViewCompat.SCROLL_AXIS_VERTICAL) != 0;
+        LinearLayoutManager linearLayoutManager = (LinearLayoutManager) child.getLayoutManager();
+        if(linearLayoutManager.findFirstCompletelyVisibleItemPosition() > 0) {
+            return false;
+        }
 
+        boolean isVertical = (nestedScrollAxes & ViewCompat.SCROLL_AXIS_VERTICAL) != 0;
         int firstRowVerticalPosition =
                 (child == null || child.getChildCount() == 0) ? 0 : child.getChildAt(0).getTop();
-
         boolean recycleviewTopStatus = firstRowVerticalPosition >= 0;
-
         return isVertical && (recycleviewTopStatus || !Utils.isScrollToBottom()) && child == directTargetChild;
     }
 

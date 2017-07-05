@@ -37,7 +37,9 @@ public class ThemeDayView extends DayView{
     }
 
     @Override
-    public void refreshContent(CalendarDate date, State state) {
+    public void refreshContent() {
+        CalendarDate date = day.getDate();
+        State state = day.getState();
         if(date != null) {
             if(date.equals(today)) {
                 dateTv.setText("今");
@@ -52,7 +54,7 @@ public class ThemeDayView extends DayView{
         } else {
             selectedBackground.setVisibility(GONE);
         }
-        super.refreshContent(date, state);
+        super.refreshContent();
     }
 
     @Override

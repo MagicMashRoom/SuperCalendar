@@ -2,12 +2,15 @@ package com.ldf.calendar.component;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.util.Log;
 
 import com.ldf.calendar.Const;
 import com.ldf.calendar.Utils;
+import com.ldf.calendar.interf.IDayRenderer;
 import com.ldf.calendar.interf.OnSelectDateListener;
 import com.ldf.calendar.model.CalendarDate;
 import com.ldf.calendar.view.Calendar;
+import com.ldf.calendar.view.Day;
 import com.ldf.calendar.view.Week;
 
 /**
@@ -18,6 +21,7 @@ public class CalendarRenderer {
     private Week weeks[] = new Week[Const.TOTAL_ROW];	// 行数组，每个元素代表一行
     private Calendar calendar;
     private CalendarAttr attr;
+    private IDayRenderer dayRenderer;
     private Context context;
     private OnSelectDateListener onSelectDateListener;	// 单元格点击回调事件
     private CalendarDate seedDate; //种子日期
@@ -32,8 +36,13 @@ public class CalendarRenderer {
 
     public void draw(Canvas canvas) {
         for (int row = 0; row < Const.TOTAL_ROW; row++) {
-			if (weeks[row] != null)
-				weeks[row].drawRow(canvas);
+			if (weeks[row] != null) {
+                for (int col = 0; col < Const.TOTAL_COL; col ++) {
+                    if (weeks[row].days[col] != null) {
+                        dayRenderer.drawDay(canvas , weeks[row].days[col]);
+                    }
+                }
+            }
 		}
     }
 
@@ -43,7 +52,7 @@ public class CalendarRenderer {
         if (weeks[row] != null) {
             if(attr.getCalendarType() == CalendarAttr.CalendayType.MONTH) {
                 if(weeks[row].days[col].getState() == State.CURRENT_MONTH){
-                    weeks[row].days[col].refreshState(State.SELECT);
+                    weeks[row].days[col].setState(State.SELECT);
                     selectedDate = weeks[row].days[col].getDate();
                     CalendarViewAdapter.saveDate(selectedDate);
                     onSelectDateListener.onSelectDate(selectedDate);
@@ -60,7 +69,7 @@ public class CalendarRenderer {
                     onSelectDateListener.onSelectDate(selectedDate);
                 }
             } else {
-                weeks[row].days[col].refreshState(State.SELECT);
+                weeks[row].days[col].setState(State.SELECT);
                 selectedDate = weeks[row].days[col].getDate();
                 CalendarViewAdapter.saveDate(selectedDate);
                 onSelectDateListener.onSelectDate(selectedDate);
@@ -79,10 +88,23 @@ public class CalendarRenderer {
         int day = currentWeekLastDay.day;
         for (int i = Const.TOTAL_COL - 1; i >= 0 ; i --) {
             CalendarDate date = currentWeekLastDay.modifyDay(day);
-            if (date.equals(CalendarViewAdapter.loadDate())) {
-                weeks[rowIndex].days[i].refreshContent(date , State.SELECT);
+            if(weeks[rowIndex] == null) {
+                weeks[rowIndex] = new Week(rowIndex);
+            }
+            if(weeks[rowIndex].days[i] != null) {
+                if (date.equals(CalendarViewAdapter.loadDate())) {
+                    weeks[rowIndex].days[i].setState(State.SELECT);
+                    weeks[rowIndex].days[i].setDate(date);
+                } else {
+                    weeks[rowIndex].days[i].setState(State.CURRENT_MONTH);
+                    weeks[rowIndex].days[i].setDate(date);
+                }
             } else {
-                weeks[rowIndex].days[i].refreshContent(date , State.CURRENT_MONTH);
+                if (date.equals(CalendarViewAdapter.loadDate())) {
+                    weeks[rowIndex].days[i] = new Day(State.SELECT , date , rowIndex , i);
+                } else {
+                    weeks[rowIndex].days[i] = new Day(State.CURRENT_MONTH , date , rowIndex , i);
+                }
             }
             day -- ;
         }
@@ -116,11 +138,22 @@ public class CalendarRenderer {
 
     private void fillCurrentMonthDate(int day, int row, int col) {
         CalendarDate date = seedDate.modifyDay(day);
+        if(weeks[row] == null) {
+            weeks[row] = new Week(row);
+        }
         if(weeks[row].days[col] != null) {
             if(date.equals(CalendarViewAdapter.loadDate())) {
-                weeks[row].days[col].refreshContent(seedDate.modifyDay(day) , State.SELECT);
+                weeks[row].days[col].setDate(date);
+                weeks[row].days[col].setState(State.SELECT);
             } else {
-                weeks[row].days[col].refreshContent(seedDate.modifyDay(day) , State.CURRENT_MONTH);
+                weeks[row].days[col].setDate(date);
+                weeks[row].days[col].setState(State.CURRENT_MONTH);
+            }
+        } else {
+            if(date.equals(CalendarViewAdapter.loadDate())) {
+                weeks[row].days[col] = new Day(State.SELECT , date , row , col);
+            } else {
+                weeks[row].days[col] = new Day(State.CURRENT_MONTH , date , row , col);
             }
         }
         if(date.equals(seedDate)){
@@ -133,8 +166,14 @@ public class CalendarRenderer {
                 seedDate.year,
                 seedDate.month + 1,
                 position - firstDayWeek - currentMonthDays + 1);
+        if(weeks[row] == null) {
+            weeks[row] = new Week(row);
+        }
         if(weeks[row].days[col] != null) {
-            weeks[row].days[col].refreshContent(date, State.NEXT_MONTH);
+            weeks[row].days[col].setDate(date);
+            weeks[row].days[col].setState(State.NEXT_MONTH);
+        } else {
+            weeks[row].days[col] = new Day(State.NEXT_MONTH , date , row , col);
         }
         // TODO: 17/6/27  当下一个月的天数大于七时，说明该月有六周
 //        if(position - firstDayWeek - currentMonthDays + 1 >= 7) { //当下一个月的天数大于七时，说明该月有六周
@@ -146,8 +185,14 @@ public class CalendarRenderer {
                 seedDate.year,
                 seedDate.month - 1,
                 lastMonthDays - (firstDayWeek- position - 1));
+        if(weeks[row] == null) {
+            weeks[row] = new Week(row);
+        }
         if(weeks[row].days[col] != null) {
-            weeks[row].days[col].refreshContent(date , State.NEXT_MONTH);
+            weeks[row].days[col].setDate(date);
+            weeks[row].days[col].setState(State.PAST_MONTH);
+        } else {
+            weeks[row].days[col] = new Day(State.PAST_MONTH , date , row , col);
         }
     }
 
@@ -174,7 +219,7 @@ public class CalendarRenderer {
             if (weeks[i] != null){
                 for (int j = 0; j < Const.TOTAL_COL; j++){
                     if(weeks[i].days[j].getState() == State.SELECT){
-                        weeks[i].days[j].refreshState(State.CURRENT_MONTH);
+                        weeks[i].days[j].setState(State.CURRENT_MONTH);
                         resetSelectedRowIndex();
                         break;
                     }
@@ -223,11 +268,7 @@ public class CalendarRenderer {
         this.onSelectDateListener = onSelectDateListener;
     }
 
-    public void setWeeks(Week[] weeks) {
-        this.weeks = weeks;
-    }
-
-    public Week[] getWeeks() {
-        return weeks;
+    public void setDayRenderer(IDayRenderer dayRenderer) {
+        this.dayRenderer = dayRenderer;
     }
 }

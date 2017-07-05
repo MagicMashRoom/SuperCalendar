@@ -11,21 +11,25 @@ import com.ldf.calendar.interf.IDayRenderer;
 
 public class Week {
     public int row;
+    public Day[] days = new Day[Const.TOTAL_COL];
 
     public Week(int row) {
         this.row = row;
     }
 
-    public IDayRenderer[] days = new IDayRenderer[Const.TOTAL_COL];
-
-    public void setDays(IDayRenderer[] days) {
-        this.days = days;
+    public int getRow() {
+        return row;
     }
 
-    public void drawRow(Canvas canvas) {
-        for (int col = 0; col < days.length; col++) {
-            if (days[col] != null)
-                days[col].drawDay(canvas , col , row );
-        }
+    public void setRow(int row) {
+        this.row = row;
+    }
+
+    public Day[] getDays() {
+        return days;
+    }
+
+    public void setDays(Day[] days) {
+        this.days = days;
     }
 }

@@ -39,11 +39,11 @@ public class CustomDayView extends DayView {
     }
 
     @Override
-    public void refreshContent(CalendarDate date, State state) {
-        renderToday(date);
-        renderSelect(state);
-        renderMarker(date, state);
-        super.refreshContent(date, state);
+    public void refreshContent() {
+        renderToday(day.getDate());
+        renderSelect(day.getState());
+        renderMarker(day.getDate(), day.getState());
+        super.refreshContent();
     }
 
     private void renderMarker(CalendarDate date, State state) {
@@ -57,7 +57,6 @@ public class CustomDayView extends DayView {
                 } else {
                     marker.setEnabled(false);
                 }
-                super.refreshContent(date, state);
             }
         } else {
             marker.setVisibility(GONE);

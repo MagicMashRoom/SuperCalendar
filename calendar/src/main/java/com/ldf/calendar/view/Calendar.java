@@ -6,6 +6,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.ldf.calendar.Const;
+import com.ldf.calendar.interf.IDayRenderer;
 import com.ldf.calendar.interf.OnAdapterSelectListener;
 import com.ldf.calendar.component.CalendarAttr;
 import com.ldf.calendar.component.CalendarRenderer;
@@ -143,7 +144,7 @@ public class Calendar extends View {
 		return renderer.getSeedDate();
 	}
 
-	public void setWeeks(Week[] weeks){
-		renderer.setWeeks(weeks);
+	public void setDayRenderer(IDayRenderer dayRenderer){
+		renderer.setDayRenderer(dayRenderer);
 	}
 }

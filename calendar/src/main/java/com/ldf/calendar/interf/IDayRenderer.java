@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 
 import com.ldf.calendar.component.State;
 import com.ldf.calendar.model.CalendarDate;
+import com.ldf.calendar.view.Day;
 import com.ldf.calendar.view.DayView;
 
 /**
@@ -12,18 +13,10 @@ import com.ldf.calendar.view.DayView;
 
 public interface IDayRenderer {
 
-    void refreshDate(CalendarDate date);
+    void refreshContent();
 
-    void refreshState(State state);
-
-    void refreshContent(CalendarDate date , State state);
-
-    State getState();
-
-    CalendarDate getDate();
+    void drawDay(Canvas canvas, Day day);
 
     IDayRenderer copy();
-
-    void drawDay(Canvas canvas, float posX, float posY);
 
 }

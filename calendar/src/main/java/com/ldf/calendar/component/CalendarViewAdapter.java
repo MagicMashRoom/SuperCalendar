@@ -5,7 +5,6 @@ import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.ldf.calendar.Const;
 import com.ldf.calendar.interf.OnAdapterSelectListener;
 import com.ldf.calendar.interf.IDayRenderer;
 import com.ldf.calendar.interf.OnSelectDateListener;
@@ -13,7 +12,6 @@ import com.ldf.calendar.Utils;
 import com.ldf.calendar.view.MonthPager;
 import com.ldf.calendar.model.CalendarDate;
 import com.ldf.calendar.view.Calendar;
-import com.ldf.calendar.view.Week;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,7 +33,7 @@ public class CalendarViewAdapter extends PagerAdapter {
 		super();
 		this.calendarType = calendarType;
 		init(context, onSelectDateListener);
-		setCustomDayView(dayView);
+		setCustomDayRenderer(dayView);
 	}
 
 	private void init(Context context, OnSelectDateListener onSelectDateListener) {
@@ -87,8 +85,6 @@ public class CalendarViewAdapter extends PagerAdapter {
 			}//每周的种子日期为这一周的最后一天
 			calendar.updateWeek(rowCount);
 		}
-		calendar.getCellHeight();
-
 		container.addView(calendar, 0);
 		return calendar;
 	}
@@ -251,45 +247,14 @@ public class CalendarViewAdapter extends PagerAdapter {
 		return calendarType;
 	}
 
-	public void setCustomDayView(IDayRenderer dayRenderer) {
-		Week weeks0[] = new Week[Const.TOTAL_ROW];
-		for (int j = 0 ; j < 6 ; j ++) {
-			Week week = new Week(j);
-			IDayRenderer[] days = new IDayRenderer[Const.TOTAL_COL];
-			for (int i = 0 ; i < 7 ; i ++) {
-				days[i] = dayRenderer.copy();
-			}
-			week.setDays(days);
-			weeks0[j] = week;
-		}
+	public void setCustomDayRenderer(IDayRenderer dayRenderer) {
 		Calendar c0 =  calendars.get(0);
-		c0.setWeeks(weeks0);
+		c0.setDayRenderer(dayRenderer);
 
-		Week weeks1[] = new Week[Const.TOTAL_ROW];
-		for (int j = 0 ; j < 6 ; j ++) {
-			Week week = new Week(j);
-			IDayRenderer[] days = new IDayRenderer[Const.TOTAL_COL];
-			for (int i = 0 ; i < 7 ; i ++) {
-				days[i] = dayRenderer.copy();
-			}
-			week.setDays(days);
-			weeks1[j] = week;
-		}
 		Calendar c1 = calendars.get(1);
-		c1.setWeeks(weeks1);
-
-		Week weeks2[] = new Week[Const.TOTAL_ROW];
-		for (int j = 0 ; j < 6 ; j ++) {
-			Week week = new Week(j);
-			IDayRenderer[] days = new IDayRenderer[Const.TOTAL_COL];
-			for (int i = 0 ; i < 7 ; i ++) {
-				days[i] = dayRenderer.copy();
-			}
-			week.setDays(days);
-			weeks2[j] = week;
-		}
+		c1.setDayRenderer(dayRenderer.copy());
 
 		Calendar c2 = calendars.get(2);
-		c2.setWeeks(weeks2);
+		c2.setDayRenderer(dayRenderer.copy());
 	}
 }
