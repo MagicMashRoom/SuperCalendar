@@ -68,9 +68,6 @@ public class CalendarViewAdapter extends PagerAdapter {
 		if(position < 2){
 			return null;
 		}
-		if (container.getChildCount() == calendars.size()) {
-			container.removeView(calendars.get(position % 3));
-		}
 		Calendar calendar = calendars.get(position % calendars.size());
 		if(calendarType == CalendarAttr.CalendayType.MONTH) {
 			CalendarDate current = seedDate.modifyMonth(position - MonthPager.CURRENT_DAY_INDEX);
@@ -85,7 +82,14 @@ public class CalendarViewAdapter extends PagerAdapter {
 			}//每周的种子日期为这一周的最后一天
 			calendar.updateWeek(rowCount);
 		}
-		container.addView(calendar, 0);
+        if (container.getChildCount() == calendars.size()) {
+            container.removeView(calendars.get(position % 3));
+        }
+        if(container.getChildCount() < calendars.size()) {
+            container.addView(calendar, 0);
+        } else {
+            container.addView(calendar, position % 3);
+        }
 		return calendar;
 	}
 
