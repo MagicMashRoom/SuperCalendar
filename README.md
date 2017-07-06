@@ -4,8 +4,8 @@
 * 博主现在工作在一家教育公司，最近公司的产品狗扔过来一个需求，说要做一个可以周月切换的课表，可以展示用户在某一天的上课安排。接到这个任务之后我研究了很多的日历控件，并且抽出了一个calenderlib。先看一下最后的项目中的效果：
 
 <figure class="half">
-    <img src="http://osnftsiae.bkt.clouddn.com/syllabus_1.png" width="250">
-    <img src="http://osnftsiae.bkt.clouddn.com/syllabus_2.png" width="250">
+    <img src="http://osnftsiae.bkt.clouddn.com/syllabus_1.png" width="200">
+    <img src="http://osnftsiae.bkt.clouddn.com/syllabus_2.png" width="200">
 </figure>
 
 * 看到本篇文章的同学估计也是实验课或者项目需求中需要一个日历表，当我接到这个需求的时候，当时脑子压根连想都没想，这么通用的控件，GitHub上一搜一大堆不是嘛。可是等到真正做起来的时候，扎心了老铁，GitHub上的大神居然异常的不给力，都是实现了基本功能，能够滑动切换月份，找实现了周月切换功能的开源库很难。终于我费尽千辛万苦找到一个能够完美切换的项目时，你周月切换之后的数据乱的一塌糊涂啊！！！
