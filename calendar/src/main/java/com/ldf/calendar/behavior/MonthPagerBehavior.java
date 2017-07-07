@@ -58,6 +58,7 @@ public class MonthPagerBehavior extends CoordinatorLayout.Behavior<MonthPager> {
             child.offsetTopAndBottom(dy);
         } else {
             initDependentViewTop = dependency.getTop();
+            Log.e("ldf","initDependentViewTop = " + initDependentViewTop);
         }
 
         dependentViewTop = dependency.getTop();
@@ -67,11 +68,19 @@ public class MonthPagerBehavior extends CoordinatorLayout.Behavior<MonthPager> {
                 <= (child.getViewHeight() - child.getCellHeight()) + touchSlop
                 && Math.abs(initDependentViewTop - dependentViewTop)
                 >= (child.getViewHeight() - child.getCellHeight()) - touchSlop) {
-            Utils.setScrollToBottom(true);
+            if(initDependentViewTop == child.getViewHeight()) {
+                Utils.setScrollToBottom(true);
+            } else {
+                Utils.setScrollToBottom(false);
+            }
             calendarViewAdapter.switchToWeek(child.getRowIndex());
         }
         if(Math.abs(initDependentViewTop - dependentViewTop) <= touchSlop) {
-            Utils.setScrollToBottom(false);
+            if(initDependentViewTop == child.getViewHeight()) {
+                Utils.setScrollToBottom(false);
+            } else {
+                Utils.setScrollToBottom(true);
+            }
             calendarViewAdapter.switchToMonth();
         }
 
