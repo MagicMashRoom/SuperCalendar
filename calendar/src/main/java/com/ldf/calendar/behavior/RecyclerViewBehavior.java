@@ -97,6 +97,14 @@ public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<RecyclerVie
                     parent.dispatchDependentViewsChanged(child);
 
                     ViewCompat.postOnAnimation(child, this);
+                } else {
+                    MonthPager monthPager = (MonthPager) parent.getChildAt(0);
+                    if(monthPager.getTop() < 0) {
+                        if(monthPager.getTop() +  monthPager.getTopMovableDistance() > 0) {
+                            monthPager.offsetTopAndBottom(- monthPager.getTop()
+                                    -  monthPager.getTopMovableDistance());
+                        }
+                    }
                 }
             }
         });

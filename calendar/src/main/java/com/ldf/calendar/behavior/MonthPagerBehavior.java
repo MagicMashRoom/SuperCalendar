@@ -15,7 +15,7 @@ import com.ldf.calendar.view.MonthPager;
 
 public class MonthPagerBehavior extends CoordinatorLayout.Behavior<MonthPager> {
     private int top;
-    private int initRecyclerViewTop;
+    private int initDependentViewTop;
     private int touchSlop = 24;
 
     @Override
@@ -57,21 +57,22 @@ public class MonthPagerBehavior extends CoordinatorLayout.Behavior<MonthPager> {
 
             child.offsetTopAndBottom(dy);
         } else {
-            initRecyclerViewTop = dependency.getTop();
+            initDependentViewTop = dependency.getTop();
         }
 
         dependentViewTop = dependency.getTop();
         top = child.getTop();
 
-        if((initRecyclerViewTop - dependentViewTop) >= child.getCellHeight()) {
-            Utils.setScrollToBottom(false);
-            calendarViewAdapter.switchToWeek(child.getRowIndex());
-            initRecyclerViewTop = dependentViewTop;
-        }
-        if((dependentViewTop - initRecyclerViewTop) >= child.getCellHeight()) {
+        if(Math.abs(initDependentViewTop - dependentViewTop)
+                <= (child.getViewHeight() - child.getCellHeight()) + touchSlop
+                && Math.abs(initDependentViewTop - dependentViewTop)
+                >= (child.getViewHeight() - child.getCellHeight()) - touchSlop) {
             Utils.setScrollToBottom(true);
+            calendarViewAdapter.switchToWeek(child.getRowIndex());
+        }
+        if(Math.abs(initDependentViewTop - dependentViewTop) <= touchSlop) {
+            Utils.setScrollToBottom(false);
             calendarViewAdapter.switchToMonth();
-            initRecyclerViewTop = dependentViewTop;
         }
 
         return true;

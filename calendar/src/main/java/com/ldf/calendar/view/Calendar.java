@@ -39,10 +39,10 @@ public class Calendar extends View {
 	private void init(Context context) {
 		this.context = context;
 		touchSlop = Utils.getTouchSlop(context);
-		initAttr();
+		initAttrAndRenderer();
 	}
 
-	private void initAttr() {
+	private void initAttrAndRenderer() {
 		calendarAttr = new CalendarAttr();
 		calendarAttr.setWeekArrayType(CalendarAttr.WeekArrayType.Monday);
 		calendarAttr.setCalendarType(CalendarAttr.CalendayType.MONTH);
