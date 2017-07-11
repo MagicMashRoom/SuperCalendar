@@ -99,10 +99,8 @@ public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<RecyclerVie
                 if (scroller.computeScrollOffset()) {
                     int delta = scroller.getCurrY() - child.getTop();
                     child.offsetTopAndBottom(delta);
-
                     saveTop(child.getTop());
                     parent.dispatchDependentViewsChanged(child);
-
                     ViewCompat.postOnAnimation(child, this);
                 } else {
                     MonthPager monthPager = (MonthPager) parent.getChildAt(0);
@@ -113,6 +111,7 @@ public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<RecyclerVie
                         } else {
                             monthPager.offsetTopAndBottom(- monthPager.getTop());
                         }
+                        parent.dispatchDependentViewsChanged(child);
                     }
                 }
             }
