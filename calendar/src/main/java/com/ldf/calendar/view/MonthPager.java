@@ -5,6 +5,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 
 import com.ldf.calendar.behavior.MonthPagerBehavior;
 import com.ldf.calendar.component.CalendarViewAdapter;
@@ -21,6 +22,8 @@ public class MonthPager extends ViewPager {
     private OnPageChangeListener monthPageChangeListener;
     private boolean pageChangeByGesture = false;
     private boolean hasPageChangeListener = false;
+    private boolean scrollable = true;
+    private int pageScrollState = ViewPager.SCROLL_STATE_IDLE;
 
     public MonthPager(Context context) {
         this(context, null);
@@ -54,6 +57,7 @@ public class MonthPager extends ViewPager {
 
             @Override
             public void onPageScrollStateChanged(int state) {
+                pageScrollState = state;
                 if(monthPageChangeListener != null) {
                     monthPageChangeListener.onPageScrollStateChanged(state);
                 }
@@ -93,10 +97,34 @@ public class MonthPager extends ViewPager {
         }
     }
 
+    public void setScrollable(boolean scrollable) {
+        this.scrollable = scrollable;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent me) {
+        if (!scrollable)
+            return false;
+        else
+            return super.onTouchEvent(me);
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent me) {
+        if (!scrollable)
+            return false;
+        else
+            return super.onInterceptTouchEvent(me);
+    }
+
     public void selectOtherMonth(int offset) {
         setCurrentItem(currentPosition + offset);
         CalendarViewAdapter calendarViewAdapter = (CalendarViewAdapter) getAdapter();
         calendarViewAdapter.notifyDataChanged(CalendarViewAdapter.loadDate());
+    }
+
+    public int getPageScrollState() {
+        return pageScrollState;
     }
 
     public interface OnPageChangeListener {

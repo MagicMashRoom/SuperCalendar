@@ -3,6 +3,7 @@ package com.ldf.calendar.behavior;
 import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -43,7 +44,11 @@ public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<RecyclerVie
         if(linearLayoutManager.findFirstCompletelyVisibleItemPosition() > 0) {
             return false;
         }
-
+        MonthPager monthPager = (MonthPager) coordinatorLayout.getChildAt(0);
+        if(monthPager.getPageScrollState() != ViewPager.SCROLL_STATE_IDLE) {
+            return false;
+        }
+        monthPager.setScrollable(false);
         boolean isVertical = (nestedScrollAxes & ViewCompat.SCROLL_AXIS_VERTICAL) != 0;
         int firstRowVerticalPosition =
                 (child == null || child.getChildCount() == 0) ? 0 : child.getChildAt(0).getTop();
@@ -65,6 +70,8 @@ public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<RecyclerVie
     public void onStopNestedScroll(final CoordinatorLayout parent, final RecyclerView child, View target) {
         Log.e("ldf","onStopNestedScroll");
         super.onStopNestedScroll(parent, child, target);
+        MonthPager monthPager = (MonthPager) parent.getChildAt(0);
+        monthPager.setScrollable(true);
         if (!Utils.isScrollToBottom()) {
             if (initOffset - Utils.loadTop() > Utils.getTouchSlop(context)){
                 scrollTo(parent, child, minOffset, 200);
@@ -100,9 +107,11 @@ public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<RecyclerVie
                 } else {
                     MonthPager monthPager = (MonthPager) parent.getChildAt(0);
                     if(monthPager.getTop() < 0) {
-                        if(monthPager.getTop() +  monthPager.getTopMovableDistance() > 0) {
+                        if(monthPager.getTop() +  monthPager.getTopMovableDistance() >= 0) {
                             monthPager.offsetTopAndBottom(- monthPager.getTop()
                                     -  monthPager.getTopMovableDistance());
+                        } else {
+                            monthPager.offsetTopAndBottom(- monthPager.getTop());
                         }
                     }
                 }
