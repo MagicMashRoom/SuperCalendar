@@ -7,6 +7,9 @@
     <img src="http://osnftsiae.bkt.clouddn.com/syllabus_1.png" width="240">
     <img src="http://osnftsiae.bkt.clouddn.com/syllabus_2.png" width="240">
 <div/>
+<div style = "float:center">
+    <img src="http://osnftsiae.bkt.clouddn.com/supercalendarexample.gif" width="240">
+<div/>
 
 * 看到本篇文章的同学估计也是实验课或者项目需求中需要一个日历表，当我接到这个需求的时候，当时脑子压根连想都没想，这么通用的控件，GitHub上一搜一大堆不是嘛。可是等到真正做起来的时候，扎心了老铁，GitHub上的大神居然异常的不给力，都是实现了基本功能，能够滑动切换月份，找实现了周月切换功能的开源库很难。终于我费尽千辛万苦找到一个能够完美切换的项目时，你周月切换之后的数据乱的一塌糊涂啊！！！
 * 算了，自己撸一个！！！
