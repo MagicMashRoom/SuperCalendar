@@ -27,7 +27,6 @@ public class MonthPager extends ViewPager {
 
     public MonthPager(Context context) {
         this(context, null);
-        init();
     }
 
     public MonthPager(Context context, AttributeSet attrs) {
