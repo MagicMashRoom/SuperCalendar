@@ -25,10 +25,10 @@ public class CustomDayView extends DayView {
     private final CalendarDate today = new CalendarDate();
 
     /**
-     * Constructor. Sets up the MarkerView with a custom layout resource.
+     * 构造器
      *
-     * @param context
-     * @param layoutResource the layout resource to use for the MarkerView
+     * @param context 上下文
+     * @param layoutResource 自定义DayView的layout资源
      */
     public CustomDayView(Context context, int layoutResource) {
         super(context, layoutResource);
