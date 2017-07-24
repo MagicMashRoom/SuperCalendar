@@ -14,7 +14,7 @@ import com.ldf.calendar.view.DayView;
  * Created by ldf on 17/6/27.
  */
 
-public class ThemeDayView extends DayView{
+public class ThemeDayView extends DayView {
     private TextView dateTv;
     private ImageView marker;
     private View selectedBackground;
@@ -40,8 +40,8 @@ public class ThemeDayView extends DayView{
     public void refreshContent() {
         CalendarDate date = day.getDate();
         State state = day.getState();
-        if(date != null) {
-            if(date.equals(today)) {
+        if (date != null) {
+            if (date.equals(today)) {
                 dateTv.setText("今");
                 todayBackground.setVisibility(VISIBLE);
             } else {
@@ -49,7 +49,7 @@ public class ThemeDayView extends DayView{
                 todayBackground.setVisibility(GONE);
             }
         }
-        if(state == State.SELECT) {
+        if (state == State.SELECT) {
             selectedBackground.setVisibility(VISIBLE);
         } else {
             selectedBackground.setVisibility(GONE);
@@ -59,6 +59,6 @@ public class ThemeDayView extends DayView{
 
     @Override
     public IDayRenderer copy() {
-        return new ThemeDayView(context , layoutResource);
+        return new ThemeDayView(context, layoutResource);
     }
 }

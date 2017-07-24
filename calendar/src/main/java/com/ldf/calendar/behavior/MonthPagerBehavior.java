@@ -35,49 +35,48 @@ public class MonthPagerBehavior extends CoordinatorLayout.Behavior<MonthPager> {
     @Override
     public boolean onDependentViewChanged(CoordinatorLayout parent, MonthPager child, View dependency) {
         CalendarViewAdapter calendarViewAdapter = (CalendarViewAdapter) child.getAdapter();
+        //dependency对其依赖的view(本例依赖的view是RecycleView)
         if (dependentViewTop != -1) {
-            int dy = dependency.getTop() - dependentViewTop;    //dependency对其依赖的view(本例依赖的view是RecycleView)
-
+            int dy = dependency.getTop() - dependentViewTop;
             int top = child.getTop();
-
-            if( dy > touchSlop){
+            if (dy > touchSlop) {
                 calendarViewAdapter.switchToMonth();
-            } else if(dy < - touchSlop){
+            } else if (dy < -touchSlop) {
                 calendarViewAdapter.switchToWeek(child.getRowIndex());
             }
 
-            if (dy > -top){
+            if (dy > -top) {
                 dy = -top;
             }
 
-            if (dy < -top - child.getTopMovableDistance()){
+            if (dy < -top - child.getTopMovableDistance()) {
                 dy = -top - child.getTopMovableDistance();
             }
 
             child.offsetTopAndBottom(dy);
-            Log.e("ldf","onDependentViewChanged = " + dy);
+            Log.e("ldf", "onDependentViewChanged = " + dy);
 
         }
 
         dependentViewTop = dependency.getTop();
         top = child.getTop();
 
-        if(offsetY > child.getCellHeight()) {
+        if (offsetY > child.getCellHeight()) {
             calendarViewAdapter.switchToMonth();
         }
-        if(offsetY < -child.getCellHeight()) {
+        if (offsetY < -child.getCellHeight()) {
             calendarViewAdapter.switchToWeek(child.getRowIndex());
         }
 
-        if(dependentViewTop > child.getCellHeight() - 24
+        if (dependentViewTop > child.getCellHeight() - 24
                 && dependentViewTop < child.getCellHeight() + 24
-                && top > - touchSlop - child.getTopMovableDistance()
+                && top > -touchSlop - child.getTopMovableDistance()
                 && top < touchSlop - child.getTopMovableDistance()) {
             Utils.setScrollToBottom(true);
             calendarViewAdapter.switchToWeek(child.getRowIndex());
             offsetY = 0;
         }
-        if(dependentViewTop > child.getViewHeight() - 24
+        if (dependentViewTop > child.getViewHeight() - 24
                 && dependentViewTop < child.getViewHeight() + 24
                 && top < touchSlop
                 && top > -touchSlop) {

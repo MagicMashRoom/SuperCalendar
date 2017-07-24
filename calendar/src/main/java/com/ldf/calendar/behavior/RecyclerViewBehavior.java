@@ -41,11 +41,11 @@ public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<RecyclerVie
     public boolean onStartNestedScroll(CoordinatorLayout coordinatorLayout, RecyclerView child,
                                        View directTargetChild, View target, int nestedScrollAxes) {
         LinearLayoutManager linearLayoutManager = (LinearLayoutManager) child.getLayoutManager();
-        if(linearLayoutManager.findFirstCompletelyVisibleItemPosition() > 0) {
+        if (linearLayoutManager.findFirstCompletelyVisibleItemPosition() > 0) {
             return false;
         }
         MonthPager monthPager = (MonthPager) coordinatorLayout.getChildAt(0);
-        if(monthPager.getPageScrollState() != ViewPager.SCROLL_STATE_IDLE) {
+        if (monthPager.getPageScrollState() != ViewPager.SCROLL_STATE_IDLE) {
             return false;
         }
         monthPager.setScrollable(false);
@@ -53,7 +53,9 @@ public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<RecyclerVie
         int firstRowVerticalPosition =
                 (child == null || child.getChildCount() == 0) ? 0 : child.getChildAt(0).getTop();
         boolean recycleviewTopStatus = firstRowVerticalPosition >= 0;
-        return isVertical && (recycleviewTopStatus || !Utils.isScrollToBottom()) && child == directTargetChild;
+        return isVertical
+                && (recycleviewTopStatus || !Utils.isScrollToBottom())
+                && child == directTargetChild;
     }
 
     @Override
@@ -68,54 +70,22 @@ public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<RecyclerVie
 
     @Override
     public void onStopNestedScroll(final CoordinatorLayout parent, final RecyclerView child, View target) {
-        Log.e("ldf","onStopNestedScroll");
         super.onStopNestedScroll(parent, child, target);
         MonthPager monthPager = (MonthPager) parent.getChildAt(0);
         monthPager.setScrollable(true);
         if (!Utils.isScrollToBottom()) {
-            if (initOffset - Utils.loadTop() > Utils.getTouchSlop(context)){
-                scrollTo(parent, child, minOffset, 200);
+            if (initOffset - Utils.loadTop() > Utils.getTouchSlop(context)) {
+                Utils.scrollTo(parent, child, minOffset, 200);
             } else {
-                scrollTo(parent, child, initOffset, 80);
+                Utils.scrollTo(parent, child, initOffset, 80);
             }
         } else {
-            if (Utils.loadTop() - minOffset > Utils.getTouchSlop(context)){
-                scrollTo(parent, child, initOffset, 200);
+            if (Utils.loadTop() - minOffset > Utils.getTouchSlop(context)) {
+                Utils.scrollTo(parent, child, initOffset, 200);
             } else {
-                scrollTo(parent, child, minOffset, 80);
+                Utils.scrollTo(parent, child, minOffset, 80);
             }
         }
-    }
-
-    private void scrollTo(final CoordinatorLayout parent, final RecyclerView child, final int y, int duration){
-        final Scroller scroller = new Scroller(parent.getContext());
-        scroller.startScroll(0, Utils.loadTop(), 0, y - Utils.loadTop(), duration);   //设置scroller的滚动偏移量
-
-        ViewCompat.postOnAnimation(child, new Runnable() {
-            @Override
-            public void run() {
-                //返回值为boolean，true说明滚动尚未完成，false说明滚动已经完成。
-                // 这是一个很重要的方法，通常放在View.computeScroll()中，用来判断是否滚动是否结束。
-                if (scroller.computeScrollOffset()) {
-                    int delta = scroller.getCurrY() - child.getTop();
-                    child.offsetTopAndBottom(delta);
-                    saveTop(child.getTop());
-                    parent.dispatchDependentViewsChanged(child);
-                    ViewCompat.postOnAnimation(child, this);
-                } else {
-                    MonthPager monthPager = (MonthPager) parent.getChildAt(0);
-                    if(monthPager.getTop() < 0) {
-                        if(monthPager.getTop() +  monthPager.getTopMovableDistance() >= 0) {
-                            monthPager.offsetTopAndBottom(- monthPager.getTop()
-                                    -  monthPager.getTopMovableDistance());
-                        } else {
-                            monthPager.offsetTopAndBottom(- monthPager.getTop());
-                        }
-                        parent.dispatchDependentViewsChanged(child);
-                    }
-                }
-            }
-        });
     }
 
     private MonthPager getMonthPager(CoordinatorLayout coordinatorLayout) {
@@ -123,11 +93,11 @@ public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<RecyclerVie
         return monthPager;
     }
 
-    private void saveTop(int top){
+    private void saveTop(int top) {
         Utils.saveTop(top);
-        if (Utils.loadTop() == initOffset){
+        if (Utils.loadTop() == initOffset) {
             Utils.setScrollToBottom(false);
-        } else if (Utils.loadTop() == minOffset){
+        } else if (Utils.loadTop() == minOffset) {
             Utils.setScrollToBottom(true);
         }
     }

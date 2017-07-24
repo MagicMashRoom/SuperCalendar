@@ -26,7 +26,7 @@ import java.util.HashMap;
  * Created by ldf on 16/11/4.
  */
 
-public class SyllabusActivity extends AppCompatActivity{
+public class SyllabusActivity extends AppCompatActivity {
     TextView textViewYearDisplay;
     TextView textViewMonthDisplay;
     TextView backToday;
@@ -74,7 +74,7 @@ public class SyllabusActivity extends AppCompatActivity{
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if(hasFocus && !initiated) {
+        if (hasFocus && !initiated) {
             refreshMonthPager();
             initiated = true;
         }
@@ -90,11 +90,11 @@ public class SyllabusActivity extends AppCompatActivity{
         scrollSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(calendarAdapter.getCalendarType() == CalendarAttr.CalendayType.WEEK) {
-                    Utils.scrollTo(content , rvToDoList , monthPager.getViewHeight() , 200);
+                if (calendarAdapter.getCalendarType() == CalendarAttr.CalendayType.WEEK) {
+                    Utils.scrollTo(content, rvToDoList, monthPager.getViewHeight(), 200);
                     calendarAdapter.switchToMonth();
                 } else {
-                    Utils.scrollTo(content , rvToDoList , monthPager.getCellHeight() , 200);
+                    Utils.scrollTo(content, rvToDoList, monthPager.getCellHeight(), 200);
                     calendarAdapter.switchToWeek(monthPager.getRowIndex());
                 }
             }
@@ -115,22 +115,22 @@ public class SyllabusActivity extends AppCompatActivity{
 
     private void initCalendarView() {
         initListener();
-        CustomDayView customDayView = new CustomDayView(context , R.layout.custom_day);
+        CustomDayView customDayView = new CustomDayView(context, R.layout.custom_day);
         calendarAdapter = new CalendarViewAdapter(
-                context ,
-                onSelectDateListener ,
-                CalendarAttr.CalendayType.MONTH ,
+                context,
+                onSelectDateListener,
+                CalendarAttr.CalendayType.MONTH,
                 customDayView);
         initMarkData();
         initMonthPager();
     }
 
     private void initMarkData() {
-        HashMap<String , String> markData = new HashMap<>();
-        markData.put("2017-8-9" , "1");
-        markData.put("2017-7-9" , "0");
-        markData.put("2017-6-9" , "1");
-        markData.put("2017-6-10" , "0");
+        HashMap<String, String> markData = new HashMap<>();
+        markData.put("2017-8-9", "1");
+        markData.put("2017-7-9", "0");
+        markData.put("2017-6-9", "1");
+        markData.put("2017-6-10", "0");
         calendarAdapter.setMarkData(markData);
     }
 
@@ -174,7 +174,7 @@ public class SyllabusActivity extends AppCompatActivity{
             public void onPageSelected(int position) {
                 mCurrentPage = position;
                 currentCalendars = calendarAdapter.getPagers();
-                if(currentCalendars.get(position % currentCalendars.size()) instanceof Calendar){
+                if (currentCalendars.get(position % currentCalendars.size()) instanceof Calendar) {
                     CalendarDate date = currentCalendars.get(position % currentCalendars.size()).getSeedDate();
                     currentDate = date;
                     textViewYearDisplay.setText(date.getYear() + "年");
@@ -198,8 +198,8 @@ public class SyllabusActivity extends AppCompatActivity{
         refreshClickDate(today);
     }
 
-    private void refreshSelectBackground(){
-        ThemeDayView themeDayView = new ThemeDayView(context , R.layout.custom_day_focus);
+    private void refreshSelectBackground() {
+        ThemeDayView themeDayView = new ThemeDayView(context, R.layout.custom_day_focus);
         calendarAdapter.setCustomDayRenderer(themeDayView);
         calendarAdapter.notifyDataSetChanged();
         calendarAdapter.notifyDataChanged(new CalendarDate());

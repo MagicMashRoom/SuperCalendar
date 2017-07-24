@@ -12,7 +12,7 @@ import android.widget.TextView;
  * Created by ldf on 17/6/14.
  */
 
-public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ViewHolder>{
+public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ViewHolder> {
 
     private final LayoutInflater layoutInflater;
     private final Context context;
@@ -41,6 +41,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ViewHold
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView textView;
+
         ViewHolder(View view) {
             super(view);
             textView = (TextView) view.findViewById(R.id.text_view);

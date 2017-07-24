@@ -47,12 +47,12 @@ public class CustomDayView extends DayView {
     }
 
     private void renderMarker(CalendarDate date, State state) {
-        if(Utils.loadMarkData().containsKey(date.toString())) {
-            if(state == State.SELECT || date.toString().equals(today.toString())) {
+        if (Utils.loadMarkData().containsKey(date.toString())) {
+            if (state == State.SELECT || date.toString().equals(today.toString())) {
                 marker.setVisibility(GONE);
             } else {
                 marker.setVisibility(VISIBLE);
-                if(Utils.loadMarkData().get(date.toString()).equals("0") ){
+                if (Utils.loadMarkData().get(date.toString()).equals("0")) {
                     marker.setEnabled(true);
                 } else {
                     marker.setEnabled(false);
@@ -67,7 +67,7 @@ public class CustomDayView extends DayView {
         if (state == State.SELECT) {
             selectedBackground.setVisibility(VISIBLE);
             dateTv.setTextColor(Color.WHITE);
-        } else if(state == State.NEXT_MONTH || state == State.PAST_MONTH) {
+        } else if (state == State.NEXT_MONTH || state == State.PAST_MONTH) {
             selectedBackground.setVisibility(GONE);
             dateTv.setTextColor(Color.parseColor("#d5d5d5"));
         } else {
@@ -77,8 +77,8 @@ public class CustomDayView extends DayView {
     }
 
     private void renderToday(CalendarDate date) {
-        if(date != null) {
-            if(date.equals(today)) {
+        if (date != null) {
+            if (date.equals(today)) {
                 dateTv.setText("今");
                 todayBackground.setVisibility(VISIBLE);
             } else {
@@ -90,6 +90,6 @@ public class CustomDayView extends DayView {
 
     @Override
     public IDayRenderer copy() {
-        return new CustomDayView(context , layoutResource);
+        return new CustomDayView(context, layoutResource);
     }
 }
