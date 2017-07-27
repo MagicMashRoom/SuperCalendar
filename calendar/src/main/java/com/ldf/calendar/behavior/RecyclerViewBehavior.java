@@ -28,10 +28,8 @@ public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<RecyclerVie
     public boolean onLayoutChild(CoordinatorLayout parent, RecyclerView child, int layoutDirection) {
         parent.onLayoutChild(child, layoutDirection);
         MonthPager monthPager = getMonthPager(parent);
-        if (monthPager.getBottom() > 0 && initOffset == -1) {
-            initOffset = monthPager.getBottom();
-            saveTop(initOffset);
-        }
+        initOffset = monthPager.getViewHeight();
+        saveTop(initOffset);
         child.offsetTopAndBottom(Utils.loadTop());
         minOffset = getMonthPager(parent).getCellHeight();
         return true;
@@ -62,8 +60,11 @@ public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<RecyclerVie
     public void onNestedPreScroll(CoordinatorLayout coordinatorLayout, RecyclerView child,
                                   View target, int dx, int dy, int[] consumed) {
         super.onNestedPreScroll(coordinatorLayout, child, target, dx, dy, consumed);
-        if (child.getTop() <= initOffset && child.getTop() >= minOffset) {
-            consumed[1] = Utils.scroll(child, dy, minOffset, initOffset);
+        if (child.getTop() <= initOffset
+                && child.getTop() >= getMonthPager(coordinatorLayout).getCellHeight()) {
+            consumed[1] = Utils.scroll(child, dy,
+                    getMonthPager(coordinatorLayout).getCellHeight(),
+                    getMonthPager(coordinatorLayout).getViewHeight());
             saveTop(child.getTop());
         }
     }
@@ -75,15 +76,15 @@ public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<RecyclerVie
         monthPager.setScrollable(true);
         if (!Utils.isScrollToBottom()) {
             if (initOffset - Utils.loadTop() > Utils.getTouchSlop(context)) {
-                Utils.scrollTo(parent, child, minOffset, 200);
+                Utils.scrollTo(parent, child, getMonthPager(parent).getCellHeight(), 200);
             } else {
-                Utils.scrollTo(parent, child, initOffset, 80);
+                Utils.scrollTo(parent, child, getMonthPager(parent).getViewHeight(), 80);
             }
         } else {
             if (Utils.loadTop() - minOffset > Utils.getTouchSlop(context)) {
-                Utils.scrollTo(parent, child, initOffset, 200);
+                Utils.scrollTo(parent, child, getMonthPager(parent).getViewHeight(), 200);
             } else {
-                Utils.scrollTo(parent, child, minOffset, 80);
+                Utils.scrollTo(parent, child, getMonthPager(parent).getCellHeight(), 80);
             }
         }
     }

@@ -15,7 +15,8 @@ public class MonthPager extends ViewPager {
     public static int CURRENT_DAY_INDEX = 1000;
 
     private int currentPosition = CURRENT_DAY_INDEX;
-    private int cellHeight = 0;
+    private int cellHeight;
+    private int viewHeight;
     private int rowIndex = 6;
 
     private ViewPager.OnPageChangeListener viewPageChangeListener;
@@ -81,21 +82,6 @@ public class MonthPager extends ViewPager {
         Log.e("ldf","MonthPager Just Can Use Own OnPageChangeListener");
     }
 
-    @Override
-    protected void onSizeChanged(int w, int h, int oldW, int oldH) {
-        cellHeight = h / 6;
-        super.onSizeChanged(w, h, oldW, oldH);
-    }
-
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        if(cellHeight > 0){
-            super.onMeasure(widthMeasureSpec,MeasureSpec.makeMeasureSpec(cellHeight * 6,
-                    MeasureSpec.EXACTLY));
-        } else {
-            super.onMeasure(widthMeasureSpec,heightMeasureSpec);
-        }
-    }
-
     public void setScrollable(boolean scrollable) {
         this.scrollable = scrollable;
     }
@@ -142,8 +128,12 @@ public class MonthPager extends ViewPager {
         return cellHeight;
     }
 
+    public void setViewheight(int viewHeight) {
+        cellHeight = viewHeight / 6;
+        this.viewHeight = viewHeight;
+    }
     public int getViewHeight () {
-        return cellHeight * 6;
+        return viewHeight;
     }
 
     public int getCurrentPosition() {

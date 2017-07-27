@@ -14,7 +14,7 @@ import com.ldf.calendar.view.MonthPager;
  */
 
 public class MonthPagerBehavior extends CoordinatorLayout.Behavior<MonthPager> {
-    private int top;
+    private int top = 0;
     private int touchSlop = 1;
     private int offsetY = 0;
 

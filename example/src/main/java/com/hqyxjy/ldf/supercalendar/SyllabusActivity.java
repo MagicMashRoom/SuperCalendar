@@ -52,6 +52,7 @@ public class SyllabusActivity extends AppCompatActivity {
         context = this;
         content = (CoordinatorLayout) findViewById(R.id.content);
         monthPager = (MonthPager) findViewById(R.id.calendar_view);
+        monthPager.setViewheight(Utils.dpi2px(context , 270));
         textViewYearDisplay = (TextView) findViewById(R.id.show_year_view);
         textViewMonthDisplay = (TextView) findViewById(R.id.show_month_view);
         backToday = (TextView) findViewById(R.id.back_today_button);
@@ -195,7 +196,6 @@ public class SyllabusActivity extends AppCompatActivity {
     private void refreshMonthPager() {
         CalendarDate today = new CalendarDate();
         calendarAdapter.notifyDataChanged(today);
-        refreshClickDate(today);
     }
 
     private void refreshSelectBackground() {
