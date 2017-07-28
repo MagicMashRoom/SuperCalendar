@@ -27,6 +27,7 @@ import java.util.HashMap;
  */
 
 public class SyllabusActivity extends AppCompatActivity {
+    //为什么不使用ButterKnife，是不想让用户看到源码是产生疑问
     TextView textViewYearDisplay;
     TextView textViewMonthDisplay;
     TextView backToday;
@@ -35,6 +36,8 @@ public class SyllabusActivity extends AppCompatActivity {
     RecyclerView rvToDoList;
     TextView scrollSwitch;
     TextView themeSwitch;
+    TextView nextMonthBtn;
+    TextView lastMonthBtn;
 
     private ArrayList<Calendar> currentCalendars = new ArrayList<>();
     private CalendarViewAdapter calendarAdapter;
@@ -57,6 +60,8 @@ public class SyllabusActivity extends AppCompatActivity {
         backToday = (TextView) findViewById(R.id.back_today_button);
         scrollSwitch = (TextView) findViewById(R.id.scroll_switch);
         themeSwitch = (TextView) findViewById(R.id.theme_switch);
+        nextMonthBtn = (TextView) findViewById(R.id.next_month);
+        lastMonthBtn = (TextView) findViewById(R.id.last_month);
         rvToDoList = (RecyclerView) findViewById(R.id.list);
         rvToDoList.setHasFixedSize(true);
         rvToDoList.setLayoutManager(new LinearLayoutManager(this));//这里用线性显示 类似于listview
@@ -105,6 +110,18 @@ public class SyllabusActivity extends AppCompatActivity {
                 refreshSelectBackground();
             }
         });
+        nextMonthBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                monthPager.setCurrentItem(monthPager.getCurrentPosition() + 1);
+            }
+        });
+        lastMonthBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                monthPager.setCurrentItem(monthPager.getCurrentPosition() - 1);
+            }
+        });
     }
 
     private void initCurrentDate() {
@@ -143,7 +160,7 @@ public class SyllabusActivity extends AppCompatActivity {
 
             @Override
             public void onSelectOtherMonth(int offset) {
-                //偏移量 -1表示上一个月 ， 1表示下一个月
+                //偏移量 -1表示刷新成上一个月数据 ， 1表示刷新成下一个月数据
                 monthPager.selectOtherMonth(offset);
             }
         };
@@ -190,7 +207,6 @@ public class SyllabusActivity extends AppCompatActivity {
 
     public void onClickBackToDayBtn() {
         refreshMonthPager();
-//        monthPager.setCurrentItem(monthPager.getCurrentPosition() - 1);//手动更改页数
     }
 
     private void refreshMonthPager() {
