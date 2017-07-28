@@ -1,4 +1,7 @@
 # SuperCalendar
+## ChangeLog
+* 添加手动切换上一月下一月功能
+* 解决神奇的日历尺寸问题，确保日历尺寸正确
 
 ## 简介
 * [可能是第十好的Android开源日历](http://www.jianshu.com/p/8e3fc46e5a80)
