@@ -44,7 +44,6 @@ public class SyllabusActivity extends AppCompatActivity {
     private CalendarDate currentDate;
     private boolean initiated = false;
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -191,6 +190,7 @@ public class SyllabusActivity extends AppCompatActivity {
 
     public void onClickBackToDayBtn() {
         refreshMonthPager();
+//        monthPager.setCurrentItem(monthPager.getCurrentPosition() - 1);//手动更改页数
     }
 
     private void refreshMonthPager() {
