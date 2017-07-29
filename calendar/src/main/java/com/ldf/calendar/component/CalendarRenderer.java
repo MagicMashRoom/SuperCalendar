@@ -34,6 +34,11 @@ public class CalendarRenderer {
         this.context = context;
     }
 
+    /**
+     * 使用dayRenderer绘制每一天
+     *
+     * @return void
+     */
     public void draw(Canvas canvas) {
         for (int row = 0; row < Const.TOTAL_ROW; row++) {
             if (weeks[row] != null) {
@@ -46,6 +51,11 @@ public class CalendarRenderer {
         }
     }
 
+    /**
+     * 点击某一天时刷新这一天的状态
+     *
+     * @return void
+     */
     public void onClickDate(int col, int row) {
         if (col >= Const.TOTAL_COL || row >= Const.TOTAL_ROW)
             return;

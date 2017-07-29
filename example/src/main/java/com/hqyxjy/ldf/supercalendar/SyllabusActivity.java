@@ -55,7 +55,7 @@ public class SyllabusActivity extends AppCompatActivity {
         content = (CoordinatorLayout) findViewById(R.id.content);
         monthPager = (MonthPager) findViewById(R.id.calendar_view);
         //此处强行setViewHeight，毕竟你知道你的日历牌的高度
-        monthPager.setViewheight(Utils.dpi2px(context , 270));
+        monthPager.setViewheight(Utils.dpi2px(context, 270));
         textViewYearDisplay = (TextView) findViewById(R.id.show_year_view);
         textViewMonthDisplay = (TextView) findViewById(R.id.show_month_view);
         backToday = (TextView) findViewById(R.id.back_today_button);
@@ -74,6 +74,7 @@ public class SyllabusActivity extends AppCompatActivity {
 
     /**
      * onWindowFocusChanged回调时，将当前月的种子日期修改为今天
+     *
      * @return void
      */
     @Override
@@ -87,6 +88,7 @@ public class SyllabusActivity extends AppCompatActivity {
 
     /**
      * 初始化对应功能的listener
+     *
      * @return void
      */
     private void initToolbarClickListener() {
@@ -130,6 +132,7 @@ public class SyllabusActivity extends AppCompatActivity {
 
     /**
      * 初始化currentDate
+     *
      * @return void
      */
     private void initCurrentDate() {
@@ -140,6 +143,7 @@ public class SyllabusActivity extends AppCompatActivity {
 
     /**
      * 初始化CustomDayView，并作为CalendarViewAdapter的参数传入
+     *
      * @return void
      */
     private void initCalendarView() {
@@ -156,6 +160,7 @@ public class SyllabusActivity extends AppCompatActivity {
 
     /**
      * 初始化标记数据，HashMap的形式，可自定义
+     *
      * @return void
      */
     private void initMarkData() {
