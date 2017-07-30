@@ -88,6 +88,12 @@ public class CalendarRenderer {
         }
     }
 
+    /**
+     * 刷新指定行的周数据
+     *
+     * @param rowIndex  参数月所在年
+     * @return void
+     */
     public void updateWeek(int rowIndex) {
         CalendarDate currentWeekLastDay;
         if (CalendarViewAdapter.weekArrayType == 1) {
@@ -120,6 +126,11 @@ public class CalendarRenderer {
         }
     }
 
+    /**
+     * 填充月数据
+     *
+     * @return void
+     */
     private void instantiateMonth() {
         int lastMonthDays = Utils.getMonthDays(seedDate.year, seedDate.month - 1);    // 上个月的天数
         int currentMonthDays = Utils.getMonthDays(seedDate.year, seedDate.month);    // 当前月的天数
@@ -134,6 +145,11 @@ public class CalendarRenderer {
         }
     }
 
+    /**
+     * 填充月中周数据
+     *
+     * @return void
+     */
     private int fillWeek(int lastMonthDays,
                          int currentMonthDays,
                          int firstDayWeek,
@@ -217,6 +233,11 @@ public class CalendarRenderer {
         }
     }
 
+    /**
+     * 根据种子日期孵化出本日历牌的数据
+     *
+     * @return void
+     */
     public void showDate(CalendarDate seedDate) {
         if (seedDate != null) {
             this.seedDate = seedDate;

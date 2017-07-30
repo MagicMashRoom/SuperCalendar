@@ -33,7 +33,7 @@ public class CalendarDate implements Serializable {
     }
 
     /**
-     * 点击某一天时刷新这一天的状态
+     * 通过修改当前Date对象的天数返回一个修改后的Date
      *
      * @return CalendarDate 修改后的日期
      */
@@ -56,6 +56,11 @@ public class CalendarDate implements Serializable {
         return modifyDate;
     }
 
+    /**
+     * 通过修改当前Date对象的所在周返回一个修改后的Date
+     *
+     * @return CalendarDate 修改后的日期
+     */
     public CalendarDate modifyWeek(int offset) {
         CalendarDate result = new CalendarDate();
         Calendar c = Calendar.getInstance();
@@ -69,6 +74,11 @@ public class CalendarDate implements Serializable {
         return result;
     }
 
+    /**
+     * 通过修改当前Date对象的所在月返回一个修改后的Date
+     *
+     * @return CalendarDate 修改后的日期
+     */
     public CalendarDate modifyMonth(int offset) {
         CalendarDate result = new CalendarDate();
         int addToMonth = this.month + offset;
