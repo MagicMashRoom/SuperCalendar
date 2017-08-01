@@ -18,6 +18,7 @@ public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<RecyclerVie
     private int initOffset = -1;
     private int minOffset = -1;
     private Context context;
+    private boolean initiated = false;
 
     public RecyclerViewBehavior(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -28,16 +29,26 @@ public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<RecyclerVie
     public boolean onLayoutChild(CoordinatorLayout parent, RecyclerView child, int layoutDirection) {
         parent.onLayoutChild(child, layoutDirection);
         MonthPager monthPager = getMonthPager(parent);
-        initOffset = monthPager.getViewHeight();
-        saveTop(initOffset);
-        child.offsetTopAndBottom(Utils.loadTop());
-        minOffset = getMonthPager(parent).getCellHeight();
+        initMinOffsetAndInitOffset(parent, child, monthPager);
         return true;
+    }
+
+    private void initMinOffsetAndInitOffset(CoordinatorLayout parent,
+                                            RecyclerView child,
+                                            MonthPager monthPager) {
+        if(!initiated) {
+            initOffset = monthPager.getViewHeight();
+            saveTop(initOffset);
+            child.offsetTopAndBottom(Utils.loadTop());
+            minOffset = getMonthPager(parent).getCellHeight();
+            initiated = true;
+        }
     }
 
     @Override
     public boolean onStartNestedScroll(CoordinatorLayout coordinatorLayout, RecyclerView child,
                                        View directTargetChild, View target, int nestedScrollAxes) {
+        Log.e("ldf","onStartNestedScroll");
         LinearLayoutManager linearLayoutManager = (LinearLayoutManager) child.getLayoutManager();
         if (linearLayoutManager.findFirstCompletelyVisibleItemPosition() > 0) {
             return false;
@@ -59,6 +70,7 @@ public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<RecyclerVie
     @Override
     public void onNestedPreScroll(CoordinatorLayout coordinatorLayout, RecyclerView child,
                                   View target, int dx, int dy, int[] consumed) {
+        Log.e("ldf","onNestedPreScroll");
         super.onNestedPreScroll(coordinatorLayout, child, target, dx, dy, consumed);
         if (child.getTop() <= initOffset
                 && child.getTop() >= getMonthPager(coordinatorLayout).getCellHeight()) {
@@ -71,6 +83,7 @@ public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<RecyclerVie
 
     @Override
     public void onStopNestedScroll(final CoordinatorLayout parent, final RecyclerView child, View target) {
+        Log.e("ldf","onStopNestedScroll");
         super.onStopNestedScroll(parent, child, target);
         MonthPager monthPager = (MonthPager) parent.getChildAt(0);
         monthPager.setScrollable(true);

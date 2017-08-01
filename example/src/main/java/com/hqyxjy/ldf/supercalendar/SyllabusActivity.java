@@ -65,7 +65,8 @@ public class SyllabusActivity extends AppCompatActivity {
         lastMonthBtn = (TextView) findViewById(R.id.last_month);
         rvToDoList = (RecyclerView) findViewById(R.id.list);
         rvToDoList.setHasFixedSize(true);
-        rvToDoList.setLayoutManager(new LinearLayoutManager(this));//这里用线性显示 类似于listview
+        //这里用线性显示 类似于listview
+        rvToDoList.setLayoutManager(new LinearLayoutManager(this));
         rvToDoList.setAdapter(new ExampleAdapter(this));
         initCurrentDate();
         initCalendarView();
