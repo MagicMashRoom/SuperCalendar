@@ -36,13 +36,17 @@ public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<RecyclerVie
     private void initMinOffsetAndInitOffset(CoordinatorLayout parent,
                                             RecyclerView child,
                                             MonthPager monthPager) {
+        if (monthPager.getBottom() > 0 && initOffset == -1) {
+            initOffset = monthPager.getViewHeight();
+            saveTop(initOffset);
+        }
         if(!initiated) {
             initOffset = monthPager.getViewHeight();
             saveTop(initOffset);
-            child.offsetTopAndBottom(Utils.loadTop());
-            minOffset = getMonthPager(parent).getCellHeight();
             initiated = true;
         }
+        child.offsetTopAndBottom(Utils.loadTop());
+        minOffset = getMonthPager(parent).getCellHeight();
     }
 
     @Override
