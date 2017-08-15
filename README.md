@@ -1,5 +1,6 @@
 # SuperCalendar
 ## ChangeLog
+* 发布1.4稳定版
 * 清除了dev污染
 * 添加手动切换上一月下一月功能
 * 解决神奇的日历尺寸问题，确保日历尺寸正确
@@ -203,7 +204,7 @@ Step 2. Add the dependency
 
 ```groovy
 	dependencies {
-	        compile 'com.github.MagicMashRoom:SuperCalendar:v1.3.1'
+	        compile 'com.github.MagicMashRoom:SuperCalendar:v1.4'
 	}
 
 ```
