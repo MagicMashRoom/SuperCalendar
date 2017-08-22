@@ -1,8 +1,9 @@
 # SuperCalendar
 ## ChangeLog
+* 发布1.4稳定版
+* 清除了dev污染
 * 添加手动切换上一月下一月功能
 * 解决神奇的日历尺寸问题，确保日历尺寸正确
-
 ## 简介
 * [可能是第十好的Android开源日历](http://www.jianshu.com/p/8e3fc46e5a80)
 * 博主现在工作在一家教育公司，最近公司的产品狗扔过来一个需求，说要做一个可以周月切换的课表，可以展示用户在某一天的上课安排。接到这个任务之后我研究了很多的日历控件，并且抽出了一个calenderlib。先看一下最后的项目中的效果：
@@ -203,7 +204,7 @@ Step 2. Add the dependency
 
 ```groovy
 	dependencies {
-	        compile 'com.github.MagicMashRoom:SuperCalendar:v1.3.1'
+	        compile 'com.github.MagicMashRoom:SuperCalendar:v1.4'
 	}
 
 ```
