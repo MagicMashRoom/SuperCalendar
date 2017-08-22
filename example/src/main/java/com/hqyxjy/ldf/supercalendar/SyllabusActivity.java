@@ -239,6 +239,8 @@ public class SyllabusActivity extends AppCompatActivity {
     private void refreshMonthPager() {
         CalendarDate today = new CalendarDate();
         calendarAdapter.notifyDataChanged(today);
+        textViewYearDisplay.setText(today.getYear() + "年");
+        textViewMonthDisplay.setText(today.getMonth() + "");
     }
 
     private void refreshSelectBackground() {
