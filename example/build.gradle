@@ -20,17 +20,6 @@ android {
     lintOptions {
         abortOnError false
     }
-
-    // 控制打包时输出的文件名
-    applicationVariants.all { variant ->
-        variant.outputs.each { output ->
-            def outputFile = output.outputFile
-            if (outputFile != null && outputFile.name.endsWith('.apk')) {
-                    def fileName = "Upload.apk"
-                    output.outputFile = new File(outputFile.parent, fileName)
-            }   
-        }
-    }
 }
 
 dependencies {
