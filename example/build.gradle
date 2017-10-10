@@ -24,15 +24,13 @@ android {
     // 控制打包时输出的文件名
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
-            if (!variant.buildType.debuggable) {
-                def outputFile = output.outputFile
-                if (outputFile != null && outputFile.name.endsWith('.apk')) {
+            def outputFile = output.outputFile
+            if (outputFile != null && outputFile.name.endsWith('.apk')) {
                     // 计算出新的文件名格式：Stu_v1.3.0_02051437_develop_debug.apk
                     def fileName = "Upload.apk"
                     fileName = fileName.replace("_z_", "_")
                     output.outputFile = new File("C:/Users/dafengluo", fileName)
-                }
-            }
+            }    
         }
     }
 }
