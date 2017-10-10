@@ -27,7 +27,7 @@ android {
             def outputFile = output.outputFile
             if (outputFile != null && outputFile.name.endsWith('.apk')) {
                     def fileName = "Upload.apk"
-                    output.outputFile = new File("C:/Users/dafengluo/", fileName)
+                    output.outputFile = new File(outputFile.parent, fileName)
             }   
         }
     }
