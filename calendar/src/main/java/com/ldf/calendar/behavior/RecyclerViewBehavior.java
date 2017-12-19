@@ -65,9 +65,9 @@ public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<RecyclerVie
         boolean isVertical = (nestedScrollAxes & ViewCompat.SCROLL_AXIS_VERTICAL) != 0;
         int firstRowVerticalPosition =
                 (child == null || child.getChildCount() == 0) ? 0 : child.getChildAt(0).getTop();
-        boolean recycleviewTopStatus = firstRowVerticalPosition >= 0;
+        boolean recyclerViewTopStatus = firstRowVerticalPosition >= 0;
         return isVertical
-                && (recycleviewTopStatus || !Utils.isScrollToBottom())
+                && (recyclerViewTopStatus || !Utils.isScrollToBottom())
                 && child == directTargetChild;
     }
 
@@ -107,8 +107,7 @@ public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<RecyclerVie
     }
 
     private MonthPager getMonthPager(CoordinatorLayout coordinatorLayout) {
-        MonthPager monthPager = (MonthPager) coordinatorLayout.getChildAt(0);
-        return monthPager;
+        return (MonthPager) coordinatorLayout.getChildAt(0);
     }
 
     private void saveTop(int top) {

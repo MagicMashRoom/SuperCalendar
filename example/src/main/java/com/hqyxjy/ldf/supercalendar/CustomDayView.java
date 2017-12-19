@@ -1,5 +1,6 @@
 package com.hqyxjy.ldf.supercalendar;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.ldf.calendar.view.DayView;
  * Created by ldf on 17/6/26.
  */
 
+@SuppressLint("ViewConstructor")
 public class CustomDayView extends DayView {
 
     private TextView dateTv;

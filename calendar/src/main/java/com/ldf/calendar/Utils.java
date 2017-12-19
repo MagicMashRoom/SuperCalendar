@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.Scroller;
 
+import com.ldf.calendar.component.CalendarAttr;
 import com.ldf.calendar.model.CalendarDate;
 import com.ldf.calendar.view.MonthPager;
 
@@ -80,11 +81,11 @@ public final class Utils {
      * @param type  周排列方式 0代表周一作为本周的第一天， 2代表周日作为本周的第一天
      * @return int 本月第一天在其周的位置
      */
-    public static int getFirstDayWeekPosition(int year, int month, int type) {
+    public static int getFirstDayWeekPosition(int year, int month, CalendarAttr.WeekArrayType type) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(getDateFromString(year, month));
         int week_index = cal.get(Calendar.DAY_OF_WEEK) - 1;
-        if (type == 1) {
+        if (type == CalendarAttr.WeekArrayType.Sunday) {
             return week_index;
         } else {
             week_index = cal.get(Calendar.DAY_OF_WEEK) + 5;
@@ -298,17 +299,6 @@ public final class Utils {
                     saveTop(child.getTop());
                     parent.dispatchDependentViewsChanged(child);
                     ViewCompat.postOnAnimation(child, this);
-                } else {
-                    MonthPager monthPager = (MonthPager) parent.getChildAt(0);
-                    if (monthPager.getTop() < 0) {
-                        if (monthPager.getTop() + monthPager.getTopMovableDistance() >= 0) {
-                            monthPager.offsetTopAndBottom(-monthPager.getTop()
-                                    - monthPager.getTopMovableDistance());
-                        } else {
-                            monthPager.offsetTopAndBottom(-monthPager.getTop());
-                        }
-                        parent.dispatchDependentViewsChanged(child);
-                    }
                 }
             }
         });

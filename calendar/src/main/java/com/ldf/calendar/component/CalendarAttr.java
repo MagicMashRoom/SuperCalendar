@@ -12,10 +12,10 @@ public class CalendarAttr {
     private WeekArrayType weekArrayType;
 
     /**
-     * 日历才去周布局或者月布局:<br/>
-     * {@link CalendarAttr.CalendayType} 布局类型<br/>
+     * 日历周布局或者月布局:<br/>
+     * {@link CalendarType} 布局类型<br/>
      */
-    private CalendayType calendarType;
+    private CalendarType calendarType;
 
     /**
      * 日期格子高度
@@ -35,11 +35,11 @@ public class CalendarAttr {
         this.weekArrayType = weekArrayType;
     }
 
-    public CalendayType getCalendarType() {
+    public CalendarType getCalendarType() {
         return calendarType;
     }
 
-    public void setCalendarType(CalendayType calendarType) {
+    public void setCalendarType(CalendarType calendarType) {
         this.calendarType = calendarType;
     }
 
@@ -63,7 +63,7 @@ public class CalendarAttr {
         Sunday, Monday
     }
 
-    public enum CalendayType {
+    public enum CalendarType {
         WEEK, MONTH
     }
 }

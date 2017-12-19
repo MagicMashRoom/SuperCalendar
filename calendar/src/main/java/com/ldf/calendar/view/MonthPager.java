@@ -19,7 +19,6 @@ public class MonthPager extends ViewPager {
     private int viewHeight;
     private int rowIndex = 6;
 
-    private ViewPager.OnPageChangeListener viewPageChangeListener;
     private OnPageChangeListener monthPageChangeListener;
     private boolean pageChangeByGesture = false;
     private boolean hasPageChangeListener = false;
@@ -36,7 +35,7 @@ public class MonthPager extends ViewPager {
     }
 
     private void init() {
-        viewPageChangeListener = new ViewPager.OnPageChangeListener() {
+        ViewPager.OnPageChangeListener viewPageChangeListener = new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 if (monthPageChangeListener != null) {
@@ -105,7 +104,7 @@ public class MonthPager extends ViewPager {
     public void selectOtherMonth(int offset) {
         setCurrentItem(currentPosition + offset);
         CalendarViewAdapter calendarViewAdapter = (CalendarViewAdapter) getAdapter();
-        calendarViewAdapter.notifyDataChanged(CalendarViewAdapter.loadDate());
+        calendarViewAdapter.notifyDataChanged(CalendarViewAdapter.loadSelectedDate());
     }
 
     public int getPageScrollState() {
@@ -122,6 +121,9 @@ public class MonthPager extends ViewPager {
 
     public int getTopMovableDistance() {
         CalendarViewAdapter calendarViewAdapter = (CalendarViewAdapter) getAdapter();
+        if(calendarViewAdapter == null) {
+            return cellHeight;
+        }
         rowIndex = calendarViewAdapter.getPagers().get(currentPosition % 3).getSelectedRowIndex();
         return cellHeight * rowIndex;
     }
@@ -130,7 +132,7 @@ public class MonthPager extends ViewPager {
         return cellHeight;
     }
 
-    public void setViewheight(int viewHeight) {
+    public void setViewHeight(int viewHeight) {
         cellHeight = viewHeight / 6;
         this.viewHeight = viewHeight;
     }

@@ -1,5 +1,6 @@
 package com.ldf.calendar.view;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
@@ -14,11 +15,12 @@ import com.ldf.calendar.interf.OnSelectDateListener;
 import com.ldf.calendar.model.CalendarDate;
 import com.ldf.calendar.Utils;
 
+@SuppressLint("ViewConstructor")
 public class Calendar extends View {
     /**
      * 日历列数
      */
-    private CalendarAttr.CalendayType calendarType;
+    private CalendarAttr.CalendarType calendarType;
     private int cellHeight; // 单元格高度
     private int cellWidth; // 单元格宽度
 
@@ -30,9 +32,12 @@ public class Calendar extends View {
     private OnAdapterSelectListener onAdapterSelectListener;
     private float touchSlop;
 
-    public Calendar(Context context, OnSelectDateListener onSelectDateListener) {
+    public Calendar(Context context,
+                    OnSelectDateListener onSelectDateListener,
+                    CalendarAttr attr) {
         super(context);
         this.onSelectDateListener = onSelectDateListener;
+        calendarAttr = attr;
         init(context);
     }
 
@@ -43,9 +48,6 @@ public class Calendar extends View {
     }
 
     private void initAttrAndRenderer() {
-        calendarAttr = new CalendarAttr();
-        calendarAttr.setWeekArrayType(CalendarAttr.WeekArrayType.Monday);
-        calendarAttr.setCalendarType(CalendarAttr.CalendayType.MONTH);
         renderer = new CalendarRenderer(this, calendarAttr, context);
         renderer.setOnSelectDateListener(onSelectDateListener);
     }
@@ -95,11 +97,11 @@ public class Calendar extends View {
         return true;
     }
 
-    public CalendarAttr.CalendayType getCalendarType() {
+    public CalendarAttr.CalendarType getCalendarType() {
         return calendarAttr.getCalendarType();
     }
 
-    public void switchCalendarType(CalendarAttr.CalendayType calendarType) {
+    public void switchCalendarType(CalendarAttr.CalendarType calendarType) {
         calendarAttr.setCalendarType(calendarType);
         renderer.setAttr(calendarAttr);
     }
