@@ -205,7 +205,7 @@ Step 2. Add the dependency
 
 ```groovy
 	dependencies {
-	        compile 'com.github.MagicMashRoom:SuperCalendar:v1.5.0'
+	        compile 'com.github.MagicMashRoom:SuperCalendar:v1.5'
 	}
 
 ```
