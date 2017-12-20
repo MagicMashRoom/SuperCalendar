@@ -1,6 +1,6 @@
 # SuperCalendar
 ## ChangeLog
-* 发布1.5.0 修改了一些BUG
+* 发布1.5 修改了一些BUG
 * 发布1.4稳定版
 * 清除了dev污染
 * 添加手动切换上一月下一月功能
