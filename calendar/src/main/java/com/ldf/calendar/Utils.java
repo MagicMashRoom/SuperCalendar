@@ -259,7 +259,7 @@ public final class Utils {
     /**
      * 判断上一次滑动改变周月日历是向下滑还是向上滑 向下滑表示切换为月日历模式 向上滑表示切换为周日历模式
      *
-     * @return boolean 是否是在向下滑动
+     * @return boolean 是否是在向下滑动。(true: 已经收缩; false: 已经打开）
      */
     public static boolean isScrollToBottom() {
         return customScrollToBottom;
