@@ -16,7 +16,6 @@ import android.widget.Scroller;
 
 import com.ldf.calendar.component.CalendarAttr;
 import com.ldf.calendar.model.CalendarDate;
-import com.ldf.calendar.view.MonthPager;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -94,7 +93,6 @@ public final class Utils {
             }
         }
         return week_index;
-
     }
 
     /**

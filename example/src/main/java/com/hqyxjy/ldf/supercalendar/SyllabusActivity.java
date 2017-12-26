@@ -155,6 +155,7 @@ public class SyllabusActivity extends AppCompatActivity {
                 context,
                 onSelectDateListener,
                 CalendarAttr.CalendarType.MONTH,
+                CalendarAttr.WeekArrayType.Sunday,
                 customDayView);
         calendarAdapter.setOnCalendarTypeChangedListener(new CalendarViewAdapter.OnCalendarTypeChanged() {
             @Override
@@ -162,7 +163,6 @@ public class SyllabusActivity extends AppCompatActivity {
                 rvToDoList.scrollToPosition(0);
             }
         });
-        calendarAdapter.setWeekArrayType(CalendarAttr.WeekArrayType.Sunday);
         initMarkData();
         initMonthPager();
     }

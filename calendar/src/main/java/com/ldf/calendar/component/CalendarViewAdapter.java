@@ -33,9 +33,11 @@ public class CalendarViewAdapter extends PagerAdapter {
     public CalendarViewAdapter(Context context,
                                OnSelectDateListener onSelectDateListener,
                                CalendarAttr.CalendarType calendarType,
+                               CalendarAttr.WeekArrayType weekArrayType,
                                IDayRenderer dayView) {
         super();
         this.calendarType = calendarType;
+        this.weekArrayType = weekArrayType;
         init(context, onSelectDateListener);
         setCustomDayRenderer(dayView);
     }
@@ -302,9 +304,5 @@ public class CalendarViewAdapter extends PagerAdapter {
 
     public CalendarAttr.WeekArrayType getWeekArrayType() {
         return weekArrayType;
-    }
-
-    public void setWeekArrayType(CalendarAttr.WeekArrayType weekArrayType) {
-        this.weekArrayType = weekArrayType;
     }
 }
