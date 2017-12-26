@@ -87,12 +87,12 @@ RecyclerView的layout_behavior为com.ldf.calendar.behavior.RecyclerViewBehavior
 
 
 ```java
-	CustomDayView customDayView = new CustomDayView(
-        	context , R.layout.custom_day);
-	calendarAdapter = new CalendarViewAdapter(
-                context ,
-                onSelectDateListener ,
-                Calendar.MONTH_TYPE ,
+	CustomDayView customDayView = new CustomDayView(context, R.layout.custom_day);
+        calendarAdapter = new CalendarViewAdapter(
+                context,
+                onSelectDateListener,
+                CalendarAttr.CalendarType.MONTH,
+                CalendarAttr.WeekArrayType.Monday,
                 customDayView);
 ```
 #### 初始化View
@@ -109,12 +109,12 @@ RecyclerView的layout_behavior为com.ldf.calendar.behavior.RecyclerViewBehavior
     
     private void initCalendarView() {
         initListener();
-        CustomDayView customDayView = new CustomDayView(
-        	context , R.layout.custom_day);
-		calendarAdapter = new CalendarViewAdapter(
-                context ,
-                onSelectDateListener ,
-                Calendar.MONTH_TYPE ,
+        CustomDayView customDayView = new CustomDayView(context, R.layout.custom_day);
+        calendarAdapter = new CalendarViewAdapter(
+                context,
+                onSelectDateListener,
+                CalendarAttr.CalendarType.MONTH,
+                CalendarAttr.WeekArrayType.Monday,
                 customDayView);
         initMarkData();
         initMonthPager();
