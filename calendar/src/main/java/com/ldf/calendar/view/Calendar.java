@@ -147,6 +147,14 @@ public class Calendar extends View {
         return renderer.getSeedDate();
     }
 
+    public CalendarDate getFirstDate() {
+        return renderer.getFirstDate();
+    }
+
+    public CalendarDate getLastDate() {
+        return renderer.getLastDate();
+    }
+
     public void setDayRenderer(IDayRenderer dayRenderer) {
         renderer.setDayRenderer(dayRenderer);
     }

@@ -146,6 +146,18 @@ public class CalendarRenderer {
         }
     }
 
+    public CalendarDate getFirstDate() {
+        Week week = weeks[0];
+        Day day = week.days[0];
+        return day.getDate();
+    }
+
+    public CalendarDate getLastDate() {
+        Week week = weeks[weeks.length - 1];
+        Day day = week.days[week.days.length - 1];
+        return day.getDate();
+    }
+
     /**
      * 填充月中周数据
      *
