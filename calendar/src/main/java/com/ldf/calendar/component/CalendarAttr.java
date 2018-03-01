@@ -60,7 +60,7 @@ public class CalendarAttr {
     }
 
     public enum WeekArrayType {
-        Sunday, Monday
+        Monday, Sunday
     }
 
     public enum CalendarType {

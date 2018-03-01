@@ -96,7 +96,7 @@ public class CalendarRenderer {
      */
     public void updateWeek(int rowIndex) {
         CalendarDate currentWeekLastDay;
-        if (attr.getWeekArrayType() == CalendarAttr.WeekArrayType.Sunday) {
+        if (attr.getWeekArrayType() == CalendarAttr.WeekArrayType.Monday) {
             currentWeekLastDay = Utils.getSaturday(seedDate);
         } else {
             currentWeekLastDay = Utils.getSunday(seedDate);

@@ -12,7 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ldf.calendar.Utils;
 import com.ldf.calendar.component.CalendarAttr;
@@ -174,8 +173,8 @@ public class SyllabusActivity extends AppCompatActivity {
      */
     private void initMarkData() {
         HashMap<String, String> markData = new HashMap<>();
-        markData.put("2017-8-9", "1");
-        markData.put("2017-7-9", "0");
+        markData.put("2018-3-3", "1");
+        markData.put("2018-3-2", "0");
         markData.put("2017-6-9", "1");
         markData.put("2017-6-10", "0");
         calendarAdapter.setMarkData(markData);

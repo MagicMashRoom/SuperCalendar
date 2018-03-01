@@ -86,7 +86,7 @@ public class CalendarViewAdapter extends PagerAdapter {
             calendar.showDate(current);
         } else {
             CalendarDate current = seedDate.modifyWeek(position - MonthPager.CURRENT_DAY_INDEX);
-            if (weekArrayType == CalendarAttr.WeekArrayType.Sunday) {
+            if (weekArrayType == CalendarAttr.WeekArrayType.Monday) {
                 calendar.showDate(Utils.getSaturday(current));
             } else {
                 calendar.showDate(Utils.getSunday(current));
@@ -197,7 +197,7 @@ public class CalendarViewAdapter extends PagerAdapter {
             Calendar v2 = calendars.get((currentPosition - 1) % 3);
             v2.switchCalendarType(CalendarAttr.CalendarType.WEEK);
             CalendarDate last = seedDate.modifyWeek(-1);
-            if (weekArrayType == CalendarAttr.WeekArrayType.Sunday) {
+            if (weekArrayType == CalendarAttr.WeekArrayType.Monday) {
                 v2.showDate(Utils.getSaturday(last));
             } else {
                 v2.showDate(Utils.getSunday(last));
@@ -207,7 +207,7 @@ public class CalendarViewAdapter extends PagerAdapter {
             Calendar v3 = calendars.get((currentPosition + 1) % 3);
             v3.switchCalendarType(CalendarAttr.CalendarType.WEEK);
             CalendarDate next = seedDate.modifyWeek(1);
-            if (weekArrayType == CalendarAttr.WeekArrayType.Sunday) {
+            if (weekArrayType == CalendarAttr.WeekArrayType.Monday) {
                 v3.showDate(Utils.getSaturday(next));
             } else {
                 v3.showDate(Utils.getSunday(next));
@@ -240,7 +240,7 @@ public class CalendarViewAdapter extends PagerAdapter {
 
             Calendar v2 = calendars.get((currentPosition - 1) % 3);
             CalendarDate last = seedDate.modifyWeek(-1);
-            if (weekArrayType == CalendarAttr.WeekArrayType.Sunday) {
+            if (weekArrayType == CalendarAttr.WeekArrayType.Monday) {
                 v2.showDate(Utils.getSaturday(last));
             } else {
                 v2.showDate(Utils.getSunday(last));
@@ -249,7 +249,7 @@ public class CalendarViewAdapter extends PagerAdapter {
 
             Calendar v3 = calendars.get((currentPosition + 1) % 3);
             CalendarDate next = seedDate.modifyWeek(1);
-            if (weekArrayType == CalendarAttr.WeekArrayType.Sunday) {
+            if (weekArrayType == CalendarAttr.WeekArrayType.Monday) {
                 v3.showDate(Utils.getSaturday(next));
             } else {
                 v3.showDate(Utils.getSunday(next));
