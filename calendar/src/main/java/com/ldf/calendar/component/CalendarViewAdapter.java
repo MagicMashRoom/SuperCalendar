@@ -129,6 +129,14 @@ public class CalendarViewAdapter extends PagerAdapter {
         return calendars;
     }
 
+    public CalendarDate getFirstVisibleDate() {
+        return calendars.get(currentPosition % 3).getFirstDate();
+    }
+
+    public CalendarDate getLastVisibleDate() {
+        return calendars.get(currentPosition % 3).getLastDate();
+    }
+
     public void cancelOtherSelectState() {
         for (int i = 0; i < calendars.size(); i++) {
             Calendar calendar = calendars.get(i);
