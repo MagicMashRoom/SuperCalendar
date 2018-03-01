@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import com.ldf.calendar.Utils;
 import com.ldf.calendar.component.State;
 import com.ldf.calendar.interf.IDayRenderer;
 import com.ldf.calendar.model.CalendarDate;
@@ -72,5 +73,11 @@ public abstract class DayView extends RelativeLayout implements IDayRenderer {
         int moveX = (canvasWidth - viewWidth) / 2;
         dx = day.getPosCol() * canvasWidth + moveX;
         return dx;
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        Utils.cleanMarkData();
     }
 }

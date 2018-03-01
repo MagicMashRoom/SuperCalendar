@@ -90,6 +90,16 @@ public class SyllabusActivity extends AppCompatActivity {
         }
     }
 
+    /*
+    * 如果你想以周模式启动你的日历，请在onResume是调用
+    * Utils.scrollTo(content, rvToDoList, monthPager.getCellHeight(), 200);
+    * calendarAdapter.switchToWeek(monthPager.getRowIndex());
+    * */
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
     /**
      * 初始化对应功能的listener
      *
@@ -154,8 +164,7 @@ public class SyllabusActivity extends AppCompatActivity {
         calendarAdapter = new CalendarViewAdapter(
                 context,
                 onSelectDateListener,
-                CalendarAttr.CalendarType.MONTH,
-                CalendarAttr.WeekArrayType.Sunday,
+                CalendarAttr.WeekArrayType.Monday,
                 customDayView);
         calendarAdapter.setOnCalendarTypeChangedListener(new CalendarViewAdapter.OnCalendarTypeChanged() {
             @Override

@@ -161,6 +161,10 @@ public final class Utils {
         markData = data;
     }
 
+    public static void cleanMarkData(){
+        markData.clear();
+    }
+
     /**
      * 计算偏移距离
      *

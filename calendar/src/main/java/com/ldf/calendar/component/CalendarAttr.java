@@ -60,7 +60,8 @@ public class CalendarAttr {
     }
 
     public enum WeekArrayType {
-        Sunday, Monday
+        /*周日作为本周的第一天*/Sunday,
+        /*周一作为本周的第一天*/Monday
     }
 
     public enum CalendarType {
