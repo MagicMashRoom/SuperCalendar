@@ -84,7 +84,7 @@ public final class Utils {
         Calendar cal = Calendar.getInstance();
         cal.setTime(getDateFromString(year, month));
         int week_index = cal.get(Calendar.DAY_OF_WEEK) - 1;
-        if (type == CalendarAttr.WeekArrayType.Sunday) {
+        if (type == CalendarAttr.WeekArrayType.Monday) {
             return week_index;
         } else {
             week_index = cal.get(Calendar.DAY_OF_WEEK) + 5;
