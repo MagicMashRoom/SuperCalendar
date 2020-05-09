@@ -9,9 +9,16 @@ import android.view.MotionEvent;
 
 import com.ldf.calendar.behavior.MonthPagerBehavior;
 import com.ldf.calendar.component.CalendarViewAdapter;
+import com.google.android.material.appbar.*;
+import com.ldf.calendar.interf.OnCalendarStateChangeListen;
 
 @CoordinatorLayout.DefaultBehavior(MonthPagerBehavior.class)
-public class MonthPager extends ViewPager {
+public class MonthPager extends ViewPager implements OnCalendarStateChangeListen
+{
+	
+	
+	
+	
     public static int CURRENT_DAY_INDEX = 1000;
 
     private int currentPosition = CURRENT_DAY_INDEX;
@@ -25,8 +32,27 @@ public class MonthPager extends ViewPager {
     private boolean scrollable = true;
     private int pageScrollState = ViewPager.SCROLL_STATE_IDLE;
 
+	
+	public OnCalendarStateChangeListen onCalendarListen;
+
+
+	public void setOnCalendarListen(OnCalendarStateChangeListen onCalendarListen){
+		this.onCalendarListen = onCalendarListen;
+	}
+	
+
+    @Override
+    public void onCalendarStateChange(boolean state) {
+        if( onCalendarListen != null){
+            onCalendarListen.onCalendarStateChange(state);
+        }
+    }
+
+	
+	
     public MonthPager(Context context) {
         this(context, null);
+		
     }
 
     public MonthPager(Context context, AttributeSet attrs) {
@@ -110,6 +136,7 @@ public class MonthPager extends ViewPager {
     public int getPageScrollState() {
         return pageScrollState;
     }
+
 
     public interface OnPageChangeListener {
         void onPageScrolled(int position, float positionOffset, int positionOffsetPixels);

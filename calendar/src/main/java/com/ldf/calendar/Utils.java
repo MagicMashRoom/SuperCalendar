@@ -10,6 +10,8 @@ import android.content.Context;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
+
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.Scroller;
@@ -288,6 +290,33 @@ public final class Utils {
      * @return void
      */
     public static void scrollTo(final CoordinatorLayout parent, final RecyclerView child, final int y, int duration) {
+        final Scroller scroller = new Scroller(parent.getContext());
+        scroller.startScroll(0, top, 0, y - top, duration);   //设置scroller的滚动偏移量
+        ViewCompat.postOnAnimation(child, new Runnable() {
+            @Override
+            public void run() {
+                //返回值为boolean，true说明滚动尚未完成，false说明滚动已经完成。
+                // 这是一个很重要的方法，通常放在View.computeScroll()中，用来判断是否滚动是否结束。
+                if (scroller.computeScrollOffset()) {
+                    int delta = scroller.getCurrY() - child.getTop();
+                    child.offsetTopAndBottom(delta);
+                    saveTop(child.getTop());
+                    parent.dispatchDependentViewsChanged(child);
+                    ViewCompat.postOnAnimation(child, this);
+                }
+            }
+        });
+    }
+
+
+    /**
+     *  用于ViewPager的适配
+     * @param parent
+     * @param child
+     * @param y
+     * @param duration
+     */
+    public static void scrollTo(final CoordinatorLayout parent, final ViewPager child, final int y, int duration) {
         final Scroller scroller = new Scroller(parent.getContext());
         scroller.startScroll(0, top, 0, y - top, duration);   //设置scroller的滚动偏移量
         ViewCompat.postOnAnimation(child, new Runnable() {
