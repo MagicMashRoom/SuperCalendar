@@ -1,5 +1,6 @@
 # SuperCalendar
 ## ChangeLog
+* 发布1.6.1androidx版
 * 发布1.6 稳定版
 * 发布1.5 修改了一些BUG
 * 发布1.4稳定版
