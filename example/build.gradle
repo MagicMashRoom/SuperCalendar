@@ -30,11 +30,11 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile fileTree(include: ['*.jar'], dir: 'libs', path: ':calendar')
     androidTestCompile('androidx.test.espresso:espresso-core:3.1.0', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'androidx.appcompat:appcompat:1.0.0'
-    testCompile 'junit:junit:4.12'
-    compile project(path: ':calendar')
+	//api 'androidx.recyclerview:Recyclerview1.1.0'
+	
 }

@@ -1,29 +1,42 @@
 package com.ldf.calendar.behavior;
 
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.ldf.calendar.Utils;
 import com.ldf.calendar.component.CalendarViewAdapter;
+import com.ldf.calendar.interf.OnCalendarStateChangeListen;
 import com.ldf.calendar.view.MonthPager;
-import androidx.viewpager.widget.*;
+import java.lang.reflect.*;
 
 /**
  * Created by ldf on 17/6/15.
  */
 
-public class MonthPagerBehavior extends CoordinatorLayout.Behavior<MonthPager> {
+/**
+ *  Modify by zzerX on 20/5/10.
+ *  <T extends ViewGroup & OnCalendarStateChangeListen>
+ *     用于规定与MothPager联动的View的类型{@link  LinkageViewBehavior},
+ *     使其可以使用RecyclerView ViewPager 等视作为联动
+ *
+ */
+
+public class MonthPagerBehavior<T extends View & OnCalendarStateChangeListen> extends CoordinatorLayout.Behavior<MonthPager> {
     private int top = 0;
     private int touchSlop = 1;
     private int offsetY = 0;
-	
+
 
     @Override
     public boolean layoutDependsOn(CoordinatorLayout parent, MonthPager child, View dependency) {
-        return dependency instanceof RecyclerView;
+		Type superclass = this.getClass();
+		//Type type = ((ParameterizedType) superclass).getActualTypeArguments()[0]; 
+		Log.v("type","泛型类型"  + superclass);
+        return dependency instanceof View;
     }
 
     @Override
@@ -65,10 +78,9 @@ public class MonthPagerBehavior extends CoordinatorLayout.Behavior<MonthPager> {
                         if (ev.getY() - downY + child.getCellHeight() >= child.getViewHeight()) {
                             //将要滑过头了
                             saveTop(child.getViewHeight());
-							//修改部分标记 : 原为recrycView
-                            Utils.scrollTo(parent, (ViewPager) parent.getChildAt(1), child.getViewHeight(), 10);
+                            Utils.scrollTo(parent, (T) parent.getChildAt(1), child.getViewHeight(), 10);
                             isVerticalScroll = false;
-							child.onCalendarStateChange(true);//回调日历状态改变
+                            child.onCalendarStateChange(true,OnCalendarStateChangeListen.MonthScrollFull);//回调日历状态改变
                         } else {
                             //正常下滑
                             saveTop((int) (child.getCellHeight() + ((ev.getY() - downY))));
@@ -84,17 +96,15 @@ public class MonthPagerBehavior extends CoordinatorLayout.Behavior<MonthPager> {
                         if (ev.getY() - downY + child.getViewHeight() <= child.getCellHeight()) {
                             //将要滑过头了
                             saveTop(child.getCellHeight());
-							//修改部分标记 : 原为recrycView
-                            Utils.scrollTo(parent, (ViewPager) parent.getChildAt(1), child.getCellHeight(), 10);
+                            Utils.scrollTo(parent, (T) parent.getChildAt(1), child.getCellHeight(), 10);
                             isVerticalScroll = false;
-				
-							child.onCalendarStateChange(false);//回调日历状态改变
+                            child.onCalendarStateChange(false,OnCalendarStateChangeListen.MonthScrollFull);//回调日历状态改变
                         } else {
                             //正常上滑
                             saveTop((int) (child.getViewHeight() + ((ev.getY() - downY))));
                             Utils.scroll(parent.getChildAt(1), (int) (lastY - ev.getY()),
                                     child.getCellHeight(), child.getViewHeight());
-									
+
                         }
                     }
 
@@ -113,13 +123,13 @@ public class MonthPagerBehavior extends CoordinatorLayout.Behavior<MonthPager> {
                         if (directionUpa) {
                             Utils.setScrollToBottom(true);
                             calendarViewAdapter.switchToWeek(child.getRowIndex());
-							//修改部分标记 : 原为recrycView
-                            Utils.scrollTo(parent, (ViewPager) parent.getChildAt(1), child.getCellHeight(), 300);
+                            Utils.scrollTo(parent, (T) parent.getChildAt(1), child.getCellHeight(), 300);
+                            child.onCalendarStateChange(false,OnCalendarStateChangeListen.MonthScrollNotFull);//回调日历状态改变
                         } else {
                             Utils.setScrollToBottom(false);
                             calendarViewAdapter.switchToMonth();
-							//修改部分标记 : 原为recrycView
-                            Utils.scrollTo(parent, (ViewPager) parent.getChildAt(1), child.getViewHeight(), 300);
+                            Utils.scrollTo(parent, (T) parent.getChildAt(1), child.getViewHeight(), 300);
+                            child.onCalendarStateChange(true,OnCalendarStateChangeListen.MonthScrollNotFull);//回调日历状态改变
                         }
                     }
 
@@ -169,7 +179,6 @@ public class MonthPagerBehavior extends CoordinatorLayout.Behavior<MonthPager> {
     @Override
     public boolean onDependentViewChanged(CoordinatorLayout parent, MonthPager child, View dependency) {
         CalendarViewAdapter calendarViewAdapter = (CalendarViewAdapter) child.getAdapter();
-        //dependency对其依赖的view(本例依赖的view是RecycleView)
         if (dependentViewTop != -1) {
             int dy = dependency.getTop() - dependentViewTop;
             int top = child.getTop();

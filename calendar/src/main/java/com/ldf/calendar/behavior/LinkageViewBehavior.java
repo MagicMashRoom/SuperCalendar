@@ -4,18 +4,18 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.ViewCompat;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.ldf.calendar.Utils;
-import com.ldf.calendar.view.LinkageViewPager;
+import com.ldf.calendar.interf.OnCalendarStateChangeListen;
 import com.ldf.calendar.view.MonthPager;
 
-public class ViewPagerBehavior extends CoordinatorLayout.Behavior<LinkageViewPager> {
+public  class LinkageViewBehavior<T extends View & OnCalendarStateChangeListen> extends CoordinatorLayout.Behavior<T> {
     private int initOffset = -1;
     private int olderChildTop = -1;
     private int minOffset = -1;
@@ -24,18 +24,13 @@ public class ViewPagerBehavior extends CoordinatorLayout.Behavior<LinkageViewPag
     boolean hidingTop = false;
     boolean showingTop = false;
 
-    public ViewPagerBehavior(Context context, AttributeSet attrs) {
+    public LinkageViewBehavior(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
     }
 
     @Override
-    public boolean layoutDependsOn(CoordinatorLayout parent, LinkageViewPager child, View dependency) {
-        return dependency instanceof LinkageViewPager;
-    }
-
-    @Override
-    public boolean onLayoutChild(CoordinatorLayout parent, LinkageViewPager child, int layoutDirection) {
+    public boolean onLayoutChild(CoordinatorLayout parent, T child, int layoutDirection) {
         parent.onLayoutChild(child, layoutDirection);
         MonthPager monthPager = getMonthPager(parent);
         initMinOffsetAndInitOffset(parent, child, monthPager);
@@ -43,7 +38,7 @@ public class ViewPagerBehavior extends CoordinatorLayout.Behavior<LinkageViewPag
     }
 
     private void initMinOffsetAndInitOffset(CoordinatorLayout parent,
-                                            ViewPager child,
+                                            T child,
                                             MonthPager monthPager) {
         if (monthPager.getBottom() > 0 && initOffset == -1) {
             initOffset = monthPager.getViewHeight();
@@ -59,7 +54,7 @@ public class ViewPagerBehavior extends CoordinatorLayout.Behavior<LinkageViewPag
     }
 
     @Override
-    public boolean onStartNestedScroll(CoordinatorLayout coordinatorLayout, LinkageViewPager child,
+    public boolean onStartNestedScroll(CoordinatorLayout coordinatorLayout, T child,
                                        View directTargetChild, View target, int nestedScrollAxes) {
         Log.v("ldf", "onStartNestedScroll");
 
@@ -71,7 +66,7 @@ public class ViewPagerBehavior extends CoordinatorLayout.Behavior<LinkageViewPag
     }
 
     @Override
-    public void onNestedPreScroll(CoordinatorLayout coordinatorLayout, LinkageViewPager child,
+    public void onNestedPreScroll(CoordinatorLayout coordinatorLayout, T child,
                                   View target, int dx, int dy, int[] consumed) {
         Log.v("ldf", "onNestedPreScroll");
         super.onNestedPreScroll(coordinatorLayout, child, target, dx, dy, consumed);
@@ -100,19 +95,17 @@ public class ViewPagerBehavior extends CoordinatorLayout.Behavior<LinkageViewPag
         //z* 利用偏移量判断日历的展开与收缩状态
         if (child.getTop() == initOffset && child.getTop() != olderChildTop) {
             Log.e("ldf", "展开状态");
-            child.onCalendarStateChange(true);
+             child.onCalendarStateChange(true,OnCalendarStateChangeListen.LinkageScrollFull);
         } else if (child.getTop() == getMonthPager(coordinatorLayout).getCellHeight() && child.getTop() != olderChildTop) {
             Log.e("ldf", "收缩状态");
-            child.onCalendarStateChange(false);
+		   child.onCalendarStateChange(false,OnCalendarStateChangeListen.LinkageScrollFull);
         }
         olderChildTop = child.getTop();
-
-        //  Log.v("ldf","偏移量：" + initOffset + " child.getTop: " + child.getTop() + "month height:" + getMonthPager(coordinatorLayout).getCellHeight());
     }
 
 
     @Override
-    public void onStopNestedScroll(final CoordinatorLayout parent, final LinkageViewPager child, View target) {
+    public void onStopNestedScroll(final CoordinatorLayout parent, final T child, View target) {
         Log.v("ldf", "onStopNestedScroll");
         super.onStopNestedScroll(parent, child, target);
         MonthPager monthPager = (MonthPager) parent.getChildAt(0);
@@ -120,26 +113,30 @@ public class ViewPagerBehavior extends CoordinatorLayout.Behavior<LinkageViewPag
         if (!Utils.isScrollToBottom()) {
             if (initOffset - Utils.loadTop() > Utils.getTouchSlop(context) && hidingTop) {
                 Utils.scrollTo(parent, child, getMonthPager(parent).getCellHeight(), 500);
+                   child.onCalendarStateChange(true,OnCalendarStateChangeListen.LinkageScrollNotFull);//回调日历状态改变
             } else {
                 Utils.scrollTo(parent, child, getMonthPager(parent).getViewHeight(), 150);
+			     child.onCalendarStateChange(false,OnCalendarStateChangeListen.LinkageScrollNotFull);//回调日历状态改变
             }
         } else {
             if (Utils.loadTop() - minOffset > Utils.getTouchSlop(context) && showingTop) {
                 Utils.scrollTo(parent, child, getMonthPager(parent).getViewHeight(), 500);
+                child.onCalendarStateChange(true,OnCalendarStateChangeListen.LinkageScrollNotFull);//回调日历状态改变
             } else {
                 Utils.scrollTo(parent, child, getMonthPager(parent).getCellHeight(), 150);
+               child.onCalendarStateChange(false,OnCalendarStateChangeListen.LinkageScrollNotFull);//回调日历状态改变
             }
         }
     }
 
     @Override
-    public boolean onNestedFling(CoordinatorLayout coordinatorLayout, LinkageViewPager child, View target, float velocityX, float velocityY, boolean consumed) {
+    public boolean onNestedFling(CoordinatorLayout coordinatorLayout, T child, View target, float velocityX, float velocityY, boolean consumed) {
         Log.d("ldf", "onNestedFling: velocityY: " + velocityY);
         return super.onNestedFling(coordinatorLayout, child, target, velocityX, velocityY, consumed);
     }
 
     @Override
-    public boolean onNestedPreFling(CoordinatorLayout coordinatorLayout, LinkageViewPager child, View target, float velocityX, float velocityY) {
+    public boolean onNestedPreFling(CoordinatorLayout coordinatorLayout, T child, View target, float velocityX, float velocityY) {
         // 日历隐藏和展示过程，不允许RecyclerView进行fling
         if (hidingTop || showingTop) {
             return true;

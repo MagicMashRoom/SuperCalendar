@@ -42,9 +42,9 @@ public class MonthPager extends ViewPager implements OnCalendarStateChangeListen
 	
 
     @Override
-    public void onCalendarStateChange(boolean state) {
+    public void onCalendarStateChange(boolean state,int type) {
         if( onCalendarListen != null){
-            onCalendarListen.onCalendarStateChange(state);
+            onCalendarListen.onCalendarStateChange(state,type);
         }
     }
 

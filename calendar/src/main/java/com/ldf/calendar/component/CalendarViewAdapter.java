@@ -54,7 +54,7 @@ public class CalendarViewAdapter extends PagerAdapter {
         seedDate = new CalendarDate();
         for (int i = 0; i < 3; i++) {
             CalendarAttr calendarAttr = new CalendarAttr();
-            calendarAttr.setCalendarType(CalendarAttr.CalendarType.WEEK);
+            calendarAttr.setCalendarType(CalendarAttr.CalendarType.MONTH);
             calendarAttr.setWeekArrayType(weekArrayType);
             Calendar calendar = new Calendar(context, onSelectDateListener, calendarAttr);
             calendar.setOnAdapterSelectListener(new OnAdapterSelectListener() {

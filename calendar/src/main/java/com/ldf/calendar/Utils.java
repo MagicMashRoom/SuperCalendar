@@ -8,15 +8,16 @@ package com.ldf.calendar;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
-
 import android.view.View;
 import android.view.ViewConfiguration;
+import android.view.ViewGroup;
 import android.widget.Scroller;
+import androidx.core.view.ViewCompat;
+import androidx.viewpager.widget.ViewPager;
 
 import com.ldf.calendar.component.CalendarAttr;
+import com.ldf.calendar.interf.OnCalendarStateChangeListen;
 import com.ldf.calendar.model.CalendarDate;
 
 import java.text.ParseException;
@@ -106,7 +107,7 @@ public final class Utils {
      */
     @SuppressLint("SimpleDateFormat")
     public static Date getDateFromString(int year, int month) {
-        String dateString = year + "-" + (month > 9 ? month : ("0" + month)) + "-01";
+        String dateString = year + "-" + (month > 9 ? month + "" : ("0" + month)) + "-01";
         Date date = new Date();
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -308,15 +309,15 @@ public final class Utils {
         });
     }
 
-
     /**
-     *  用于ViewPager的适配
-     * @param parent
-     * @param child
-     * @param y
-     * @param duration
+     *  用于的适配不同视图
+     * @param parent   协调布局parent
+     * @param child    协调布局协调滑动的child
+     * @param y        滑动目标位置y轴数值
+     * @param duration 滑动执行时间
+     * @return void
      */
-    public static void scrollTo(final CoordinatorLayout parent, final ViewPager child, final int y, int duration) {
+    public static <T extends View & OnCalendarStateChangeListen> void scrollTo(final CoordinatorLayout parent, final T child, final int y, int duration) {
         final Scroller scroller = new Scroller(parent.getContext());
         scroller.startScroll(0, top, 0, y - top, duration);   //设置scroller的滚动偏移量
         ViewCompat.postOnAnimation(child, new Runnable() {
@@ -334,6 +335,7 @@ public final class Utils {
             }
         });
     }
+
 
     public static void saveTop(int y) {
         top = y;
